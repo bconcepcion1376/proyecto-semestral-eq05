@@ -88,6 +88,16 @@
                 <label for="eq05-per-telefono">Teléfono celular</label>
                 <input type="tel" id="eq05-per-telefono" name="telefono" value="+507 6123-4567" pattern="\+507 ?6[0-9]{3}-?[0-9]{4}" autocomplete="tel" maxlength="14">
               </div>
+              <div class="eq05-campo">
+                <label for="eq05-per-expediente">Número de expediente</label>
+                <input type="text" id="eq05-per-expediente" name="numero_expediente" value="123456" readonly pattern="\d{6}" maxlength="6" aria-describedby="eq05-per-exp-ayuda">
+                <span class="eq05-ayuda" id="eq05-per-exp-ayuda">Dato único de 6 dígitos asignado por la clínica.</span>
+              </div>
+              <div class="eq05-campo">
+                <label for="eq05-per-emergencia">Teléfono de emergencia</label>
+                <input type="tel" id="eq05-per-emergencia" name="telefono_emergencia" value="+507 6999-8888" pattern="\+507 ?6[0-9]{3}-?[0-9]{4}" maxlength="14" required>
+                <span class="eq05-ayuda">Contacto en caso de complicación médica.</span>
+              </div>
             </div>
             <button class="eq05-boton eq05-boton--primario" type="submit">Guardar cambios</button>
           </form>
