@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Cree su cuenta de paciente en MediAgenda con su cédula o pasaporte para reservar citas médicas en línea.">
+  <title>Registro de paciente · MediAgenda</title>
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <header id="eq05-encabezado">
+    <div class="eq05-contenedor eq05-encabezado__barra">
+      <a class="eq05-logo" href="index.html">
+        <img src="img/logo.svg" alt="" width="36" height="36">
+        <span>MediAgenda</span>
+      </a>
+      <input class="eq05-menu-check" type="checkbox" id="eq05-menu-check">
+      <label class="eq05-menu-boton" for="eq05-menu-check"><span class="eq05-sr">Abrir o cerrar el menú</span><span aria-hidden="true">☰</span></label>
+      <nav class="eq05-nav" id="eq05-nav-principal" aria-label="Principal">
+        <ul class="eq05-nav__lista">
+          <li><a class="eq05-nav__enlace" href="index.html">Inicio</a></li>
+          <li><a class="eq05-nav__enlace" href="principal-formulario.html">Reservar cita</a></li>
+          <li><a class="eq05-nav__enlace" href="principal-listado.html">Citas</a></li>
+          <li><a class="eq05-nav__enlace" href="secundaria-formulario.html">Horarios</a></li>
+          <li><a class="eq05-nav__enlace" href="panel.html">Administración</a></li>
+        </ul>
+        <div class="eq05-cuenta">
+          <a class="eq05-boton eq05-boton--claro" href="login.html">Iniciar sesión</a>
+          <a class="eq05-boton eq05-boton--blanco" href="registro.html">Registrarse</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="eq05-principal" class="eq05-contenedor">
+    <section aria-labelledby="eq05-titulo-registro">
+      <h1 id="eq05-titulo-registro">Crear cuenta de paciente</h1>
+      <p class="eq05-subtitulo">Los campos marcados con <span class="eq05-requerido">*</span> son obligatorios.</p>
+      <form class="eq05-form" id="eq05-form-registro" action="principal-listado.html" method="get">
+        <div class="eq05-dos-columnas eq05-dos-columnas--iguales">
+          <div>
+            <fieldset>
+              <legend>Datos personales</legend>
+              <div class="eq05-fila-campos">
+                <div class="eq05-campo">
+                  <label for="eq05-reg-nombre">Nombre <span class="eq05-requerido">*</span></label>
+                  <input type="text" id="eq05-reg-nombre" name="nombre" placeholder="Ana" autocomplete="given-name" minlength="2" maxlength="60" required>
+                </div>
+                <div class="eq05-campo">
+                  <label for="eq05-reg-apellido">Apellido <span class="eq05-requerido">*</span></label>
+                  <input type="text" id="eq05-reg-apellido" name="apellido" placeholder="Pérez" autocomplete="family-name" minlength="2" maxlength="60" required>
+                </div>
+                <div class="eq05-campo">
+                  <label for="eq05-reg-tipo-doc">Tipo de documento <span class="eq05-requerido">*</span></label>
+                  <select id="eq05-reg-tipo-doc" name="tipo_documento" required>
+                    <option value="">Seleccione…</option>
+                    <option value="cedula" selected>Cédula</option>
+                    <option value="pasaporte">Pasaporte</option>
+                  </select>
+                </div>
+                <div class="eq05-campo">
+                  <label for="eq05-reg-documento">N.º de documento <span class="eq05-requerido">*</span></label>
+                  <input type="text" id="eq05-reg-documento" name="documento" placeholder="8-123-4567" pattern="[A-Z0-9]{1,3}-[0-9]{1,4}-[0-9]{1,6}" title="Formato de cédula panameña, por ejemplo 8-123-4567 o PE-12-345" maxlength="15" aria-describedby="eq05-reg-documento-ayuda" required>
+                  <span class="eq05-ayuda" id="eq05-reg-documento-ayuda">Ejemplo: 8-123-4567. Debe ser único por paciente.</span>
+                </div>
+                <div class="eq05-campo">
+                  <label for="eq05-reg-nacimiento">Fecha de nacimiento <span class="eq05-requerido">*</span></label>
+                  <input type="date" id="eq05-reg-nacimiento" name="fecha_nacimiento" min="1900-01-01" max="2026-10-19" autocomplete="bday" required>
+                </div>
+              </div>
+              <fieldset>
+                <legend>Sexo</legend>
+                <div class="eq05-opcion"><input type="radio" id="eq05-reg-sexo-f" name="sexo" value="F"><label for="eq05-reg-sexo-f">Femenino</label></div>
+                <div class="eq05-opcion"><input type="radio" id="eq05-reg-sexo-m" name="sexo" value="M"><label for="eq05-reg-sexo-m">Masculino</label></div>
+                <div class="eq05-opcion"><input type="radio" id="eq05-reg-sexo-n" name="sexo" value="N" checked><label for="eq05-reg-sexo-n">Prefiero no decirlo</label></div>
+              </fieldset>
+            </fieldset>
+          </div>
+          <div>
+            <fieldset>
+              <legend>Contacto</legend>
+              <div class="eq05-campo">
+                <label for="eq05-reg-correo">Correo electrónico <span class="eq05-requerido">*</span></label>
+                <input type="email" id="eq05-reg-correo" name="correo" placeholder="nombre@correo.com" autocomplete="email" maxlength="120" aria-describedby="eq05-reg-correo-ayuda" required>
+                <span class="eq05-ayuda" id="eq05-reg-correo-ayuda">Será su usuario para ingresar.</span>
+              </div>
+              <div class="eq05-campo">
+                <label for="eq05-reg-telefono">Teléfono celular <span class="eq05-requerido">*</span></label>
+                <input type="tel" id="eq05-reg-telefono" name="telefono" placeholder="+507 6000-0000" pattern="\+507 ?6[0-9]{3}-?[0-9]{4}" title="Celular de Panamá, por ejemplo +507 6123-4567" autocomplete="tel" maxlength="14" required>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Seguridad</legend>
+              <div class="eq05-campo">
+                <label for="eq05-reg-clave">Contraseña <span class="eq05-requerido">*</span></label>
+                <input type="password" id="eq05-reg-clave" name="clave" autocomplete="new-password" minlength="8" maxlength="64" pattern="(?=.*[A-Z])(?=.*[0-9]).{8,}" title="Mínimo 8 caracteres, con una mayúscula y un número" aria-describedby="eq05-reg-requisitos" required>
+              </div>
+              <div class="eq05-campo">
+                <label for="eq05-reg-clave2">Confirmar contraseña <span class="eq05-requerido">*</span></label>
+                <input type="password" id="eq05-reg-clave2" name="clave_confirmacion" autocomplete="new-password" minlength="8" maxlength="64" required>
+              </div>
+              <ul class="eq05-requisitos" id="eq05-reg-requisitos">
+                <li>Mínimo 8 caracteres</li>
+                <li>Al menos una letra mayúscula</li>
+                <li>Al menos un número</li>
+              </ul>
+            </fieldset>
+          </div>
+        </div>
+        <div class="eq05-opcion">
+          <input type="checkbox" id="eq05-reg-terminos" name="terminos" value="acepto" required>
+          <label for="eq05-reg-terminos">Acepto los <a href="legal.html#eq05-terminos">términos de uso</a> y la <a href="legal.html#eq05-privacidad">política de privacidad</a> <span class="eq05-requerido">*</span></label>
+        </div>
+        <div class="eq05-acciones">
+          <button class="eq05-boton eq05-boton--primario" type="submit">Crear cuenta</button>
+          <button class="eq05-boton" type="reset">Limpiar</button>
+          <a href="login.html">Ya tengo cuenta</a>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer id="eq05-pie">
+    <div class="eq05-contenedor eq05-pie__barra">
+      <p><strong>MediAgenda</strong> · Clínicas Minimed, Ciudad de Panamá</p>
+      <nav aria-label="Enlaces del pie de página">
+        <ul class="eq05-pie__enlaces">
+          <li><a href="index.html#eq05-como-funciona">Ayuda</a></li>
+          <li><a href="legal.html#eq05-privacidad">Privacidad</a></li>
+          <li><a href="legal.html#eq05-terminos">Términos</a></li>
+          <li><a href="index.html#eq05-contacto">Contacto</a></li>
+        </ul>
+      </nav>
+      <p><small>© 2026 MediAgenda · Proyecto semestral, equipo 05</small></p>
+    </div>
+  </footer>
+</body>
+</html>

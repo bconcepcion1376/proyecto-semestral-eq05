@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Panel de administración de MediAgenda: indicadores, reportes, usuarios y feriados.">
+  <title>Panel de administración · MediAgenda</title>
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <header id="eq05-encabezado">
+    <div class="eq05-contenedor eq05-encabezado__barra">
+      <a class="eq05-logo" href="index.html">
+        <img src="img/logo.svg" alt="" width="36" height="36">
+        <span>MediAgenda</span>
+      </a>
+      <input class="eq05-menu-check" type="checkbox" id="eq05-menu-check">
+      <label class="eq05-menu-boton" for="eq05-menu-check"><span class="eq05-sr">Abrir o cerrar el menú</span><span aria-hidden="true">☰</span></label>
+      <nav class="eq05-nav" id="eq05-nav-principal" aria-label="Principal">
+        <ul class="eq05-nav__lista">
+          <li><a class="eq05-nav__enlace" href="index.html">Inicio</a></li>
+          <li><a class="eq05-nav__enlace" href="principal-formulario.html">Reservar cita</a></li>
+          <li><a class="eq05-nav__enlace" href="principal-listado.html">Citas</a></li>
+          <li><a class="eq05-nav__enlace" href="secundaria-formulario.html">Horarios</a></li>
+          <li><a class="eq05-nav__enlace eq05-nav__enlace--activo" href="panel.html" aria-current="page">Administración</a></li>
+        </ul>
+        <div class="eq05-cuenta">
+          <img src="img/iconos/campana.svg" alt="Avisos: 1 sin leer" width="22" height="22">
+          <a class="eq05-cuenta__usuario" href="perfil.html">
+            <img class="eq05-avatar" src="img/avatar.svg" alt="" width="36" height="36">
+            <span><strong>Marta Díaz</strong><span class="eq05-cuenta__rol">Administrador · Mi perfil</span></span>
+          </a>
+          <a class="eq05-boton eq05-boton--claro eq05-boton--pequeno" href="index.html">Salir</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="eq05-principal" class="eq05-contenedor">
+    <h1>Panel de administración</h1>
+    <p class="eq05-subtitulo">Datos al <time datetime="2027-02-01">lunes 1 de febrero de 2027</time>.</p>
+
+    <section class="eq05-indicadores" aria-label="Indicadores del mes">
+      <article class="eq05-indicador">
+        <h2>Citas de enero</h2>
+        <p class="eq05-indicador__valor"><data value="1248">1 248</data></p>
+        <p class="eq05-texto-secundario"><small>▲ 6 % frente a diciembre</small></p>
+      </article>
+      <article class="eq05-indicador">
+        <h2>Ocupación de agendas</h2>
+        <p class="eq05-indicador__valor"><data value="0.78">78 %</data></p>
+        <p class="eq05-texto-secundario"><small>Espacios usados / ofrecidos</small></p>
+      </article>
+      <article class="eq05-indicador">
+        <h2>Cancelaciones</h2>
+        <p class="eq05-indicador__valor"><data value="0.062">6,2 %</data></p>
+        <p class="eq05-texto-secundario"><small>77 citas canceladas</small></p>
+      </article>
+      <article class="eq05-indicador">
+        <h2>Ausentismo</h2>
+        <p class="eq05-indicador__valor"><data value="0.041">4,1 %</data></p>
+        <p class="eq05-texto-secundario"><small>51 pacientes no llegaron</small></p>
+      </article>
+    </section>
+
+    <nav aria-label="Gestión del sistema">
+      <ul class="eq05-gestion">
+        <li><a href="#eq05-usuarios">Usuarios y roles <span>5 usuarios del personal</span></a></li>
+        <li><a href="principal-listado.html">Citas <span>32 hoy</span></a></li>
+        <li><a href="secundaria-formulario.html">Horarios de médicos <span>14 médicos</span></a></li>
+        <li><a href="#eq05-feriados">Feriados <span>12 en 2027</span></a></li>
+        <li><a href="#eq05-reportes">Reportes <span>5 informes</span></a></li>
+      </ul>
+    </nav>
+
+    <section class="eq05-seccion" id="eq05-reportes" aria-labelledby="eq05-titulo-reportes">
+      <h2 id="eq05-titulo-reportes">Reportes</h2>
+      <div class="eq05-panel-graficos">
+        <figure class="eq05-tarjeta eq05-figura">
+          <img src="img/grafico-citas-mes.svg" alt="Gráfico de barras: las citas suben cada mes, de 980 en agosto a 1 248 en enero" width="560" height="300">
+          <figcaption>Citas atendidas por mes, de agosto de 2026 a enero de 2027.</figcaption>
+        </figure>
+        <figure class="eq05-tarjeta eq05-figura">
+          <div class="eq05-tabla-envoltura">
+            <table class="eq05-tabla">
+              <caption>Citas por especialidad, enero de 2027</caption>
+              <thead>
+                <tr><th scope="col">Especialidad</th><th scope="col">Citas</th><th scope="col">Participación</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Medicina general</th><td class="eq05-numero">412</td><td class="eq05-numero">33 %</td></tr>
+                <tr><th scope="row">Pediatría</th><td class="eq05-numero">296</td><td class="eq05-numero">24 %</td></tr>
+                <tr><th scope="row">Cardiología</th><td class="eq05-numero">226</td><td class="eq05-numero">18 %</td></tr>
+                <tr><th scope="row">Ginecología</th><td class="eq05-numero">168</td><td class="eq05-numero">13 %</td></tr>
+                <tr><th scope="row">Dermatología</th><td class="eq05-numero">146</td><td class="eq05-numero">12 %</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <figcaption>Medicina general concentra un tercio de la demanda.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="eq05-seccion" id="eq05-usuarios" aria-labelledby="eq05-titulo-usuarios">
+      <div class="eq05-titulo-fila">
+        <h2 id="eq05-titulo-usuarios">Usuarios y roles</h2>
+        <a class="eq05-boton eq05-boton--primario" href="registro.html">+ Nuevo usuario</a>
+      </div>
+      <div class="eq05-tabla-envoltura">
+        <table class="eq05-tabla">
+          <caption>Personal con acceso al sistema</caption>
+          <thead>
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Correo</th>
+              <th scope="col">Rol</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Marta Díaz</th>
+              <td>marta.diaz@mediagenda.pa</td>
+              <td>Administrador</td>
+              <td><span class="eq05-estado eq05-estado--atendida">Activo</span></td>
+              <td><a href="perfil.html">Editar<span class="eq05-sr"> a Marta Díaz</span></a></td>
+            </tr>
+            <tr>
+              <th scope="row">Luis Gómez</th>
+              <td>luis.gomez@mediagenda.pa</td>
+              <td>Recepción</td>
+              <td><span class="eq05-estado eq05-estado--atendida">Activo</span></td>
+              <td><a href="perfil.html">Editar<span class="eq05-sr"> a Luis Gómez</span></a></td>
+            </tr>
+            <tr>
+              <th scope="row">Dra. Carmen Ríos</th>
+              <td>carmen.rios@mediagenda.pa</td>
+              <td>Médico</td>
+              <td><span class="eq05-estado eq05-estado--atendida">Activo</span></td>
+              <td><a href="perfil.html">Editar<span class="eq05-sr"> a Dra. Carmen Ríos</span></a></td>
+            </tr>
+            <tr>
+              <th scope="row">Dr. José Arias</th>
+              <td>jose.arias@mediagenda.pa</td>
+              <td>Médico</td>
+              <td><span class="eq05-estado eq05-estado--atendida">Activo</span></td>
+              <td><a href="perfil.html">Editar<span class="eq05-sr"> a Dr. José Arias</span></a></td>
+            </tr>
+            <tr>
+              <th scope="row">Dra. Laura Vega</th>
+              <td>laura.vega@mediagenda.pa</td>
+              <td>Médico</td>
+              <td><span class="eq05-estado eq05-estado--reagendada">Sin horario</span></td>
+              <td><a href="perfil.html">Editar<span class="eq05-sr"> a Dra. Laura Vega</span></a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="eq05-seccion" id="eq05-feriados" aria-labelledby="eq05-titulo-feriados">
+      <h2 id="eq05-titulo-feriados">Próximos días sin atención</h2>
+      <p>Los feriados nacionales vienen precargados. El carnaval se calcula cada año a partir de la fecha de Pascua.</p>
+      <div class="eq05-tabla-envoltura">
+        <table class="eq05-tabla">
+          <caption>Feriados de febrero a mayo de 2027</caption>
+          <thead>
+            <tr><th scope="col">Fecha</th><th scope="col">Motivo</th><th scope="col">Agenda</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><time datetime="2027-02-08">Lun 8 feb</time></td><th scope="row">Carnaval</th><td>Bloqueado</td></tr>
+            <tr><td><time datetime="2027-02-09">Mar 9 feb</time></td><th scope="row">Carnaval</th><td>Bloqueado</td></tr>
+            <tr><td><time datetime="2027-03-26">Vie 26 mar</time></td><th scope="row">Viernes Santo</th><td>Bloqueado</td></tr>
+            <tr><td><time datetime="2027-05-01">Sáb 1 may</time></td><th scope="row">Día del Trabajo</th><td>Bloqueado</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer id="eq05-pie">
+    <div class="eq05-contenedor eq05-pie__barra">
+      <p><strong>MediAgenda</strong> · Clínicas Minimed, Ciudad de Panamá</p>
+      <nav aria-label="Enlaces del pie de página">
+        <ul class="eq05-pie__enlaces">
+          <li><a href="index.html#eq05-como-funciona">Ayuda</a></li>
+          <li><a href="legal.html#eq05-privacidad">Privacidad</a></li>
+          <li><a href="legal.html#eq05-terminos">Términos</a></li>
+          <li><a href="index.html#eq05-contacto">Contacto</a></li>
+        </ul>
+      </nav>
+      <p><small>© 2026 MediAgenda · Proyecto semestral, equipo 05</small></p>
+    </div>
+  </footer>
+</body>
+</html>
