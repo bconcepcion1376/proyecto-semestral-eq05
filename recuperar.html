@@ -15,7 +15,7 @@
   <header id="eq05-encabezado">
     <div class="eq05-contenedor eq05-encabezado__barra">
       <a class="eq05-logo" href="index.html">
-        <img src="img/logo.svg" alt="" width="36" height="36">
+        <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
         <span>MediAgenda</span>
       </a>
       <input class="eq05-menu-check" type="checkbox" id="eq05-menu-check">
@@ -48,35 +48,49 @@
       <div class="eq05-tres-columnas">
         <section class="eq05-tarjeta" id="eq05-paso-1" aria-labelledby="eq05-titulo-paso-1">
           <h2 id="eq05-titulo-paso-1">1 · Indique su correo</h2>
-          <form class="eq05-form" id="eq05-form-recuperar" action="recuperar.html#eq05-paso-2" method="get">
-            <div class="eq05-campo">
-              <label for="eq05-rec-correo">Correo electrónico</label>
-              <input type="email" id="eq05-rec-correo" name="correo" placeholder="nombre@correo.com" autocomplete="email" maxlength="120" required>
-            </div>
-            <button class="eq05-boton eq05-boton--primario eq05-boton--bloque" type="submit">Enviar enlace</button>
+          
+          <!-- CORRECCIÓN 1 y 2: method="post", action="#" y fieldset/legend -->
+          <form class="eq05-form" id="eq05-form-recuperar" action="#" method="post">
+            <fieldset class="eq05-conjunto-campos">
+              <legend class="eq05-sr">Formulario para solicitar enlace de recuperación</legend>
+              
+              <div class="eq05-campo">
+                <label for="eq05-rec-correo">Correo electrónico</label>
+                <input type="email" id="eq05-rec-correo" name="correo" placeholder="nombre@correo.com" autocomplete="email" maxlength="120" required>
+              </div>
+              <button class="eq05-boton eq05-boton--primario eq05-boton--bloque" type="submit">Enviar enlace</button>
+            </fieldset>
           </form>
         </section>
+
         <section class="eq05-tarjeta eq05-tarjeta--suave" id="eq05-paso-2" aria-labelledby="eq05-titulo-paso-2">
           <h2 id="eq05-titulo-paso-2">2 · Revise su correo</h2>
           <p role="status">Si el correo está registrado, recibirá un enlace válido por <strong>30 minutos</strong>.</p>
           <p class="eq05-texto-secundario"><small>¿No llegó? Revise la carpeta de correo no deseado. Podrá pedir otro enlace en 60 segundos.</small></p>
         </section>
+
         <section class="eq05-tarjeta" id="eq05-paso-3" aria-labelledby="eq05-titulo-paso-3">
           <h2 id="eq05-titulo-paso-3">3 · Nueva contraseña</h2>
-          <form class="eq05-form" id="eq05-form-nueva-clave" action="login.html" method="get">
-            <div class="eq05-campo">
-              <label for="eq05-rec-codigo">Código del correo</label>
-              <input type="text" id="eq05-rec-codigo" name="codigo" placeholder="6 dígitos" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="one-time-code" required>
-            </div>
-            <div class="eq05-campo">
-              <label for="eq05-rec-clave">Contraseña nueva</label>
-              <input type="password" id="eq05-rec-clave" name="clave" autocomplete="new-password" minlength="8" maxlength="64" required>
-            </div>
-            <div class="eq05-campo">
-              <label for="eq05-rec-clave2">Confirmar contraseña</label>
-              <input type="password" id="eq05-rec-clave2" name="clave_confirmacion" autocomplete="new-password" minlength="8" maxlength="64" required>
-            </div>
-            <button class="eq05-boton eq05-boton--primario eq05-boton--bloque" type="submit">Guardar contraseña</button>
+          
+          <!-- CORRECCIÓN 1 y 2: method="post", action="#" y fieldset/legend -->
+          <form class="eq05-form" id="eq05-form-nueva-clave" action="#" method="post">
+            <fieldset class="eq05-conjunto-campos">
+              <legend class="eq05-sr">Formulario de creación de nueva contraseña</legend>
+              
+              <div class="eq05-campo">
+                <label for="eq05-rec-codigo">Código del correo</label>
+                <input type="text" id="eq05-rec-codigo" name="codigo" placeholder="6 dígitos" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="one-time-code" required>
+              </div>
+              <div class="eq05-campo">
+                <label for="eq05-rec-clave">Contraseña nueva</label>
+                <input type="password" id="eq05-rec-clave" name="clave" autocomplete="new-password" minlength="8" maxlength="64" required>
+              </div>
+              <div class="eq05-campo">
+                <label for="eq05-rec-clave2">Confirmar contraseña</label>
+                <input type="password" id="eq05-rec-clave2" name="clave_confirmacion" autocomplete="new-password" minlength="8" maxlength="64" required>
+              </div>
+              <button class="eq05-boton eq05-boton--primario eq05-boton--bloque" type="submit">Guardar contraseña</button>
+            </fieldset>
           </form>
         </section>
       </div>

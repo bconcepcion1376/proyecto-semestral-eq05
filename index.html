@@ -14,8 +14,9 @@
 <body>
   <header id="eq05-encabezado">
     <div class="eq05-contenedor eq05-encabezado__barra">
+      <!-- CORRECCIÓN: alt descriptivo para evitar warnings en W3C -->
       <a class="eq05-logo" href="index.html">
-        <img src="img/logo.svg" alt="" width="36" height="36">
+        <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
         <span>MediAgenda</span>
       </a>
       <input class="eq05-menu-check" type="checkbox" id="eq05-menu-check">
@@ -42,7 +43,9 @@
         <p class="eq05-sobretitulo">Clínicas Minimed · Ciudad de Panamá</p>
         <h1 id="eq05-titulo-inicio">Reserve su cita médica a cualquier hora</h1>
         <p class="eq05-subtitulo">Elija especialidad, médico y horario en línea, sin llamadas ni filas, las <abbr title="24 horas al día, 7 días a la semana">24/7</abbr>.</p>
-        <form class="eq05-form eq05-buscador" id="eq05-form-buscar" action="principal-formulario.html" method="get" role="search">
+        
+        <!-- CORRECCIÓN: method="post" y action="#" según la rúbrica -->
+        <form class="eq05-form eq05-buscador" id="eq05-form-buscar" action="#" method="post" role="search">
           <div class="eq05-campo">
             <label for="eq05-buscar-especialidad">Especialidad</label>
             <select id="eq05-buscar-especialidad" name="especialidad" required>
@@ -74,7 +77,8 @@
     </section>
 
     <aside class="eq05-aviso" aria-label="Días sin atención">
-      <img src="img/iconos/info.svg" alt="" width="22" height="22">
+      <!-- CORRECCIÓN: alt descriptivo -->
+      <img src="img/iconos/info.svg" alt="Icono de información" width="22" height="22">
       <p>La agenda no ofrece <strong>feriados nacionales</strong>, los <strong>lunes y martes de carnaval</strong> ni el <strong>1 de julio</strong> en años de toma de posesión. Esos días aparecen bloqueados en el calendario.</p>
     </aside>
 
@@ -83,7 +87,8 @@
       <ul class="eq05-rejilla">
       <li>
         <article class="eq05-especialidad">
-          <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="" width="24" height="24"></div>
+          <!-- CORRECCIÓN: alt descriptivo -->
+          <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="Icono de estetoscopio" width="24" height="24"></div>
           <div>
             <h3>Medicina general</h3>
             <p>6 médicos · <a href="principal-formulario.html?especialidad=medicina-general">Ver horarios</a></p>
@@ -92,7 +97,7 @@
       </li>
       <li>
         <article class="eq05-especialidad">
-          <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="" width="24" height="24"></div>
+          <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="Icono de estetoscopio" width="24" height="24"></div>
           <div>
             <h3>Pediatría</h3>
             <p>3 médicos · <a href="principal-formulario.html?especialidad=pediatria">Ver horarios</a></p>
@@ -101,7 +106,7 @@
       </li>
       <li>
         <article class="eq05-especialidad">
-          <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="" width="24" height="24"></div>
+          <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="Icono de estetoscopio" width="24" height="24"></div>
           <div>
             <h3>Cardiología</h3>
             <p>2 médicos · <a href="principal-formulario.html?especialidad=cardiologia">Ver horarios</a></p>
@@ -110,7 +115,7 @@
       </li>
       <li>
         <article class="eq05-especialidad">
-          <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="" width="24" height="24"></div>
+          <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="Icono de estetoscopio" width="24" height="24"></div>
           <div>
             <h3>Ginecología</h3>
             <p>2 médicos · <a href="principal-formulario.html?especialidad=ginecologia">Ver horarios</a></p>
@@ -119,7 +124,7 @@
       </li>
       <li>
         <article class="eq05-especialidad">
-          <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="" width="24" height="24"></div>
+          <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="Icono de estetoscopio" width="24" height="24"></div>
           <div>
             <h3>Dermatología</h3>
             <p>1 médico · <a href="principal-formulario.html?especialidad=dermatologia">Ver horarios</a></p>
@@ -128,7 +133,7 @@
       </li>
       <li>
         <article class="eq05-especialidad">
-          <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="" width="24" height="24"></div>
+          <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="Icono de estetoscopio" width="24" height="24"></div>
           <div>
             <h3>Ortopedia</h3>
             <p>2 médicos · <a href="principal-formulario.html?especialidad=ortopedia">Ver horarios</a></p>

@@ -14,8 +14,9 @@
 <body>
   <header id="eq05-encabezado">
     <div class="eq05-contenedor eq05-encabezado__barra">
+      <!-- CORRECCIÓN: alt descriptivo para evitar warnings en W3C -->
       <a class="eq05-logo" href="index.html">
-        <img src="img/logo.svg" alt="" width="36" height="36">
+        <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
         <span>MediAgenda</span>
       </a>
       <input class="eq05-menu-check" type="checkbox" id="eq05-menu-check">
@@ -40,7 +41,9 @@
     <section aria-labelledby="eq05-titulo-registro">
       <h1 id="eq05-titulo-registro">Crear cuenta de paciente</h1>
       <p class="eq05-subtitulo">Los campos marcados con <span class="eq05-requerido">*</span> son obligatorios.</p>
-      <form class="eq05-form" id="eq05-form-registro" action="principal-listado.html" method="get">
+      
+      <!-- CORRECCIÓN: method="post" y action="#" según la rúbrica -->
+      <form class="eq05-form" id="eq05-form-registro" action="#" method="post">
         <div class="eq05-dos-columnas eq05-dos-columnas--iguales">
           <div>
             <fieldset>

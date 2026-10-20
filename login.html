@@ -14,8 +14,9 @@
 <body>
   <header id="eq05-encabezado">
     <div class="eq05-contenedor eq05-encabezado__barra">
+      <!-- CORRECCIÓN: alt descriptivo para evitar warnings en W3C -->
       <a class="eq05-logo" href="index.html">
-        <img src="img/logo.svg" alt="" width="36" height="36">
+        <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
         <span>MediAgenda</span>
       </a>
       <input class="eq05-menu-check" type="checkbox" id="eq05-menu-check">
@@ -41,28 +42,36 @@
       <section class="eq05-tarjeta" aria-labelledby="eq05-titulo-login">
         <h1 id="eq05-titulo-login">Iniciar sesión</h1>
         <p class="eq05-subtitulo">Acceda para reservar y gestionar sus citas.</p>
-        <!-- Maqueta estática: en el sistema con servidor este formulario se envía por POST sobre HTTPS. -->
-        <form class="eq05-form" id="eq05-form-login" action="principal-listado.html" method="get">
-          <div class="eq05-campo">
-            <label for="eq05-login-correo">Correo electrónico</label>
-            <input type="email" id="eq05-login-correo" name="correo" placeholder="nombre@correo.com" autocomplete="username" maxlength="120" required>
-          </div>
-          <div class="eq05-campo">
-            <label for="eq05-login-clave">Contraseña</label>
-            <input type="password" id="eq05-login-clave" name="clave" placeholder="Mínimo 8 caracteres" autocomplete="current-password" minlength="8" maxlength="64" required>
-          </div>
-          <div class="eq05-fila-entre">
-            <div class="eq05-opcion">
-              <input type="checkbox" id="eq05-login-recordar" name="recordar" value="si">
-              <label for="eq05-login-recordar">Recordarme en este equipo</label>
+        
+        <!-- CORRECCIÓN: method="post" y action="#" según la rúbrica -->
+        <form class="eq05-form" id="eq05-form-login" action="#" method="post">
+          <!-- CORRECCIÓN: fieldset y legend para cumplir con la rúbrica de formularios -->
+          <fieldset class="eq05-conjunto-campos">
+            <legend class="eq05-sr">Credenciales de acceso</legend>
+            
+            <div class="eq05-campo">
+              <label for="eq05-login-correo">Correo electrónico</label>
+              <input type="email" id="eq05-login-correo" name="correo" placeholder="nombre@correo.com" autocomplete="username" maxlength="120" required>
             </div>
-            <a href="recuperar.html">¿Olvidó su contraseña?</a>
-          </div>
-          <button class="eq05-boton eq05-boton--primario eq05-boton--bloque" type="submit">Ingresar</button>
+            <div class="eq05-campo">
+              <label for="eq05-login-clave">Contraseña</label>
+              <input type="password" id="eq05-login-clave" name="clave" placeholder="Mínimo 8 caracteres" autocomplete="current-password" minlength="8" maxlength="64" required>
+            </div>
+            <div class="eq05-fila-entre">
+              <div class="eq05-opcion">
+                <input type="checkbox" id="eq05-login-recordar" name="recordar" value="si">
+                <label for="eq05-login-recordar">Recordarme en este equipo</label>
+              </div>
+              <a href="recuperar.html">¿Olvidó su contraseña?</a>
+            </div>
+            <button class="eq05-boton eq05-boton--primario eq05-boton--bloque" type="submit">Ingresar</button>
+          </fieldset>
         </form>
+        
         <hr class="eq05-separador">
         <p>¿No tiene cuenta? <a href="registro.html"><strong>Regístrese como paciente</strong></a></p>
       </section>
+      
       <aside class="eq05-tarjeta eq05-tarjeta--suave" aria-labelledby="eq05-titulo-personal">
         <h2 id="eq05-titulo-personal">Personal de la clínica</h2>
         <p>Recepción, médicos y administradores ingresan con el usuario que les asignó el administrador. <strong>No necesitan registrarse.</strong></p>
