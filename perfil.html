@@ -15,7 +15,7 @@
   <header id="eq05-encabezado">
     <div class="eq05-contenedor eq05-encabezado__barra">
       <a class="eq05-logo" href="index.html">
-        <img src="img/logo.svg" alt="" width="36" height="36">
+        <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
         <span>MediAgenda</span>
       </a>
       <input class="eq05-menu-check" type="checkbox" id="eq05-menu-check">
@@ -31,7 +31,7 @@
         <div class="eq05-cuenta">
           <img src="img/iconos/campana.svg" alt="Avisos: 1 sin leer" width="22" height="22">
           <a class="eq05-cuenta__usuario" href="perfil.html">
-            <img class="eq05-avatar" src="img/avatar.svg" alt="" width="36" height="36">
+            <img class="eq05-avatar" src="img/avatar.svg" alt="Avatar de usuario" width="36" height="36">
             <span><strong>Ana Pérez</strong><span class="eq05-cuenta__rol">Paciente · Mi perfil</span></span>
           </a>
           <a class="eq05-boton eq05-boton--claro eq05-boton--pequeno" href="index.html">Salir</a>
@@ -60,11 +60,37 @@
       <div>
         <section class="eq05-tarjeta" id="eq05-datos" aria-labelledby="eq05-titulo-datos">
           <h2 id="eq05-titulo-datos">Datos personales</h2>
-          <form class="eq05-form" id="eq05-form-perfil" action="perfil.html" method="get">
-            <div class="eq05-fila-campos">
-              <div class="eq05-campo">
-                <label for="eq05-per-nombre">Nombre</label>
-                <input type="text" id="eq05-per-nombre" name="nombre" value="Ana" autocomplete="given-name" minlength="2" maxlength="60" required>
+          <form class="eq05-form" id="eq05-form-perfil" action="#" method="post">
+            <fieldset class="eq05-conjunto-campos">
+              <legend class="eq05-sr">Formulario de datos personales</legend>
+              
+              <div class="eq05-fila-campos">
+                <div class="eq05-campo">
+                  <label for="eq05-per-nombre">Nombre</label>
+                  <input type="text" id="eq05-per-nombre" name="nombre" value="Ana" autocomplete="given-name" minlength="2" maxlength="60" required>
+                </div>
+                <div class="eq05-campo">
+                  <label for="eq05-per-apellido">Apellido</label>
+                  <input type="text" id="eq05-per-apellido" name="apellido" value="Pérez" autocomplete="family-name" minlength="2" maxlength="60" required>
+                </div>
+                <div class="eq05-campo">
+                  <label for="eq05-per-documento">Documento</label>
+                  <input type="text" id="eq05-per-documento" name="documento" value="8-123-4567" readonly aria-describedby="eq05-per-documento-ayuda">
+                  <span class="eq05-ayuda" id="eq05-per-documento-ayuda">Solo el administrador puede cambiarlo.</span>
+                </div>
+                <div class="eq05-campo">
+                  <label for="eq05-per-nacimiento">Fecha de nacimiento</label>
+                  <input type="date" id="eq05-per-nacimiento" name="fecha_nacimiento" value="1990-03-14" min="1900-01-01" max="2026-10-19" autocomplete="bday">
+                </div>
+                <div class="eq05-campo">
+                  <label for="eq05-per-correo">Correo electrónico</label>
+                  <input type="email" id="eq05-per-correo" name="correo" value="ana.perez@correo.com" autocomplete="email" maxlength="120" aria-describedby="eq05-per-correo-ayuda" required>
+                  <span class="eq05-ayuda" id="eq05-per-correo-ayuda">Si lo cambia, deberá confirmarlo desde el correo nuevo.</span>
+                </div>
+                <div class="eq05-campo">
+                  <label for="eq05-per-telefono">Teléfono celular</label>
+                  <input type="tel" id="eq05-per-telefono" name="telefono" value="+507 6123-4567" pattern="\+507 ?6[0-9]{3}-?[0-9]{4}" autocomplete="tel" maxlength="14">
+                </div>
               </div>
               <div class="eq05-campo">
                 <label for="eq05-per-apellido">Apellido</label>
@@ -100,32 +126,41 @@
               </div>
             </div>
             <button class="eq05-boton eq05-boton--primario" type="submit">Guardar cambios</button>
+          
           </form>
         </section>
 
         <div class="eq05-fila-campos">
           <section class="eq05-tarjeta" id="eq05-seguridad" aria-labelledby="eq05-titulo-seguridad">
             <h2 id="eq05-titulo-seguridad">Seguridad</h2>
-            <form class="eq05-form" id="eq05-form-clave" action="perfil.html" method="get">
-              <div class="eq05-campo">
-                <label for="eq05-per-clave-actual">Contraseña actual</label>
-                <input type="password" id="eq05-per-clave-actual" name="clave_actual" autocomplete="current-password" minlength="8" maxlength="64" required>
-              </div>
-              <div class="eq05-campo">
-                <label for="eq05-per-clave-nueva">Contraseña nueva</label>
-                <input type="password" id="eq05-per-clave-nueva" name="clave_nueva" autocomplete="new-password" minlength="8" maxlength="64" required>
-              </div>
-              <button class="eq05-boton" type="submit">Cambiar contraseña</button>
+            <form class="eq05-form" id="eq05-form-clave" action="#" method="post">
+              <fieldset class="eq05-conjunto-campos">
+                <legend class="eq05-sr">Formulario de cambio de contraseña</legend>
+                
+                <div class="eq05-campo">
+                  <label for="eq05-per-clave-actual">Contraseña actual</label>
+                  <input type="password" id="eq05-per-clave-actual" name="clave_actual" autocomplete="current-password" minlength="8" maxlength="64" required>
+                </div>
+                <div class="eq05-campo">
+                  <label for="eq05-per-clave-nueva">Contraseña nueva</label>
+                  <input type="password" id="eq05-per-clave-nueva" name="clave_nueva" autocomplete="new-password" minlength="8" maxlength="64" required>
+                </div>
+                <button class="eq05-boton" type="submit">Cambiar contraseña</button>
+              </fieldset>
             </form>
           </section>
 
           <section class="eq05-tarjeta" id="eq05-notificaciones" aria-labelledby="eq05-titulo-notificaciones">
             <h2 id="eq05-titulo-notificaciones">Notificaciones</h2>
-            <form class="eq05-form" id="eq05-form-notificaciones" action="perfil.html" method="get">
-              <div class="eq05-opcion"><input type="checkbox" id="eq05-not-correo" name="aviso_correo" value="si" checked><label for="eq05-not-correo">Correo: confirmación y recordatorio 24 h antes</label></div>
-              <div class="eq05-opcion"><input type="checkbox" id="eq05-not-whatsapp" name="aviso_whatsapp" value="si" disabled><label for="eq05-not-whatsapp">WhatsApp <small class="eq05-texto-secundario">(próximamente)</small></label></div>
-              <div class="eq05-opcion"><input type="checkbox" id="eq05-not-sms" name="aviso_sms" value="si" disabled><label for="eq05-not-sms">SMS <small class="eq05-texto-secundario">(próximamente)</small></label></div>
-              <button class="eq05-boton" type="submit">Guardar preferencias</button>
+            <form class="eq05-form" id="eq05-form-notificaciones" action="#" method="post">
+              <fieldset class="eq05-conjunto-campos">
+                <legend class="eq05-sr">Formulario de preferencias de notificación</legend>
+                
+                <div class="eq05-opcion"><input type="checkbox" id="eq05-not-correo" name="aviso_correo" value="si" checked><label for="eq05-not-correo">Correo: confirmación y recordatorio 24 h antes</label></div>
+                <div class="eq05-opcion"><input type="checkbox" id="eq05-not-whatsapp" name="aviso_whatsapp" value="si" disabled><label for="eq05-not-whatsapp">WhatsApp <small class="eq05-texto-secundario">(próximamente)</small></label></div>
+                <div class="eq05-opcion"><input type="checkbox" id="eq05-not-sms" name="aviso_sms" value="si" disabled><label for="eq05-not-sms">SMS <small class="eq05-texto-secundario">(próximamente)</small></label></div>
+                <button class="eq05-boton" type="submit">Guardar preferencias</button>
+              </fieldset>
             </form>
           </section>
         </div>

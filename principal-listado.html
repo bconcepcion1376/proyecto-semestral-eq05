@@ -15,7 +15,7 @@
   <header id="eq05-encabezado">
     <div class="eq05-contenedor eq05-encabezado__barra">
       <a class="eq05-logo" href="index.html">
-        <img src="img/logo.svg" alt="" width="36" height="36">
+        <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
         <span>MediAgenda</span>
       </a>
       <input class="eq05-menu-check" type="checkbox" id="eq05-menu-check">
@@ -31,7 +31,7 @@
         <div class="eq05-cuenta">
           <img src="img/iconos/campana.svg" alt="Avisos: 1 sin leer" width="22" height="22">
           <a class="eq05-cuenta__usuario" href="perfil.html">
-            <img class="eq05-avatar" src="img/avatar.svg" alt="" width="36" height="36">
+            <img class="eq05-avatar" src="img/avatar.svg" alt="Avatar de usuario" width="36" height="36">
             <span><strong>Luis Gómez</strong><span class="eq05-cuenta__rol">Recepción · Mi perfil</span></span>
           </a>
           <a class="eq05-boton eq05-boton--claro eq05-boton--pequeno" href="index.html">Salir</a>
@@ -52,52 +52,57 @@
       </div>
     </div>
 
-    <form class="eq05-form eq05-filtros" id="eq05-form-filtros" action="principal-listado.html" method="get" role="search">
-      <div class="eq05-campo eq05-campo--busqueda">
-        <label for="eq05-filtro-buscar">Buscar</label>
-        <input type="search" id="eq05-filtro-buscar" name="q" placeholder="Paciente, cédula o N.º de cita" maxlength="60">
-      </div>
-      <div class="eq05-campo">
-        <label for="eq05-filtro-fecha">Fecha</label>
-        <input type="date" id="eq05-filtro-fecha" name="fecha" value="2027-02-01">
-      </div>
-      <div class="eq05-campo">
-        <label for="eq05-filtro-medico">Médico</label>
-        <select id="eq05-filtro-medico" name="medico">
-          <option value="">Todos</option>
-          <option value="arias">Dr. José Arias</option>
-          <option value="rios">Dra. Carmen Ríos</option>
-          <option value="vega">Dra. Laura Vega</option>
-        </select>
-      </div>
-      <div class="eq05-campo">
-        <label for="eq05-filtro-especialidad">Especialidad</label>
-        <select id="eq05-filtro-especialidad" name="especialidad">
-          <option value="">Todas</option>
+    <!-- CORRECCIÓN 1 y 2: method="post", action="#" y fieldset/legend -->
+    <form class="eq05-form eq05-filtros" id="eq05-form-filtros" action="#" method="post" role="search">
+      <fieldset class="eq05-conjunto-campos">
+        <legend class="eq05-sr">Filtros de búsqueda de citas</legend>
+        
+        <div class="eq05-campo eq05-campo--busqueda">
+          <label for="eq05-filtro-buscar">Buscar</label>
+          <input type="search" id="eq05-filtro-buscar" name="q" placeholder="Paciente, cédula o N.º de cita" maxlength="60">
+        </div>
+        <div class="eq05-campo">
+          <label for="eq05-filtro-fecha">Fecha</label>
+          <input type="date" id="eq05-filtro-fecha" name="fecha" value="2027-02-01">
+        </div>
+        <div class="eq05-campo">
+          <label for="eq05-filtro-medico">Médico</label>
+          <select id="eq05-filtro-medico" name="medico">
+            <option value="">Todos</option>
+            <option value="arias">Dr. José Arias</option>
+            <option value="rios">Dra. Carmen Ríos</option>
+            <option value="vega">Dra. Laura Vega</option>
+          </select>
+        </div>
+        <div class="eq05-campo">
+          <label for="eq05-filtro-especialidad">Especialidad</label>
+          <select id="eq05-filtro-especialidad" name="especialidad">
+            <option value="">Todas</option>
             <option value="medicina-general">Medicina general</option>
             <option value="pediatria">Pediatría</option>
             <option value="cardiologia">Cardiología</option>
             <option value="ginecologia">Ginecología</option>
             <option value="dermatologia">Dermatología</option>
             <option value="ortopedia">Ortopedia</option>
-        </select>
-      </div>
-      <div class="eq05-campo">
-        <label for="eq05-filtro-estado">Estado</label>
-        <select id="eq05-filtro-estado" name="estado">
-          <option value="">Todos</option>
-          <option value="programada">Programada</option>
-          <option value="reagendada">Reagendada</option>
-          <option value="sala">En sala</option>
-          <option value="atendida">Atendida</option>
-          <option value="cancelada">Cancelada</option>
-          <option value="ausente">No asistió</option>
-        </select>
-      </div>
-      <div class="eq05-acciones">
-        <button class="eq05-boton eq05-boton--primario" type="submit">Filtrar</button>
-        <button class="eq05-boton" type="reset">Limpiar</button>
-      </div>
+          </select>
+        </div>
+        <div class="eq05-campo">
+          <label for="eq05-filtro-estado">Estado</label>
+          <select id="eq05-filtro-estado" name="estado">
+            <option value="">Todos</option>
+            <option value="programada">Programada</option>
+            <option value="reagendada">Reagendada</option>
+            <option value="sala">En sala</option>
+            <option value="atendida">Atendida</option>
+            <option value="cancelada">Cancelada</option>
+            <option value="ausente">No asistió</option>
+          </select>
+        </div>
+        <div class="eq05-acciones">
+          <button class="eq05-boton eq05-boton--primario" type="submit">Filtrar</button>
+          <button class="eq05-boton" type="reset">Limpiar</button>
+        </div>
+      </fieldset>
     </form>
 
     <ul class="eq05-resumen-estados" aria-label="Resumen por estado">

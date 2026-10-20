@@ -15,7 +15,7 @@
   <header id="eq05-encabezado">
     <div class="eq05-contenedor eq05-encabezado__barra">
       <a class="eq05-logo" href="index.html">
-        <img src="img/logo.svg" alt="" width="36" height="36">
+        <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
         <span>MediAgenda</span>
       </a>
       <input class="eq05-menu-check" type="checkbox" id="eq05-menu-check">
@@ -31,7 +31,7 @@
         <div class="eq05-cuenta">
           <img src="img/iconos/campana.svg" alt="Avisos: 1 sin leer" width="22" height="22">
           <a class="eq05-cuenta__usuario" href="perfil.html">
-            <img class="eq05-avatar" src="img/avatar.svg" alt="" width="36" height="36">
+            <img class="eq05-avatar" src="img/avatar.svg" alt="Avatar de usuario" width="36" height="36">
             <span><strong>Dra. Carmen Ríos</strong><span class="eq05-cuenta__rol">Médico · Mi perfil</span></span>
           </a>
           <a class="eq05-boton eq05-boton--claro eq05-boton--pequeno" href="index.html">Salir</a>
@@ -80,23 +80,28 @@
         <section class="eq05-tarjeta" aria-labelledby="eq05-titulo-nota">
           <h2 id="eq05-titulo-nota">Nota de consulta</h2>
           <p class="eq05-texto-secundario"><small>Solo la ve y la edita el médico asignado. Se puede corregir durante 24 horas.</small></p>
-          <form class="eq05-form" id="eq05-form-nota" action="principal-listado.html" method="get">
-            <div class="eq05-campo">
-              <label for="eq05-nota-observaciones">Observaciones y diagnóstico <span class="eq05-requerido">*</span></label>
-              <textarea id="eq05-nota-observaciones" name="observaciones" rows="4" minlength="10" maxlength="2000" placeholder="Escriba la nota de la consulta…" required></textarea>
-            </div>
-            <div class="eq05-campo">
-              <label for="eq05-nota-indicaciones">Indicaciones al paciente</label>
-              <textarea id="eq05-nota-indicaciones" name="indicaciones" rows="3" maxlength="1000" placeholder="Medicamentos, exámenes, próxima cita…"></textarea>
-            </div>
-            <div class="eq05-opcion">
-              <input type="checkbox" id="eq05-nota-control" name="requiere_control" value="si">
-              <label for="eq05-nota-control">Requiere cita de control</label>
-            </div>
-            <div class="eq05-acciones">
-              <button class="eq05-boton" type="submit" name="accion" value="borrador">Guardar borrador</button>
-              <button class="eq05-boton eq05-boton--primario" type="submit" name="accion" value="atendida">Guardar y marcar atendida</button>
-            </div>
+          
+          <form class="eq05-form" id="eq05-form-nota" action="#" method="post">
+            <fieldset class="eq05-conjunto-campos">
+              <legend class="eq05-sr">Formulario de nota de consulta</legend>
+              
+              <div class="eq05-campo">
+                <label for="eq05-nota-observaciones">Observaciones y diagnóstico <span class="eq05-requerido">*</span></label>
+                <textarea id="eq05-nota-observaciones" name="observaciones" rows="4" minlength="10" maxlength="2000" placeholder="Escriba la nota de la consulta…" required></textarea>
+              </div>
+              <div class="eq05-campo">
+                <label for="eq05-nota-indicaciones">Indicaciones al paciente</label>
+                <textarea id="eq05-nota-indicaciones" name="indicaciones" rows="3" maxlength="1000" placeholder="Medicamentos, exámenes, próxima cita…"></textarea>
+              </div>
+              <div class="eq05-opcion">
+                <input type="checkbox" id="eq05-nota-control" name="requiere_control" value="si">
+                <label for="eq05-nota-control">Requiere cita de control</label>
+              </div>
+              <div class="eq05-acciones">
+                <button class="eq05-boton" type="submit" name="accion" value="borrador">Guardar borrador</button>
+                <button class="eq05-boton eq05-boton--primario" type="submit" name="accion" value="atendida">Guardar y marcar atendida</button>
+              </div>
+            </fieldset>
           </form>
         </section>
       </article>
