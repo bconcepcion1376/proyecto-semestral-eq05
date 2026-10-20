@@ -14,8 +14,9 @@
 <body>
   <header id="eq05-encabezado">
     <div class="eq05-contenedor eq05-encabezado__barra">
+      <!-- CORRECCIÓN: alt descriptivo para evitar warnings en W3C -->
       <a class="eq05-logo" href="index.html">
-        <img src="img/logo.svg" alt="" width="36" height="36">
+        <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
         <span>MediAgenda</span>
       </a>
       <input class="eq05-menu-check" type="checkbox" id="eq05-menu-check">
@@ -31,7 +32,8 @@
         <div class="eq05-cuenta">
           <img src="img/iconos/campana.svg" alt="Avisos: 1 sin leer" width="22" height="22">
           <a class="eq05-cuenta__usuario" href="perfil.html">
-            <img class="eq05-avatar" src="img/avatar.svg" alt="" width="36" height="36">
+            <!-- CORRECCIÓN: alt descriptivo -->
+            <img class="eq05-avatar" src="img/avatar.svg" alt="Avatar de usuario" width="36" height="36">
             <span><strong>Ana Pérez</strong><span class="eq05-cuenta__rol">Paciente · Mi perfil</span></span>
           </a>
           <a class="eq05-boton eq05-boton--claro eq05-boton--pequeno" href="index.html">Salir</a>
@@ -42,7 +44,8 @@
 
   <main id="eq05-principal" class="eq05-contenedor">
     <section class="eq05-error" aria-labelledby="eq05-titulo-error">
-      <img class="eq05-error__ilustracion" src="img/error-acceso.svg" alt="" width="280" height="240">
+      <!-- CORRECCIÓN: alt descriptivo -->
+      <img class="eq05-error__ilustracion" src="img/error-acceso.svg" alt="Ilustración de acceso denegado" width="280" height="240">
       <div>
         <p class="eq05-error__codigo">403</p>
         <h1 id="eq05-titulo-error">No tiene permiso para ver esta página</h1>

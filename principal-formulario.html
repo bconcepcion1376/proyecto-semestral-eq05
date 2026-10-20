@@ -15,7 +15,7 @@
   <header id="eq05-encabezado">
     <div class="eq05-contenedor eq05-encabezado__barra">
       <a class="eq05-logo" href="index.html">
-        <img src="img/logo.svg" alt="" width="36" height="36">
+        <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
         <span>MediAgenda</span>
       </a>
       <input class="eq05-menu-check" type="checkbox" id="eq05-menu-check">
@@ -31,7 +31,7 @@
         <div class="eq05-cuenta">
           <img src="img/iconos/campana.svg" alt="Avisos: 1 sin leer" width="22" height="22">
           <a class="eq05-cuenta__usuario" href="perfil.html">
-            <img class="eq05-avatar" src="img/avatar.svg" alt="" width="36" height="36">
+            <img class="eq05-avatar" src="img/avatar.svg" alt="Avatar de usuario" width="36" height="36">
             <span><strong>Ana Pérez</strong><span class="eq05-cuenta__rol">Paciente · Mi perfil</span></span>
           </a>
           <a class="eq05-boton eq05-boton--claro eq05-boton--pequeno" href="index.html">Salir</a>
@@ -50,15 +50,27 @@
     <h1>Reservar cita</h1>
     <p class="eq05-subtitulo">Solo verá días y horas que la clínica y el médico tienen disponibles.</p>
 
-    <form class="eq05-form eq05-dos-columnas" id="eq05-form-cita" action="principal-detalle.html" method="get">
+    <!-- CORRECCIÓN 1: method="post" y action="#" según la rúbrica -->
+    <form class="eq05-form eq05-dos-columnas" id="eq05-form-cita" action="#" method="post">
       <div>
         <fieldset>
           <legend>1 · ¿Qué necesita?</legend>
+          
           <div class="eq05-campo">
             <label for="eq05-cita-paciente">Paciente <small class="eq05-texto-secundario">(solo Recepción)</small></label>
             <input type="search" id="eq05-cita-paciente" name="paciente" placeholder="Buscar por nombre o cédula" maxlength="80" autocomplete="off">
             <span class="eq05-ayuda">Recepción puede reservar en nombre de un paciente. El paciente reserva para sí mismo.</span>
           </div>
+
+          <!-- CORRECCIÓN 2: CAMPO ESPECIAL ASIGNADO (Número de expediente: 6 dígitos) -->
+          <div class="eq05-campo">
+            <label for="eq05-cita-expediente">Número de expediente <span class="eq05-requerido">*</span></label>
+            <input type="text" id="eq05-cita-expediente" name="numero_expediente" placeholder="Ej. 123456" 
+                   pattern="\d{6}" minlength="6" maxlength="6" inputmode="numeric" 
+                   autocomplete="off" required>
+            <span class="eq05-ayuda">Debe contener exactamente 6 dígitos numéricos.</span>
+          </div>
+
           <div class="eq05-fila-campos">
             <div class="eq05-campo">
               <label for="eq05-cita-especialidad">Especialidad <span class="eq05-requerido">*</span></label>
@@ -119,20 +131,22 @@
             <div>
               <div class="eq05-campo">
                 <label for="eq05-cita-fecha">Fecha <span class="eq05-requerido">*</span></label>
-                <input type="date" id="eq05-cita-fecha" name="fecha" value="2027-02-18" min="2027-02-01" max="2027-04-02" required>
-                <span class="eq05-ayuda">Entre hoy y 60 días después.</span>
+                <!-- CORRECCIÓN 3: Regla de negocio de 24 horas de anticipación reflejada en min y texto -->
+                <input type="date" id="eq05-cita-fecha" name="fecha" value="2027-02-19" min="2027-02-19" max="2027-04-02" required>
+                <span class="eq05-ayuda"><strong>Nota:</strong> Las citas deben solicitarse con al menos 24 horas de anticipación.</span>
               </div>
               <fieldset>
-                <legend>Horas libres del jueves 18 de febrero</legend>
+                <legend>Horas libres del jueves 19 de febrero</legend>
                 <div class="eq05-horas">
-              <label class="eq05-hora"><input type="radio" name="hora" value="08:00" required><span>8:00</span></label>
-              <label class="eq05-hora"><input type="radio" name="hora" value="08:30" required><span>8:30</span></label>
-              <label class="eq05-hora"><input type="radio" name="hora" value="09:00" disabled required><span>9:00<span class="eq05-sr"> (ocupado)</span></span></label>
-              <label class="eq05-hora"><input type="radio" name="hora" value="09:30" required><span>9:30</span></label>
-              <label class="eq05-hora"><input type="radio" name="hora" value="10:00" checked required><span>10:00</span></label>
-              <label class="eq05-hora"><input type="radio" name="hora" value="10:30" required><span>10:30</span></label>
-              <label class="eq05-hora"><input type="radio" name="hora" value="11:00" disabled required><span>11:00<span class="eq05-sr"> (ocupado)</span></span></label>
-              <label class="eq05-hora"><input type="radio" name="hora" value="11:30" required><span>11:30</span></label>
+                  <label class="eq05-hora"><input type="radio" name="hora" value="08:00" required><span>8:00</span></label>
+                  <label class="eq05-hora"><input type="radio" name="hora" value="08:30" required><span>8:30</span></label>
+                  <!-- CORRECCIÓN 4: Se quitó 'required' de los inputs deshabilitados -->
+                  <label class="eq05-hora"><input type="radio" name="hora" value="09:00" disabled><span>9:00<span class="eq05-sr"> (ocupado)</span></span></label>
+                  <label class="eq05-hora"><input type="radio" name="hora" value="09:30" required><span>9:30</span></label>
+                  <label class="eq05-hora"><input type="radio" name="hora" value="10:00" checked required><span>10:00</span></label>
+                  <label class="eq05-hora"><input type="radio" name="hora" value="10:30" required><span>10:30</span></label>
+                  <label class="eq05-hora"><input type="radio" name="hora" value="11:00" disabled><span>11:00<span class="eq05-sr"> (ocupado)</span></span></label>
+                  <label class="eq05-hora"><input type="radio" name="hora" value="11:30" required><span>11:30</span></label>
                 </div>
               </fieldset>
             </div>
@@ -151,7 +165,7 @@
           <dt>Especialidad</dt><dd>Cardiología</dd>
           <dt>Servicio</dt><dd>Primera vez (30 min)</dd>
           <dt>Médico</dt><dd>Dra. Carmen Ríos</dd>
-          <dt>Fecha</dt><dd><time datetime="2027-02-18">Jue 18 feb 2027</time></dd>
+          <dt>Fecha</dt><dd><time datetime="2027-02-19">Vie 19 feb 2027</time></dd>
           <dt>Hora</dt><dd><time datetime="10:00">10:00 a. m.</time></dd>
           <dt>Lugar</dt><dd>Consultorio 204</dd>
         </dl>

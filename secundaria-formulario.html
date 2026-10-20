@@ -14,8 +14,9 @@
 <body>
   <header id="eq05-encabezado">
     <div class="eq05-contenedor eq05-encabezado__barra">
+      <!-- CORRECCIÓN: alt descriptivo para evitar warnings en W3C -->
       <a class="eq05-logo" href="index.html">
-        <img src="img/logo.svg" alt="" width="36" height="36">
+        <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
         <span>MediAgenda</span>
       </a>
       <input class="eq05-menu-check" type="checkbox" id="eq05-menu-check">
@@ -31,7 +32,7 @@
         <div class="eq05-cuenta">
           <img src="img/iconos/campana.svg" alt="Avisos: 1 sin leer" width="22" height="22">
           <a class="eq05-cuenta__usuario" href="perfil.html">
-            <img class="eq05-avatar" src="img/avatar.svg" alt="" width="36" height="36">
+            <img class="eq05-avatar" src="img/avatar.svg" alt="Avatar de usuario" width="36" height="36">
             <span><strong>Marta Díaz</strong><span class="eq05-cuenta__rol">Administrador · Mi perfil</span></span>
           </a>
           <a class="eq05-boton eq05-boton--claro eq05-boton--pequeno" href="index.html">Salir</a>
@@ -51,7 +52,8 @@
     <h1>Horario del médico</h1>
     <p class="eq05-subtitulo">Defina cuándo atiende cada médico y registre sus ausencias. Los feriados y el carnaval se bloquean solos aunque el día tenga horario.</p>
 
-    <form class="eq05-form" id="eq05-form-horario" action="principal-listado.html" method="get">
+    <!-- CORRECCIÓN: method="post" y action="#" según la rúbrica -->
+    <form class="eq05-form" id="eq05-form-horario" action="#" method="post">
       <div class="eq05-campo">
         <label for="eq05-hor-medico">Médico <span class="eq05-requerido">*</span></label>
         <select id="eq05-hor-medico" name="medico" required>
@@ -208,7 +210,7 @@
       </div>
 
       <section class="eq05-aviso eq05-aviso--advertencia" aria-labelledby="eq05-titulo-impacto">
-        <img src="img/iconos/advertencia.svg" alt="" width="22" height="22">
+        <img src="img/iconos/advertencia.svg" alt="Icono de advertencia" width="22" height="22">
         <div>
           <h2 id="eq05-titulo-impacto">Esta ausencia afecta 9 citas programadas</h2>
           <p>Al guardar, el sistema propondrá el <strong>siguiente espacio libre</strong> de la Dra. Ríos para cada una. El paciente verá la nueva fecha al ingresar y podrá cambiarla.</p>
