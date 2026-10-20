@@ -4,6 +4,28 @@
 
 **Nombre:** MediAgenda, sistema web de citas médicas.
 
+## Integrantes y roles del hito
+| Integrante | Usuario GitHub | Rol |
+|------------|----------------|-----|
+| [Benjamin concepcion] | [bconcepcion1376]    | [Líder de proyecto y desarrollo HTML/CSS] |
+| [Dana wing]  | [dalilaling]  | [Calidad y validación W3C ] |
+| [Alvaro guardia] |[aguard28] | [Calidad y validación W3C ] |
+| [Edwin ]     |[simbiak]      | [Documentación] |
+
+## Descripción
+MediAgenda es un sistema web de citas médicas para las clínicas privadas Minimed en Ciudad de Panamá. Permite a los pacientes reservar, reprogramar y cancelar citas en línea 24/7, sin depender del horario de recepción. El sistema bloquea automáticamente feriados nacionales de Panamá (incluidos carnaval y toma de posesión) y reagenda en bloque las citas cuando un médico se ausenta, evitando traslados innecesarios de los pacientes.
+
+## Cómo abrir el sitio
+1. Descarga o clona este repositorio
+2. Abre el archivo `index.html` en tu navegador
+
+
+## Prefijo, color de acento, campo especial y regla de negocio
+- **Prefijo:** `eq05-` (aplicado en todas las clases, IDs y variables CSS)
+- **Color de acento:** `#0A62A0` (azul MediAgenda, asignado por el docente)
+- **Campo especial:** Número de expediente (exactamente 6 dígitos) en `principal-formulario.html`
+- **Regla de negocio:** Las citas pedidas por el paciente deben hacerse con al menos **24 horas de anticipación**; el rol de Recepción puede reagendar sin ese límite.
+
 ## Alcance
 
 ### Contexto y problema
@@ -45,7 +67,7 @@ A diferencia de agendar por teléfono o en la libreta de recepción, MediAgenda 
 
 ## D. Maqueta HTML5 + CSS3
 
-Sitio estático navegable que reproduce los wireframes (`docs/wireframes.pdf`) y aplica la guía de estilo (`docs/guia_estilo.pdf`). Para verlo, abra `index.html` en el navegador o use la extensión *Live Server* de VS Code.
+Sitio estático navegable que reproduce los wireframes (`docs/wireframes.pdf`) y aplica la guía de estilo (`docs/guia_estilo.pdf`). 
 
 ### Páginas
 
@@ -89,7 +111,7 @@ docs/                               propuesta, wireframes, guía de estilo y dem
 | CSS3 | Hoja externa `css/estilos.css` enlazada en todas las páginas. Selectores de id (`#eq05-encabezado`), clase (`.eq05-boton`), universal (`*`) y agrupación (`h1, h2, h3, h4`). Prefijo de equipo `eq05-` en todos los id, clases y variables. Diseño con Flexbox y Grid, adaptable a móvil (menú plegable y tabla de citas en tarjetas). |
 | Guía de estilo | Color asignado `#0A62A0` y su paleta, tipografía Inter, espaciado base 8 px, botones, campos, estados de cita y avisos tal como se definen en la guía. |
 
-> Los formularios usan `method="get"` y apuntan a la página siguiente solo para que la maqueta sea navegable sin servidor. En la versión con backend se enviarán por POST.
+> Todos los formularios usan method="post" y action="#" según las instrucciones de la rúbrica para maquetas estáticas del Hito 1.
 
 ### Validación
 
@@ -100,8 +122,21 @@ Todas las páginas se validaron sin errores con el validador HTML del W3C (Nu Ht
 | HTML · [validator.w3.org/nu](https://validator.w3.org/nu/) | 12 páginas, 0 errores |
 | CSS · [jigsaw.w3.org/css-validator](https://jigsaw.w3.org/css-validator/) | `css/estilos.css`, 0 errores |
 
-Capturas:
+### Capturas de validación
 
-<!-- Agregar las capturas del validador en docs/validacion/ y enlazarlas aquí, por ejemplo: -->
-<!-- ![Validación HTML de index.html](docs/validacion/html-index.png) -->
-<!-- ![Validación CSS de estilos.css](docs/validacion/css-estilos.png) -->
+Validación HTML:
+![Validación HTML de index.html](docs/validacion/html-index.png)
+
+Validación CSS:
+![Validación CSS de estilos.css](docs/validacion/css-estilos.png)
+
+## Declaración de herramientas
+De conformidad con la política de integridad académica del curso:
+
+Se utilizó inteligencia artificial (Qwen) exclusivamente como **asistente de auditoría y revisión** para:
+1. Verificar el cumplimiento de la rúbrica del Hito 1 
+2. Sugerir mejoras de accesibilidad 
+
+---
+
+ 2026 MediAgenda  Proyecto semestral, Equipo 05  Clínicas Minimed, Ciudad de Panamá
