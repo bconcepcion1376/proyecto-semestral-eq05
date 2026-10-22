@@ -14,9 +14,8 @@
 <body>
   <header id="eq05-encabezado">
     <div class="eq05-contenedor eq05-encabezado__barra">
-      <!-- CORRECCIÓN: alt descriptivo para evitar warnings en W3C -->
       <a class="eq05-logo" href="index.html">
-        <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
+        <img src="img/logo.svg" alt="" width="36" height="36">
         <span>MediAgenda</span>
       </a>
       <input class="eq05-menu-check" type="checkbox" id="eq05-menu-check">
@@ -32,8 +31,7 @@
         <div class="eq05-cuenta">
           <img src="img/iconos/campana.svg" alt="Avisos: 1 sin leer" width="22" height="22">
           <a class="eq05-cuenta__usuario" href="perfil.html">
-            <!-- CORRECCIÓN: alt descriptivo -->
-            <img class="eq05-avatar" src="img/avatar.svg" alt="Avatar de usuario" width="36" height="36">
+            <img class="eq05-avatar" src="img/avatar.svg" alt="" width="36" height="36">
             <span><strong>Marta Díaz</strong><span class="eq05-cuenta__rol">Administrador · Mi perfil</span></span>
           </a>
           <a class="eq05-boton eq05-boton--claro eq05-boton--pequeno" href="index.html">Salir</a>
@@ -47,24 +45,23 @@
     <p class="eq05-subtitulo">Datos al <time datetime="2027-02-01">lunes 1 de febrero de 2027</time>.</p>
 
     <section class="eq05-indicadores" aria-label="Indicadores del mes">
-      <!-- CORRECCIÓN: h3 para mantener jerarquía correcta (h1 -> h2 -> h3) -->
       <article class="eq05-indicador">
-        <h3>Citas de enero</h3>
+        <h2>Citas de enero</h2>
         <p class="eq05-indicador__valor"><data value="1248">1 248</data></p>
         <p class="eq05-texto-secundario"><small>▲ 6 % frente a diciembre</small></p>
       </article>
       <article class="eq05-indicador">
-        <h3>Ocupación de agendas</h3>
+        <h2>Ocupación de agendas</h2>
         <p class="eq05-indicador__valor"><data value="0.78">78 %</data></p>
         <p class="eq05-texto-secundario"><small>Espacios usados / ofrecidos</small></p>
       </article>
       <article class="eq05-indicador">
-        <h3>Cancelaciones</h3>
+        <h2>Cancelaciones</h2>
         <p class="eq05-indicador__valor"><data value="0.062">6,2 %</data></p>
         <p class="eq05-texto-secundario"><small>77 citas canceladas</small></p>
       </article>
       <article class="eq05-indicador">
-        <h3>Ausentismo</h3>
+        <h2>Ausentismo</h2>
         <p class="eq05-indicador__valor"><data value="0.041">4,1 %</data></p>
         <p class="eq05-texto-secundario"><small>51 pacientes no llegaron</small></p>
       </article>
