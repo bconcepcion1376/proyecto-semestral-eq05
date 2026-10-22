@@ -7,9 +7,9 @@
 ## Integrantes y roles del hito
 | Integrante | Usuario GitHub | Rol |
 |------------|----------------|-----|
-| Benjamin concepcion | bconcepcion1376]    | Líder de proyecto y desarrollo HTML/CSS |
-| Dana wing]  | dalilaling  | Calidad , validación W3C y desarrollo HTML/CSS  |
-| Alvaro guardia] | aguard28 | Calidad , validación W3C  y desarrollo HTML/CSS |
+| Benjamin Concepcion | bconcepcion1376    | Líder de proyecto y desarrollo HTML/CSS |
+| Dana Wing  | dalilaling  | Calidad , validación W3C y desarrollo HTML/CSS  |
+| Alvaro Guardia | aguard28 | Calidad , validación W3C  y desarrollo HTML/CSS |
 | Edwin Vergara     | simbiak      | Documentación y desarrollo HTML/CSS |
 
 ## Descripción
