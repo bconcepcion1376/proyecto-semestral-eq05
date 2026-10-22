@@ -7,10 +7,10 @@
 ## Integrantes y roles del hito
 | Integrante | Usuario GitHub | Rol |
 |------------|----------------|-----|
-| [Benjamin concepcion] | [bconcepcion1376]    | [Líder de proyecto y desarrollo HTML/CSS] |
-| [Dana wing]  | [dalilaling]  | [Calidad y validación W3C ] |
-| [Alvaro guardia] |[aguard28] | [Calidad y validación W3C ] |
-| [Edwin ]     |[simbiak]      | [Documentación] |
+| Benjamin concepcion | bconcepcion1376]    | Líder de proyecto y desarrollo HTML/CSS |
+| Dana wing]  | dalilaling  | Calidad , validación W3C y desarrollo HTML/CSS  |
+| Alvaro guardia] | aguard28 | Calidad , validación W3C  y desarrollo HTML/CSS |
+| Edwin Vergara     | simbiak      | Documentación y desarrollo HTML/CSS |
 
 ## Descripción
 MediAgenda es un sistema web de citas médicas para las clínicas privadas Minimed en Ciudad de Panamá. Permite a los pacientes reservar, reprogramar y cancelar citas en línea 24/7, sin depender del horario de recepción. El sistema bloquea automáticamente feriados nacionales de Panamá (incluidos carnaval y toma de posesión) y reagenda en bloque las citas cuando un médico se ausenta, evitando traslados innecesarios de los pacientes.
