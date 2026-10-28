@@ -1,0 +1,60 @@
+# Control de entrega - Hito 2
+# Lo agrega el docente. Cualquier cambio o borrado de este archivo queda en el historial de Git.
+name: control-entrega-hito2
+
+on:
+  push:
+    branches: ["entrega-hito2"]
+
+permissions:
+  contents: read
+  issues: write
+
+env:
+  HITO: "Hito 2"
+  LIMITE_UTC: "2026-11-11T04:59:59Z"   # 10-nov-2026 23:59:59 hora de Panamá (UTC-5)
+  GRACIA_MIN: "60"
+  DOCENTE: "SarmientoEdu"
+
+jobs:
+  tardia:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Registrar entrega tardía
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PUSHED_AT: ${{ github.event.repository.pushed_at }}
+          ACTOR: ${{ github.actor }}
+          RAMA: ${{ github.ref_name }}
+          SHA: ${{ github.sha }}
+          MENSAJE: ${{ github.event.head_commit.message }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          TS="$PUSHED_AT"
+          case "$TS" in ''|*[!0-9]*) TS=$(date -u +%s) ;; esac   # respaldo: hora del servidor
+          LIM=$(date -u -d "$LIMITE_UTC" +%s)
+          if [ "$TS" -le $(( LIM + GRACIA_MIN * 60 )) ]; then
+            echo "Push a tiempo. Nada que registrar."
+            exit 0
+          fi
+          HORAS=$(awk -v a="$TS" -v b="$LIM" 'BEGIN{printf "%.1f", (a-b)/3600}')
+          HORA_LOCAL=$(TZ=America/Panama date -d "@$TS" '+%Y-%m-%d %H:%M')
+          LIMITE_LOCAL=$(TZ=America/Panama date -d "@$LIM" '+%Y-%m-%d %H:%M')
+          CORTO=$(printf '%s' "$SHA" | cut -c1-7)
+          LINEA=$(printf '%s' "$MENSAJE" | head -n1)
+          TITULO="⏰ ${HITO}: entrega tardía"
+          CUERPO="@${DOCENTE} Push posterior a la fecha límite (${LIMITE_LOCAL}, hora de Panamá).
+
+          - Hora de recepción: ${HORA_LOCAL} (${HORAS} h tarde)
+          - Rama: ${RAMA} | Commit: ${CORTO} | Push de: @${ACTOR}
+          - Mensaje: ${LINEA}
+          - Ejecución: ${RUN_URL}"
+          N=$(gh issue list --repo "$REPO" --state all --limit 100 --json number,title \
+                --jq ".[] | select(.title == \"$TITULO\") | .number" | head -n1 || true)
+          if [ -z "$N" ]; then
+            gh issue create --repo "$REPO" --title "$TITULO" --body "$CUERPO"
+          else
+            gh issue comment "$N" --repo "$REPO" --body "$CUERPO"
+          fi
