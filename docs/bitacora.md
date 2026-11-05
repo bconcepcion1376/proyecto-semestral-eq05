@@ -6,7 +6,11 @@ Cada entrada indica fecha, participantes, decisiones, problemas y pendientes.
 ---
 
 ## 2026-11-05 · Preparación del repositorio
-**Participantes:** Benjamin Concepción [agregar a quien haya participado]
+**Participantes:** 
+Benjamin Concepción
+Dana Wing
+Alvaro Guardia
+Edwin Vergara
 
 **Decisiones:**
 - Se creó la rama de entrega `entrega-hito2` a partir de `main`, después de `git pull`.
@@ -28,3 +32,36 @@ Cada entrada indica fecha, participantes, decisiones, problemas y pendientes.
 - Conseguir los 3 registros semilla dictados en clase (semana 9).
 - Estar atentos al cambio de requerimiento (semana 11).
 - Iniciar la Fase 1: includes, `config/datos_demo.php` y `clases/Validador.php`.
+
+---
+
+## 2026-11-05 · Cambio de requerimiento y registros semilla
+**Participantes:** 
+- Benjamin Concepción
+- Dana Wing
+- Alvaro Guardia
+- Edwin Vergara
+**Decisiones:**
+- Se recibió del docente el cambio de requerimiento del Hito 2 (texto original):
+  > Un médico no puede tener dos citas a la misma fecha y hora, y máximo 8 citas activas
+  > por día (parámetro configurable).
+- De las pruebas indicadas por el docente se identifican 3 reglas:
+  - R1: un médico no puede tener dos citas activas a la misma fecha y hora.
+  - R2: máximo 8 citas activas por médico por día, definido como constante en `config/`.
+  - R3: un paciente no puede tener dos citas activas de la misma especialidad.
+- Se recibieron los 3 registros semilla (expedientes 482915, 482916 y 482917), que se
+  agregarán a `config/datos_demo.php`.
+- Definición de cita activa: Pendiente, Confirmada, Programada, Reagendada, En sala.
+- Definición de cita no activa: Cancelada, Atendida, No asistió.
+
+**Problemas:**
+- Los estados "Confirmada" y "Pendiente" de los registros semilla no existían en la maqueta;
+  hay que agregarlos a las listas permitidas.
+- Los médicos Ignacio Valdelomar y Pilar Zamudio no estaban en los formularios.
+- El nombre "D'Alessio" contiene un apóstrofo que hay que tratar con cuidado en PHP y al mostrarlo.
+
+**Pendiente:**
+- Edwin: agregar los registros semilla y la constante del máximo diario a `datos_demo.php`.
+- Dana: implementar R1, R2 y R3 en el procesamiento de citas.
+- Benjamin: agregar médicos y estados nuevos en `principal_formulario` y `principal_listado`.
+- Agregar casos de prueba de R1, R2 y R3 al plan de pruebas y la fila al documento de trazabilidad.
