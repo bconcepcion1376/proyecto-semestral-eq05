@@ -18,10 +18,10 @@ Edwin Vergara
 - Cada integrante trabaja en su rama personal `nombre/hito2`, creada desde `entrega-hito2`.
 - Los cambios entran a `entrega-hito2` solo mediante Pull Request revisado por otro integrante.
 - Roles del Hito 2: 
-  - Benjamin,  Desarrollo (backend PHP), repositorio y documentación.
-  - Dana, líder de proyecto.
+  - Benjamin,  Desarrollo (backend PHP).
+  - Dana, líder de proyecto y repositorio
   - Alvaro, Diseño y experiencia de usuario.
-  - Calidad, seguridad.
+  - Calidad, seguridad y documentacion.
 
 **Problemas:**
 - No se pudo crear la rama `benjamin` porque ya existía `benjamin/bitacora` (Git no permite
