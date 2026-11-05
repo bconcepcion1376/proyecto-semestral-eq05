@@ -17,7 +17,11 @@ Edwin Vergara
 - Se verificó que Issues está habilitado y que el workflow `control-entrega-hito2` corre en verde.
 - Cada integrante trabaja en su rama personal `nombre/hito2`, creada desde `entrega-hito2`.
 - Los cambios entran a `entrega-hito2` solo mediante Pull Request revisado por otro integrante.
-- Roles del Hito 2: Benjamin, líder de proyecto. [completar los demás roles]
+- Roles del Hito 2: 
+  - Benjamin,  Desarrollo (backend PHP), repositorio y documentación.
+  - Dana, líder de proyecto.
+  - Alvaro, Diseño y experiencia de usuario.
+  - Calidad, seguridad.
 
 **Problemas:**
 - No se pudo crear la rama `benjamin` porque ya existía `benjamin/bitacora` (Git no permite
@@ -33,7 +37,7 @@ Edwin Vergara
 - Estar atentos al cambio de requerimiento (semana 11).
 - Iniciar la Fase 1: includes, `config/datos_demo.php` y `clases/Validador.php`.
 
----
+-----------------------------------------------------------------------------------------------------------------------
 
 ## 2026-11-05 · Cambio de requerimiento y registros semilla
 **Participantes:** 
