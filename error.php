@@ -15,7 +15,7 @@
   <header id="eq05-encabezado">
     <div class="eq05-contenedor eq05-encabezado__barra">
       <!-- CORRECCIÓN: alt descriptivo para evitar warnings en W3C -->
-      <a class="eq05-logo" href="index.html">
+      <a class="eq05-logo" href="index.php">
         <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
         <span>MediAgenda</span>
       </a>
@@ -23,20 +23,20 @@
       <label class="eq05-menu-boton" for="eq05-menu-check"><span class="eq05-sr">Abrir o cerrar el menú</span><span aria-hidden="true">☰</span></label>
       <nav class="eq05-nav" id="eq05-nav-principal" aria-label="Principal">
         <ul class="eq05-nav__lista">
-          <li><a class="eq05-nav__enlace" href="index.html">Inicio</a></li>
-          <li><a class="eq05-nav__enlace" href="principal-formulario.html">Reservar cita</a></li>
-          <li><a class="eq05-nav__enlace" href="principal-listado.html">Citas</a></li>
-          <li><a class="eq05-nav__enlace" href="secundaria-formulario.html">Horarios</a></li>
-          <li><a class="eq05-nav__enlace" href="panel.html">Administración</a></li>
+          <li><a class="eq05-nav__enlace" href="index.php">Inicio</a></li>
+          <li><a class="eq05-nav__enlace" href="principal_formulario.php">Reservar cita</a></li>
+          <li><a class="eq05-nav__enlace" href="principal_listado.php">Citas</a></li>
+          <li><a class="eq05-nav__enlace" href="secundaria_formulario.php">Horarios</a></li>
+          <li><a class="eq05-nav__enlace" href="panel.php">Administración</a></li>
         </ul>
         <div class="eq05-cuenta">
           <img src="img/iconos/campana.svg" alt="Avisos: 1 sin leer" width="22" height="22">
-          <a class="eq05-cuenta__usuario" href="perfil.html">
+          <a class="eq05-cuenta__usuario" href="perfil.php">
             <!-- CORRECCIÓN: alt descriptivo -->
             <img class="eq05-avatar" src="img/avatar.svg" alt="Avatar de usuario" width="36" height="36">
             <span><strong>Ana Pérez</strong><span class="eq05-cuenta__rol">Paciente · Mi perfil</span></span>
           </a>
-          <a class="eq05-boton eq05-boton--claro eq05-boton--pequeno" href="index.html">Salir</a>
+          <a class="eq05-boton eq05-boton--claro eq05-boton--pequeno" href="index.php">Salir</a>
         </div>
       </nav>
     </div>
@@ -51,8 +51,8 @@
         <h1 id="eq05-titulo-error">No tiene permiso para ver esta página</h1>
         <p>Su cuenta (<strong>Paciente</strong>) no tiene acceso a <strong>Administración</strong>. Si cree que es un error, comuníquese con recepción.</p>
         <div class="eq05-acciones">
-          <a class="eq05-boton eq05-boton--primario" href="principal-listado.html">Ir a mis citas</a>
-          <a class="eq05-boton" href="index.html">Ir al inicio</a>
+          <a class="eq05-boton eq05-boton--primario" href="principal_listado.php">Ir a mis citas</a>
+          <a class="eq05-boton" href="index.php">Ir al inicio</a>
         </div>
         <p class="eq05-texto-secundario"><small>Código de referencia: <code>ERR-403-7F2A</code></small></p>
       </div>
@@ -64,7 +64,7 @@
         <h2 id="eq05-titulo-404">Variante: página no encontrada</h2>
         <p>La dirección no existe o la cita ya no está disponible.</p>
       </div>
-      <a class="eq05-boton" href="index.html">Ir al inicio</a>
+      <a class="eq05-boton" href="index.php">Ir al inicio</a>
     </section>
   </main>
 
@@ -73,10 +73,10 @@
       <p><strong>MediAgenda</strong> · Clínicas Minimed, Ciudad de Panamá</p>
       <nav aria-label="Enlaces del pie de página">
         <ul class="eq05-pie__enlaces">
-          <li><a href="index.html#eq05-como-funciona">Ayuda</a></li>
-          <li><a href="legal.html#eq05-privacidad">Privacidad</a></li>
-          <li><a href="legal.html#eq05-terminos">Términos</a></li>
-          <li><a href="index.html#eq05-contacto">Contacto</a></li>
+          <li><a href="index.php#eq05-como-funciona">Ayuda</a></li>
+          <li><a href="legal.php#eq05-privacidad">Privacidad</a></li>
+          <li><a href="legal.php#eq05-terminos">Términos</a></li>
+          <li><a href="index.php#eq05-contacto">Contacto</a></li>
         </ul>
       </nav>
       <p><small>© 2026 MediAgenda · Proyecto semestral, equipo 05</small></p>
