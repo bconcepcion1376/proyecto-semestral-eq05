@@ -1516,3 +1516,18 @@ small { font-size: 0.875rem; }
     width: auto;
   }
 }
+
+.eq05-estado--pendiente {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+.eq05-estado--confirmada {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+}
