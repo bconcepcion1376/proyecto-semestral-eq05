@@ -69,3 +69,51 @@ Edwin Vergara
 - Dana: implementar R1, R2 y R3 en el procesamiento de citas.
 - Benjamin: agregar médicos y estados nuevos en `principal_formulario` y `principal_listado`.
 - Agregar casos de prueba de R1, R2 y R3 al plan de pruebas y la fila al documento de trazabilidad.
+
+---------------------------------------------------------------------------------------------------------------------------------
+## 2026-11-05 · Migración de mis páginas a PHP (parte A: enlaces y datos semilla)
+**Participantes:**
+- Benjamin Concepción
+
+**Trabajo realizado:**
+- Renombré mis 9 páginas de `.html` a `.php` con `git mv` para conservar el historial (`7f592cc`).
+- `principal_formulario.php`: calendario de noviembre 2026 alineado con los registros semilla
+  (feriados 3, 4, 5, 10 y 28; día 18 sin cupo; 19 y 20 ausencia del médico), Dr. Valdelomar
+  y Dra. Zamudio agregados, 9:30 deshabilitada por estar ocupada (`83d4ca8`).
+- `principal_listado.php`: enlaces corregidos, estados Pendiente y Confirmada en el filtro y
+  en las pestañas, pestañas por nombre de estado (`?estado=programada`) en lugar de números,
+  y se eliminó la fila duplicada CIT-0148 (`70fbe83`).
+- `error.php`: recibe el código por GET (`?codigo=403|404`) o desde Apache
+  (`REDIRECT_STATUS`), lo valida con lista blanca (`in_array` estricto) y envía el código
+  HTTP real con `http_response_code`. Los textos salen de un arreglo y se imprimen con
+  `htmlspecialchars` (`8395466`, `5854c9a`).
+- `index.php`: enlaces a `.php`, médicos semilla en el buscador y el buscador pasa a
+  `method="get"` hacia `principal_formulario.php` (formulario GET de búsqueda) (`d742588`).
+- `legal.php`: enlaces del menú y reglas R2 y R3 agregadas a los términos de uso (`3d83e6e`).
+
+**Decisiones:**
+- Los valores de estado son los mismos en el filtro y en las pestañas (programada,
+  reagendada, sala, atendida, cancelada, ausente, pendiente, confirmada), para validarlos
+  con una sola lista en PHP.
+- Los nombres de archivo usan guion bajo (`principal_listado.php`), según la sección 6.
+- Una búsqueda solo consulta datos, por eso usa GET; los formularios que modifican datos usan POST.
+
+**Problemas:**
+- Al reemplazar `.html` por `.php` quedaron enlaces con guion (`principal-detalle.php`) que
+  daban 404. Solución: buscar por el nombre del archivo y no solo por la extensión.
+- En el listado el médico semilla estaba escrito "Samudio"; se corrigió a "Zamudio" para
+  que coincida con el formulario y la validación.
+- El listado mostraba tres fechas distintas (subtítulo, filtro y tabla); se alinearon.
+- En `error.php` quedó una línea duplicada y un `</div>` sin pareja; se detectó al validar
+  el balance de etiquetas.
+- `php -S` falló al escribir el comando entre comillas, y luego la página no cargaba
+  (ERR_CONNECTION_REFUSED) porque el servidor se había detenido.
+
+**Pendiente:**
+- Benjamin: corregir enlaces en `login.php`, `registro.php`, `recuperar.php` y `principal_detalle.php`.
+- Alvaro: clases CSS `eq05-estado--pendiente` y `eq05-estado--confirmada`; carpeta `includes/`.
+- Edwin: `config/datos_demo.php` con registros semilla, feriados y la constante del máximo diario.
+- Cuando existan los includes: reemplazar encabezado y pie en mis 9 páginas.
+- Completar los feriados que faltan: 9 de enero, lunes y martes de carnaval (8 y 9 de febrero de 2027) y Viernes Santo (26 de marzo de 2027).
+- Agregar al plan de pruebas los 6 casos de `error.php` (403, 404, sin parámetro, abc, 500 e inyección).
+- `.htaccess` con `ErrorDocument 403/404` hacia `error.php` (probar con Apache, no con `php -S`).
