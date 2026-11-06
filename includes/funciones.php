@@ -1,4 +1,5 @@
 <?php
+session_start();
 defined('APP_ACCESO') or exit('Acceso denegado');
 
 function limpiar($dato) {
@@ -25,7 +26,6 @@ function formatear_fecha($fecha) {
 }
 
 function generar_token_csrf() {
-    if (session_status() === PHP_SESSION_NONE) session_start();
     if (empty($_SESSION['token_csrf'])) {
         $_SESSION['token_csrf'] = bin2hex(random_bytes(32));
     }
@@ -33,6 +33,5 @@ function generar_token_csrf() {
 }
 
 function verificar_token_csrf($token) {
-    if (session_status() === PHP_SESSION_NONE) session_start();
     return isset($_SESSION['token_csrf']) && hash_equals($_SESSION['token_csrf'], $token);
 }
