@@ -4,7 +4,7 @@ define('ACCESO_QZ7', true);
 require_once 'includes/funciones.php';
 require_once 'includes/encabezado.php';
 
-session_start();
+git add index.phpsession_start();
 if (!isset($_SESSION['rol'])) {
     $_SESSION['rol'] = 'invitado';
 }
