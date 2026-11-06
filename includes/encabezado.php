@@ -1,6 +1,5 @@
-// rev:nb4-h2
 <?php
-defined('ACCESO_QZ7') or exit('Acceso denegado');
+defined('APP_ACCESO') or exit('Acceso denegado');
 /*
 * Encabezado común de MediAgenda: <head>, logo y menú principal.
 * Antes de incluirlo, cada página debe definir:
@@ -14,12 +13,12 @@ defined('ACCESO_QZ7') or exit('Acceso denegado');
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="<?php echo htmlspecialchars($descripcion, ENT_QUOTES, 'UTF-8'); ?>">
-<title><?php echo htmlspecialchars($titulo, ENT_QUOTES, 'UTF-8'); ?> · MediAgenda</title>
+<meta name="description" content="<?php echo limpiar($descripcion); ?>">
+<title><?php echo limpiar($titulo); ?> · MediAgenda</title>
 <link rel="icon" href="img/logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
