@@ -14,7 +14,7 @@
 <body>
   <header id="eq05-encabezado">
     <div class="eq05-contenedor eq05-encabezado__barra">
-      <a class="eq05-logo" href="index.html">
+      <a class="eq05-logo" href="index.php">
         <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
         <span>MediAgenda</span>
       </a>
@@ -22,19 +22,19 @@
       <label class="eq05-menu-boton" for="eq05-menu-check"><span class="eq05-sr">Abrir o cerrar el menú</span><span aria-hidden="true">☰</span></label>
       <nav class="eq05-nav" id="eq05-nav-principal" aria-label="Principal">
         <ul class="eq05-nav__lista">
-          <li><a class="eq05-nav__enlace" href="index.html">Inicio</a></li>
-          <li><a class="eq05-nav__enlace" href="principal-formulario.html">Reservar cita</a></li>
-          <li><a class="eq05-nav__enlace eq05-nav__enlace--activo" href="principal-listado.html" aria-current="page">Citas</a></li>
-          <li><a class="eq05-nav__enlace" href="secundaria-formulario.html">Horarios</a></li>
-          <li><a class="eq05-nav__enlace" href="panel.html">Administración</a></li>
+          <li><a class="eq05-nav__enlace" href="index.php">Inicio</a></li>
+          <li><a class="eq05-nav__enlace" href="principal_formulario.php">Reservar cita</a></li>
+          <li><a class="eq05-nav__enlace eq05-nav__enlace--activo" href="principal_listado.php" aria-current="page">Citas</a></li>
+          <li><a class="eq05-nav__enlace" href="secundaria_formulario.php">Horarios</a></li>
+          <li><a class="eq05-nav__enlace" href="panel.php">Administración</a></li>
         </ul>
         <div class="eq05-cuenta">
           <img src="img/iconos/campana.svg" alt="Avisos: 1 sin leer" width="22" height="22">
-          <a class="eq05-cuenta__usuario" href="perfil.html">
+          <a class="eq05-cuenta__usuario" href="perfil.php">
             <img class="eq05-avatar" src="img/avatar.svg" alt="Avatar de usuario" width="36" height="36">
             <span><strong>Dra. Carmen Ríos</strong><span class="eq05-cuenta__rol">Médico · Mi perfil</span></span>
           </a>
-          <a class="eq05-boton eq05-boton--claro eq05-boton--pequeno" href="index.html">Salir</a>
+          <a class="eq05-boton eq05-boton--claro eq05-boton--pequeno" href="index.php">Salir</a>
         </div>
       </nav>
     </div>
@@ -43,7 +43,7 @@
   <main id="eq05-principal" class="eq05-contenedor">
     <nav class="eq05-migas" aria-label="Ruta de navegación">
       <ol>
-        <li><a href="principal-listado.html">Citas</a></li>
+        <li><a href="principal_listado.php">Citas</a></li>
         <li><span aria-current="page">CIT-0142</span></li>
       </ol>
     </nav>
@@ -81,7 +81,7 @@
           <h2 id="eq05-titulo-nota">Nota de consulta</h2>
           <p class="eq05-texto-secundario"><small>Solo la ve y la edita el médico asignado. Se puede corregir durante 24 horas.</small></p>
           
-          <form class="eq05-form" id="eq05-form-nota" action="#" method="post">
+          <form class="eq05-form" id="eq05-form-nota" action="principal_detalle.php" method="post">
             <fieldset class="eq05-conjunto-campos">
               <legend class="eq05-sr">Formulario de nota de consulta</legend>
               
@@ -130,10 +130,10 @@
       <p><strong>MediAgenda</strong> · Clínicas Minimed, Ciudad de Panamá</p>
       <nav aria-label="Enlaces del pie de página">
         <ul class="eq05-pie__enlaces">
-          <li><a href="index.html#eq05-como-funciona">Ayuda</a></li>
-          <li><a href="legal.html#eq05-privacidad">Privacidad</a></li>
-          <li><a href="legal.html#eq05-terminos">Términos</a></li>
-          <li><a href="index.html#eq05-contacto">Contacto</a></li>
+          <li><a href="index.php#eq05-como-funciona">Ayuda</a></li>
+          <li><a href="legal.php#eq05-privacidad">Privacidad</a></li>
+          <li><a href="legal.php#eq05-terminos">Términos</a></li>
+          <li><a href="index.php#eq05-contacto">Contacto</a></li>
         </ul>
       </nav>
       <p><small>© 2026 MediAgenda · Proyecto semestral, equipo 05</small></p>

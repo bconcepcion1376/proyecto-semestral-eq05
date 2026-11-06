@@ -14,7 +14,7 @@
 <body>
   <header id="eq05-encabezado">
     <div class="eq05-contenedor eq05-encabezado__barra">
-      <a class="eq05-logo" href="index.html">
+      <a class="eq05-logo" href="index.php">
         <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
         <span>MediAgenda</span>
       </a>
@@ -22,19 +22,19 @@
       <label class="eq05-menu-boton" for="eq05-menu-check"><span class="eq05-sr">Abrir o cerrar el menú</span><span aria-hidden="true">☰</span></label>
       <nav class="eq05-nav" id="eq05-nav-principal" aria-label="Principal">
         <ul class="eq05-nav__lista">
-          <li><a class="eq05-nav__enlace" href="index.html">Inicio</a></li>
-          <li><a class="eq05-nav__enlace" href="principal-formulario.html">Reservar cita</a></li>
-          <li><a class="eq05-nav__enlace eq05-nav__enlace--activo" href="principal-listado.html" aria-current="page">Citas</a></li>
-          <li><a class="eq05-nav__enlace" href="secundaria-formulario.html">Horarios</a></li>
-          <li><a class="eq05-nav__enlace" href="panel.html">Administración</a></li>
+          <li><a class="eq05-nav__enlace" href="index.php">Inicio</a></li>
+          <li><a class="eq05-nav__enlace" href="principal_formulario.php">Reservar cita</a></li>
+          <li><a class="eq05-nav__enlace eq05-nav__enlace--activo" href="principal_listado.php" aria-current="page">Citas</a></li>
+          <li><a class="eq05-nav__enlace" href="secundaria_formulario.php">Horarios</a></li>
+          <li><a class="eq05-nav__enlace" href="panel.php">Administración</a></li>
         </ul>
         <div class="eq05-cuenta">
           <img src="img/iconos/campana.svg" alt="Avisos: 1 sin leer" width="22" height="22">
-          <a class="eq05-cuenta__usuario" href="perfil.html">
+          <a class="eq05-cuenta__usuario" href="perfil.php">
             <img class="eq05-avatar" src="img/avatar.svg" alt="Avatar de usuario" width="36" height="36">
             <span><strong>Luis Gómez</strong><span class="eq05-cuenta__rol">Recepción · Mi perfil</span></span>
           </a>
-          <a class="eq05-boton eq05-boton--claro eq05-boton--pequeno" href="index.html">Salir</a>
+          <a class="eq05-boton eq05-boton--claro eq05-boton--pequeno" href="index.php">Salir</a>
         </div>
       </nav>
     </div>
@@ -44,16 +44,16 @@
     <div class="eq05-titulo-fila">
       <div>
         <h1>Citas</h1>
-        <p class="eq05-texto-secundario">Agenda del día · <time datetime="2027-02-01">lunes 1 de febrero de 2027</time></p>
+        <p class="eq05-texto-secundario">Agenda del día · <time datetime="2026-11-12">jueves 12 de noviembre de 2026</time></p>
       </div>
       <div class="eq05-acciones">
-        <a class="eq05-boton" href="secundaria-formulario.html#eq05-ausencia">Registrar ausencia de médico</a>
-        <a class="eq05-boton eq05-boton--primario" href="principal-formulario.html">+ Nueva cita</a>
+        <a class="eq05-boton" href="secundaria_formulario.php#eq05-ausencia">Registrar ausencia de médico</a>
+        <a class="eq05-boton eq05-boton--primario" href="principal_formulario.php">+ Nueva cita</a>
       </div>
     </div>
 
-    <!-- CORRECCIÓN 1 y 2: method="post", action="#" y fieldset/legend -->
-    <form class="eq05-form eq05-filtros" id="eq05-form-filtros" action="#" method="post" role="search">
+    
+    <form class="eq05-form eq05-filtros" id="eq05-form-filtros" action="principal_listado.php" method="get" role="search">
       <fieldset class="eq05-conjunto-campos">
         <legend class="eq05-sr">Filtros de búsqueda de citas</legend>
         
@@ -63,7 +63,7 @@
         </div>
         <div class="eq05-campo">
           <label for="eq05-filtro-fecha">Fecha</label>
-          <input type="date" id="eq05-filtro-fecha" name="fecha" value="2027-02-01">
+          <input type="date" id="eq05-filtro-fecha" name="fecha" value="2026-11-12">
         </div>
         <div class="eq05-campo">
           <label for="eq05-filtro-medico">Médico</label>
@@ -72,6 +72,9 @@
             <option value="arias">Dr. José Arias</option>
             <option value="rios">Dra. Carmen Ríos</option>
             <option value="vega">Dra. Laura Vega</option>
+            <?php //Datos semillas de médicos para pruebas de filtros y búsqueda. ?>
+            <option value="valdelomar">Dr. Ignacio Valdelomar</option>
+            <option value="zamudio">Dra. Pilar Zamudio</option>
           </select>
         </div>
         <div class="eq05-campo">
@@ -96,6 +99,8 @@
             <option value="atendida">Atendida</option>
             <option value="cancelada">Cancelada</option>
             <option value="ausente">No asistió</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="confirmada">Confirmada</option>
           </select>
         </div>
         <div class="eq05-acciones">
@@ -106,18 +111,20 @@
     </form>
 
     <ul class="eq05-resumen-estados" aria-label="Resumen por estado">
-      <li><a href="principal-listado.html?estado=0" aria-current="true">Todas <span class="eq05-numero">32</span></a></li>
-      <li><a href="principal-listado.html?estado=1">Programadas <span class="eq05-numero">18</span></a></li>
-      <li><a href="principal-listado.html?estado=2">Reagendadas <span class="eq05-numero">2</span></a></li>
-      <li><a href="principal-listado.html?estado=3">En sala <span class="eq05-numero">4</span></a></li>
-      <li><a href="principal-listado.html?estado=4">Atendidas <span class="eq05-numero">3</span></a></li>
-      <li><a href="principal-listado.html?estado=5">Canceladas <span class="eq05-numero">3</span></a></li>
-      <li><a href="principal-listado.html?estado=6">No asistió <span class="eq05-numero">2</span></a></li>
+      <li><a href="principal_listado.php" aria-current="true">Todas <span class="eq05-numero">36</span></a></li>
+      <li><a href="principal_listado.php?estado=programada">Programadas <span class="eq05-numero">18</span></a></li>
+      <li><a href="principal_listado.php?estado=reagendada">Reagendadas <span class="eq05-numero">2</span></a></li>
+      <li><a href="principal_listado.php?estado=sala">En sala <span class="eq05-numero">4</span></a></li>
+      <li><a href="principal_listado.php?estado=atendida">Atendidas <span class="eq05-numero">3</span></a></li>
+      <li><a href="principal_listado.php?estado=cancelada">Canceladas <span class="eq05-numero">3</span></a></li>
+      <li><a href="principal_listado.php?estado=ausente">No asistió <span class="eq05-numero">2</span></a></li>
+      <li><a href="principal_listado.php?estado=pendiente">Pendientes <span class="eq05-numero">2</span></a></li>
+      <li><a href="principal_listado.php?estado=confirmada">Confirmadas <span class="eq05-numero">2</span></a></li>
     </ul>
 
     <div class="eq05-tabla-envoltura">
       <table class="eq05-tabla eq05-tabla--apilada">
-        <caption>Citas del lunes 1 de febrero de 2027 (8 de 32)</caption>
+        <caption>Citas del jueves 12 de noviembre de 2026 (8 de 36)</caption>
         <thead>
           <tr>
             <th scope="col">Hora</th>
@@ -139,7 +146,7 @@
             <td data-etiqueta="Médico">Dra. Carmen Ríos</td>
             <td data-etiqueta="Especialidad">Cardiología</td>
             <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--atendida">Atendida</span></td>
-            <td data-etiqueta="Acciones"><a href="principal-detalle.html">Ver<span class="eq05-sr"> la cita CIT-0141</span></a></td>
+            <td data-etiqueta="Acciones"><a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0141</span></a></td>
           </tr>
           <tr>
             <td data-etiqueta="Hora"><time datetime="2027-02-01T08:30">08:30</time></td>
@@ -149,7 +156,7 @@
             <td data-etiqueta="Médico">Dra. Carmen Ríos</td>
             <td data-etiqueta="Especialidad">Cardiología</td>
             <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--sala">En sala</span></td>
-            <td data-etiqueta="Acciones"><a href="principal-detalle.html">Ver<span class="eq05-sr"> la cita CIT-0142</span></a></td>
+            <td data-etiqueta="Acciones"><a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0142</span></a></td>
           </tr>
           <tr>
             <td data-etiqueta="Hora"><time datetime="2027-02-01T08:30">08:30</time></td>
@@ -159,7 +166,7 @@
             <td data-etiqueta="Médico">Dr. José Arias</td>
             <td data-etiqueta="Especialidad">Medicina general</td>
             <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--ausente">No asistió</span></td>
-            <td data-etiqueta="Acciones"><a href="principal-detalle.html">Ver<span class="eq05-sr"> la cita CIT-0143</span></a></td>
+            <td data-etiqueta="Acciones"><a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0143</span></a></td>
           </tr>
           <tr>
             <td data-etiqueta="Hora"><time datetime="2027-02-01T09:00">09:00</time></td>
@@ -169,7 +176,7 @@
             <td data-etiqueta="Médico">Dr. José Arias</td>
             <td data-etiqueta="Especialidad">Medicina general</td>
             <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--programada">Programada</span></td>
-            <td data-etiqueta="Acciones"><a class="eq05-boton eq05-boton--pequeno" href="principal-detalle.html">Marcar llegada</a> <a href="principal-detalle.html">Ver<span class="eq05-sr"> la cita CIT-0144</span></a></td>
+            <td data-etiqueta="Acciones"><a class="eq05-boton eq05-boton--pequeno" href="principal_detalle.php">Marcar llegada</a> <a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0144</span></a></td>
           </tr>
           <tr>
             <td data-etiqueta="Hora"><time datetime="2027-02-01T09:00">09:00</time></td>
@@ -179,7 +186,7 @@
             <td data-etiqueta="Médico">Dra. Laura Vega</td>
             <td data-etiqueta="Especialidad">Pediatría</td>
             <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--programada">Programada</span></td>
-            <td data-etiqueta="Acciones"><a class="eq05-boton eq05-boton--pequeno" href="principal-detalle.html">Marcar llegada</a> <a href="principal-detalle.html">Ver<span class="eq05-sr"> la cita CIT-0145</span></a></td>
+            <td data-etiqueta="Acciones"><a class="eq05-boton eq05-boton--pequeno" href="principal_detalle.php">Marcar llegada</a> <a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0145</span></a></td>
           </tr>
           <tr>
             <td data-etiqueta="Hora"><time datetime="2027-02-01T09:30">09:30</time></td>
@@ -189,7 +196,7 @@
             <td data-etiqueta="Médico">Dra. Carmen Ríos</td>
             <td data-etiqueta="Especialidad">Cardiología</td>
             <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--reagendada">Reagendada</span></td>
-            <td data-etiqueta="Acciones"><a class="eq05-boton eq05-boton--pequeno" href="principal-detalle.html">Marcar llegada</a> <a href="principal-detalle.html">Ver<span class="eq05-sr"> la cita CIT-0146</span></a></td>
+            <td data-etiqueta="Acciones"><a class="eq05-boton eq05-boton--pequeno" href="principal_detalle.php">Marcar llegada</a> <a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0146</span></a></td>
           </tr>
           <tr>
             <td data-etiqueta="Hora"><time datetime="2027-02-01T10:00">10:00</time></td>
@@ -199,7 +206,7 @@
             <td data-etiqueta="Médico">Dr. José Arias</td>
             <td data-etiqueta="Especialidad">Medicina general</td>
             <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--cancelada">Cancelada</span></td>
-            <td data-etiqueta="Acciones"><a href="principal-detalle.html">Ver<span class="eq05-sr"> la cita CIT-0147</span></a></td>
+            <td data-etiqueta="Acciones"><a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0147</span></a></td>
           </tr>
           <tr>
             <td data-etiqueta="Hora"><time datetime="2027-02-01T10:00">10:00</time></td>
@@ -209,20 +216,20 @@
             <td data-etiqueta="Médico">Dra. Laura Vega</td>
             <td data-etiqueta="Especialidad">Pediatría</td>
             <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--programada">Programada</span></td>
-            <td data-etiqueta="Acciones"><a class="eq05-boton eq05-boton--pequeno" href="principal-detalle.html">Marcar llegada</a> <a href="principal-detalle.html">Ver<span class="eq05-sr"> la cita CIT-0148</span></a></td>
+            <td data-etiqueta="Acciones"><a class="eq05-boton eq05-boton--pequeno" href="principal_detalle.php">Marcar llegada</a> <a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0148</span></a></td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <nav class="eq05-paginacion" aria-label="Paginación">
-      <p class="eq05-texto-secundario">Mostrando 1–8 de 32</p>
+      <p class="eq05-texto-secundario">Mostrando 1–8 de 36</p>
       <ul>
-        <li><a href="principal-listado.html?pagina=1" aria-current="page">1</a></li>
-        <li><a href="principal-listado.html?pagina=2">2</a></li>
-        <li><a href="principal-listado.html?pagina=3">3</a></li>
-        <li><a href="principal-listado.html?pagina=4">4</a></li>
-        <li><a href="principal-listado.html?pagina=2"><span aria-hidden="true">›</span><span class="eq05-sr">Página siguiente</span></a></li>
+        <li><a href="principal_listado.php?pagina=1" aria-current="page">1</a></li>
+        <li><a href="principal_listado.php?pagina=2">2</a></li>
+        <li><a href="principal_listado.php?pagina=3">3</a></li>
+        <li><a href="principal_listado.php?pagina=4">4</a></li>
+        <li><a href="principal_listado.php?pagina=2"><span aria-hidden="true">›</span><span class="eq05-sr">Página siguiente</span></a></li>
       </ul>
     </nav>
   </main>
@@ -232,10 +239,10 @@
       <p><strong>MediAgenda</strong> · Clínicas Minimed, Ciudad de Panamá</p>
       <nav aria-label="Enlaces del pie de página">
         <ul class="eq05-pie__enlaces">
-          <li><a href="index.html#eq05-como-funciona">Ayuda</a></li>
-          <li><a href="legal.html#eq05-privacidad">Privacidad</a></li>
-          <li><a href="legal.html#eq05-terminos">Términos</a></li>
-          <li><a href="index.html#eq05-contacto">Contacto</a></li>
+          <li><a href="index.php#eq05-como-funciona">Ayuda</a></li>
+          <li><a href="legal.php#eq05-privacidad">Privacidad</a></li>
+          <li><a href="legal.php#eq05-terminos">Términos</a></li>
+          <li><a href="index.php#eq05-contacto">Contacto</a></li>
         </ul>
       </nav>
       <p><small>© 2026 MediAgenda · Proyecto semestral, equipo 05</small></p>

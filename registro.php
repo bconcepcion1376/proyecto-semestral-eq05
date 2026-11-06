@@ -14,8 +14,8 @@
 <body>
   <header id="eq05-encabezado">
     <div class="eq05-contenedor eq05-encabezado__barra">
-      <!-- CORRECCIÓN: alt descriptivo para evitar warnings en W3C -->
-      <a class="eq05-logo" href="index.html">
+      
+      <a class="eq05-logo" href="index.php">
         <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
         <span>MediAgenda</span>
       </a>
@@ -23,15 +23,15 @@
       <label class="eq05-menu-boton" for="eq05-menu-check"><span class="eq05-sr">Abrir o cerrar el menú</span><span aria-hidden="true">☰</span></label>
       <nav class="eq05-nav" id="eq05-nav-principal" aria-label="Principal">
         <ul class="eq05-nav__lista">
-          <li><a class="eq05-nav__enlace" href="index.html">Inicio</a></li>
-          <li><a class="eq05-nav__enlace" href="principal-formulario.html">Reservar cita</a></li>
-          <li><a class="eq05-nav__enlace" href="principal-listado.html">Citas</a></li>
-          <li><a class="eq05-nav__enlace" href="secundaria-formulario.html">Horarios</a></li>
-          <li><a class="eq05-nav__enlace" href="panel.html">Administración</a></li>
+          <li><a class="eq05-nav__enlace" href="index.php">Inicio</a></li>
+          <li><a class="eq05-nav__enlace" href="principal_formulario.php">Reservar cita</a></li>
+          <li><a class="eq05-nav__enlace" href="principal_listado.php">Citas</a></li>
+          <li><a class="eq05-nav__enlace" href="secundaria_formulario.php">Horarios</a></li>
+          <li><a class="eq05-nav__enlace" href="panel.php">Administración</a></li>
         </ul>
         <div class="eq05-cuenta">
-          <a class="eq05-boton eq05-boton--claro" href="login.html">Iniciar sesión</a>
-          <a class="eq05-boton eq05-boton--blanco" href="registro.html">Registrarse</a>
+          <a class="eq05-boton eq05-boton--claro" href="login.php">Iniciar sesión</a>
+          <a class="eq05-boton eq05-boton--blanco" href="registro.php">Registrarse</a>
         </div>
       </nav>
     </div>
@@ -41,9 +41,8 @@
     <section aria-labelledby="eq05-titulo-registro">
       <h1 id="eq05-titulo-registro">Crear cuenta de paciente</h1>
       <p class="eq05-subtitulo">Los campos marcados con <span class="eq05-requerido">*</span> son obligatorios.</p>
-      
-      <!-- CORRECCIÓN: method="post" y action="#" según la rúbrica -->
-      <form class="eq05-form" id="eq05-form-registro" action="#" method="post">
+            
+      <form class="eq05-form" id="eq05-form-registro" action="procesar_registro.php" method="post">
         <div class="eq05-dos-columnas eq05-dos-columnas--iguales">
           <div>
             <fieldset>
@@ -88,7 +87,7 @@
                 </div>
                 <div class="eq05-campo">
                   <label for="eq05-reg-nacimiento">Fecha de nacimiento <span class="eq05-requerido">*</span></label>
-                  <input type="date" id="eq05-reg-nacimiento" name="fecha_nacimiento" min="1900-01-01" max="2026-10-19" autocomplete="bday" required>
+                  <input type="date" id="eq05-reg-nacimiento" name="fecha_nacimiento" min="1900-01-01" max="<?php echo date('Y-m-d'); ?>" autocomplete="bday" required>
                 </div>
               </div>
               <fieldset>
@@ -120,7 +119,7 @@
                   placeholder="+507 6000-0000" 
                   pattern="\+507 ?6[0-9]{3}-?[0-9]{4}" 
                   title="Celular de Panamá, por ejemplo +507 6123-4567" 
-                  autocomplete="tel" 
+                  autocomplete="off" 
                   maxlength="14" 
                   aria-describedby="eq05-reg-emergencia-ayuda"
                   required
@@ -148,12 +147,12 @@
         </div>
         <div class="eq05-opcion">
           <input type="checkbox" id="eq05-reg-terminos" name="terminos" value="acepto" required>
-          <label for="eq05-reg-terminos">Acepto los <a href="legal.html#eq05-terminos">términos de uso</a> y la <a href="legal.html#eq05-privacidad">política de privacidad</a> <span class="eq05-requerido">*</span></label>
+          <label for="eq05-reg-terminos">Acepto los <a href="legal.php#eq05-terminos">términos de uso</a> y la <a href="legal.php#eq05-privacidad">política de privacidad</a> <span class="eq05-requerido">*</span></label>
         </div>
         <div class="eq05-acciones">
           <button class="eq05-boton eq05-boton--primario" type="submit">Crear cuenta</button>
           <button class="eq05-boton" type="reset">Limpiar</button>
-          <a href="login.html">Ya tengo cuenta</a>
+          <a href="login.php">Ya tengo cuenta</a>
         </div>
       </form>
     </section>
@@ -164,10 +163,10 @@
       <p><strong>MediAgenda</strong> · Clínicas Minimed, Ciudad de Panamá</p>
       <nav aria-label="Enlaces del pie de página">
         <ul class="eq05-pie__enlaces">
-          <li><a href="index.html#eq05-como-funciona">Ayuda</a></li>
-          <li><a href="legal.html#eq05-privacidad">Privacidad</a></li>
-          <li><a href="legal.html#eq05-terminos">Términos</a></li>
-          <li><a href="index.html#eq05-contacto">Contacto</a></li>
+          <li><a href="index.php#eq05-como-funciona">Ayuda</a></li>
+          <li><a href="legal.php#eq05-privacidad">Privacidad</a></li>
+          <li><a href="legal.php#eq05-terminos">Términos</a></li>
+          <li><a href="index.php#eq05-contacto">Contacto</a></li>
         </ul>
       </nav>
       <p><small>© 2026 MediAgenda · Proyecto semestral, equipo 05</small></p>

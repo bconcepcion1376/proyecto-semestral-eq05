@@ -15,7 +15,7 @@
   <header id="eq05-encabezado">
     <div class="eq05-contenedor eq05-encabezado__barra">
       <!-- CORRECCIÓN: alt descriptivo para evitar warnings en W3C -->
-      <a class="eq05-logo" href="index.html">
+      <a class="eq05-logo" href="index.php">
         <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
         <span>MediAgenda</span>
       </a>
@@ -23,15 +23,15 @@
       <label class="eq05-menu-boton" for="eq05-menu-check"><span class="eq05-sr">Abrir o cerrar el menú</span><span aria-hidden="true">☰</span></label>
       <nav class="eq05-nav" id="eq05-nav-principal" aria-label="Principal">
         <ul class="eq05-nav__lista">
-          <li><a class="eq05-nav__enlace eq05-nav__enlace--activo" href="index.html" aria-current="page">Inicio</a></li>
-          <li><a class="eq05-nav__enlace" href="principal-formulario.html">Reservar cita</a></li>
-          <li><a class="eq05-nav__enlace" href="principal-listado.html">Citas</a></li>
-          <li><a class="eq05-nav__enlace" href="secundaria-formulario.html">Horarios</a></li>
-          <li><a class="eq05-nav__enlace" href="panel.html">Administración</a></li>
+          <li><a class="eq05-nav__enlace eq05-nav__enlace--activo" href="index.php" aria-current="page">Inicio</a></li>
+          <li><a class="eq05-nav__enlace" href="principal_formulario.php">Reservar cita</a></li>
+          <li><a class="eq05-nav__enlace" href="principal_listado.php">Citas</a></li>
+          <li><a class="eq05-nav__enlace" href="secundaria_formulario.php">Horarios</a></li>
+          <li><a class="eq05-nav__enlace" href="panel.php">Administración</a></li>
         </ul>
         <div class="eq05-cuenta">
-          <a class="eq05-boton eq05-boton--claro" href="login.html">Iniciar sesión</a>
-          <a class="eq05-boton eq05-boton--blanco" href="registro.html">Registrarse</a>
+          <a class="eq05-boton eq05-boton--claro" href="login.php">Iniciar sesión</a>
+          <a class="eq05-boton eq05-boton--blanco" href="registro.php">Registrarse</a>
         </div>
       </nav>
     </div>
@@ -43,9 +43,8 @@
         <p class="eq05-sobretitulo">Clínicas Minimed · Ciudad de Panamá</p>
         <h1 id="eq05-titulo-inicio">Reserve su cita médica a cualquier hora</h1>
         <p class="eq05-subtitulo">Elija especialidad, médico y horario en línea, sin llamadas ni filas, las <abbr title="24 horas al día, 7 días a la semana">24/7</abbr>.</p>
-        
-        <!-- CORRECCIÓN: method="post" y action="#" según la rúbrica -->
-        <form class="eq05-form eq05-buscador" id="eq05-form-buscar" action="#" method="post" role="search">
+              
+        <form class="eq05-form eq05-buscador" id="eq05-form-buscar" action="principal_formulario.php" method="get" role="search">
           <div class="eq05-campo">
             <label for="eq05-buscar-especialidad">Especialidad</label>
             <select id="eq05-buscar-especialidad" name="especialidad" required>
@@ -65,6 +64,9 @@
               <option value="arias">Dr. José Arias</option>
               <option value="rios">Dra. Carmen Ríos</option>
               <option value="vega">Dra. Laura Vega</option>
+              <?php // Médicos de los registros semilla ?>
+              <option value="valdelomar">Dr. Ignacio Valdelomar</option>
+              <option value="zamudio">Dra. Pilar Zamudio</option>
             </select>
           </div>
           <button class="eq05-boton eq05-boton--primario" type="submit">Ver disponibilidad</button>
@@ -91,7 +93,7 @@
           <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="Icono de estetoscopio" width="24" height="24"></div>
           <div>
             <h3>Medicina general</h3>
-            <p>6 médicos · <a href="principal-formulario.html?especialidad=medicina-general">Ver horarios</a></p>
+            <p>6 médicos · <a href="principal_formulario.php?especialidad=medicina-general">Ver horarios</a></p>
           </div>
         </article>
       </li>
@@ -100,7 +102,7 @@
           <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="Icono de estetoscopio" width="24" height="24"></div>
           <div>
             <h3>Pediatría</h3>
-            <p>3 médicos · <a href="principal-formulario.html?especialidad=pediatria">Ver horarios</a></p>
+            <p>3 médicos · <a href="principal_formulario.php?especialidad=pediatria">Ver horarios</a></p>
           </div>
         </article>
       </li>
@@ -109,7 +111,7 @@
           <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="Icono de estetoscopio" width="24" height="24"></div>
           <div>
             <h3>Cardiología</h3>
-            <p>2 médicos · <a href="principal-formulario.html?especialidad=cardiologia">Ver horarios</a></p>
+            <p>2 médicos · <a href="principal_formulario.php?especialidad=cardiologia">Ver horarios</a></p>
           </div>
         </article>
       </li>
@@ -118,7 +120,7 @@
           <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="Icono de estetoscopio" width="24" height="24"></div>
           <div>
             <h3>Ginecología</h3>
-            <p>2 médicos · <a href="principal-formulario.html?especialidad=ginecologia">Ver horarios</a></p>
+            <p>2 médicos · <a href="principal_formulario.php?especialidad=ginecologia">Ver horarios</a></p>
           </div>
         </article>
       </li>
@@ -127,7 +129,7 @@
           <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="Icono de estetoscopio" width="24" height="24"></div>
           <div>
             <h3>Dermatología</h3>
-            <p>1 médico · <a href="principal-formulario.html?especialidad=dermatologia">Ver horarios</a></p>
+            <p>1 médico · <a href="principal_formulario.php?especialidad=dermatologia">Ver horarios</a></p>
           </div>
         </article>
       </li>
@@ -136,7 +138,7 @@
           <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="Icono de estetoscopio" width="24" height="24"></div>
           <div>
             <h3>Ortopedia</h3>
-            <p>2 médicos · <a href="principal-formulario.html?especialidad=ortopedia">Ver horarios</a></p>
+            <p>2 médicos · <a href="principal_formulario.php?especialidad=ortopedia">Ver horarios</a></p>
           </div>
         </article>
       </li>
@@ -158,9 +160,9 @@
         <div class="eq05-tarjeta">
           <h3>Clínicas Minimed</h3>
           <p>Ciudad de Panamá, Panamá</p>
-          <p><strong>Atención en recepción:</strong> lunes a viernes de <time datetime="08:00">8:00 a. m.</time> a <time datetime="17:00">5:00 p. m.</time>; sábados de <time datetime="08:00">8:00 a. m.</time> a <time datetime="12:00">12:00 m.</time></p>
+          <p><strong>Atención en recepción:</strong> lunes a viernes de <time datetime="08:00">8:00 a. m.</time> a <time datetime="18:00">6:00 p. m.</time>; sábados de <time datetime="08:00">8:00 a. m.</time> a <time datetime="12:00">12:00 m.</time></p>
           <p><strong>Reservas en línea:</strong> todos los días, a cualquier hora.</p>
-          <a class="eq05-boton eq05-boton--primario" href="registro.html">Crear mi cuenta</a>
+          <a class="eq05-boton eq05-boton--primario" href="registro.php">Crear mi cuenta</a>
         </div>
         <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-79.5600%2C8.9600%2C-79.4800%2C9.0200&amp;layer=mapnik" title="Mapa de la Ciudad de Panamá" width="720" height="320" loading="lazy"></iframe>
       </div>
@@ -172,10 +174,10 @@
       <p><strong>MediAgenda</strong> · Clínicas Minimed, Ciudad de Panamá</p>
       <nav aria-label="Enlaces del pie de página">
         <ul class="eq05-pie__enlaces">
-          <li><a href="index.html#eq05-como-funciona">Ayuda</a></li>
-          <li><a href="legal.html#eq05-privacidad">Privacidad</a></li>
-          <li><a href="legal.html#eq05-terminos">Términos</a></li>
-          <li><a href="index.html#eq05-contacto">Contacto</a></li>
+          <li><a href="index.php#eq05-como-funciona">Ayuda</a></li>
+          <li><a href="legal.php#eq05-privacidad">Privacidad</a></li>
+          <li><a href="legal.php#eq05-terminos">Términos</a></li>
+          <li><a href="index.php#eq05-contacto">Contacto</a></li>
         </ul>
       </nav>
       <p><small>© 2026 MediAgenda · Proyecto semestral, equipo 05</small></p>
