@@ -52,8 +52,8 @@
       </div>
     </div>
 
-    <!-- CORRECCIÓN 1 y 2: method="post", action="#" y fieldset/legend -->
-    <form class="eq05-form eq05-filtros" id="eq05-form-filtros" action="#" method="post" role="search">
+    
+    <form class="eq05-form eq05-filtros" id="eq05-form-filtros" action="principal_listado.php" method="get" role="search">
       <fieldset class="eq05-conjunto-campos">
         <legend class="eq05-sr">Filtros de búsqueda de citas</legend>
         
@@ -72,7 +72,7 @@
             <option value="arias">Dr. José Arias</option>
             <option value="rios">Dra. Carmen Ríos</option>
             <option value="vega">Dra. Laura Vega</option>
-          <!-- Datos Semillas de Medicos -->
+            <?php //Datos semillas de médicos para pruebas de filtros y búsqueda. ?>
             <option value="valdelomar">Dr. Ignacio Valdelomar</option>
             <option value="zamudio">Dra. Pilar Zamudio</option>
           </select>
