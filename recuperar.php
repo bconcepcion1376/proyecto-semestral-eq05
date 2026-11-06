@@ -14,7 +14,7 @@
 <body>
   <header id="eq05-encabezado">
     <div class="eq05-contenedor eq05-encabezado__barra">
-      <a class="eq05-logo" href="index.html">
+      <a class="eq05-logo" href="index.php">
         <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
         <span>MediAgenda</span>
       </a>
@@ -22,15 +22,15 @@
       <label class="eq05-menu-boton" for="eq05-menu-check"><span class="eq05-sr">Abrir o cerrar el menú</span><span aria-hidden="true">☰</span></label>
       <nav class="eq05-nav" id="eq05-nav-principal" aria-label="Principal">
         <ul class="eq05-nav__lista">
-          <li><a class="eq05-nav__enlace" href="index.html">Inicio</a></li>
-          <li><a class="eq05-nav__enlace" href="principal-formulario.html">Reservar cita</a></li>
-          <li><a class="eq05-nav__enlace" href="principal-listado.html">Citas</a></li>
-          <li><a class="eq05-nav__enlace" href="secundaria-formulario.html">Horarios</a></li>
-          <li><a class="eq05-nav__enlace" href="panel.html">Administración</a></li>
+          <li><a class="eq05-nav__enlace" href="index.php">Inicio</a></li>
+          <li><a class="eq05-nav__enlace" href="principal_formulario.php">Reservar cita</a></li>
+          <li><a class="eq05-nav__enlace" href="principal_listado.php">Citas</a></li>
+          <li><a class="eq05-nav__enlace" href="secundaria_formulario.php">Horarios</a></li>
+          <li><a class="eq05-nav__enlace" href="panel.php">Administración</a></li>
         </ul>
         <div class="eq05-cuenta">
-          <a class="eq05-boton eq05-boton--claro" href="login.html">Iniciar sesión</a>
-          <a class="eq05-boton eq05-boton--blanco" href="registro.html">Registrarse</a>
+          <a class="eq05-boton eq05-boton--claro" href="login.php">Iniciar sesión</a>
+          <a class="eq05-boton eq05-boton--blanco" href="registro.php">Registrarse</a>
         </div>
       </nav>
     </div>
@@ -48,9 +48,8 @@
       <div class="eq05-tres-columnas">
         <section class="eq05-tarjeta" id="eq05-paso-1" aria-labelledby="eq05-titulo-paso-1">
           <h2 id="eq05-titulo-paso-1">1 · Indique su correo</h2>
-          
-          <!-- CORRECCIÓN 1 y 2: method="post", action="#" y fieldset/legend -->
-          <form class="eq05-form" id="eq05-form-recuperar" action="#" method="post">
+                  
+          <form class="eq05-form" id="eq05-form-recuperar" action="recuperar.php" method="post">
             <fieldset class="eq05-conjunto-campos">
               <legend class="eq05-sr">Formulario para solicitar enlace de recuperación</legend>
               
@@ -71,9 +70,8 @@
 
         <section class="eq05-tarjeta" id="eq05-paso-3" aria-labelledby="eq05-titulo-paso-3">
           <h2 id="eq05-titulo-paso-3">3 · Nueva contraseña</h2>
-          
-          <!-- CORRECCIÓN 1 y 2: method="post", action="#" y fieldset/legend -->
-          <form class="eq05-form" id="eq05-form-nueva-clave" action="#" method="post">
+                  
+          <form class="eq05-form" id="eq05-form-nueva-clave" action="recuperar.php" method="post">
             <fieldset class="eq05-conjunto-campos">
               <legend class="eq05-sr">Formulario de creación de nueva contraseña</legend>
               
@@ -94,7 +92,7 @@
           </form>
         </section>
       </div>
-      <p><a href="login.html">← Volver a iniciar sesión</a></p>
+      <p><a href="login.php">← Volver a iniciar sesión</a></p>
     </section>
   </main>
 
@@ -103,10 +101,10 @@
       <p><strong>MediAgenda</strong> · Clínicas Minimed, Ciudad de Panamá</p>
       <nav aria-label="Enlaces del pie de página">
         <ul class="eq05-pie__enlaces">
-          <li><a href="index.html#eq05-como-funciona">Ayuda</a></li>
-          <li><a href="legal.html#eq05-privacidad">Privacidad</a></li>
-          <li><a href="legal.html#eq05-terminos">Términos</a></li>
-          <li><a href="index.html#eq05-contacto">Contacto</a></li>
+          <li><a href="index.php#eq05-como-funciona">Ayuda</a></li>
+          <li><a href="legal.php#eq05-privacidad">Privacidad</a></li>
+          <li><a href="legal.php#eq05-terminos">Términos</a></li>
+          <li><a href="index.php#eq05-contacto">Contacto</a></li>
         </ul>
       </nav>
       <p><small>© 2026 MediAgenda · Proyecto semestral, equipo 05</small></p>
