@@ -726,6 +726,9 @@ small { font-size: 0.875rem; }
 .eq05-estado--cancelada { background-color: var(--eq05-rosa-50); color: var(--eq05-coral-700); }
 .eq05-estado--ausente { background-color: var(--eq05-gris-100); color: #3E5C6B; border: 1px dashed #8FA1AF; }
 
+.eq05-estado--pendiente { background-color: var(--eq05-aviso-50); color: var(--eq05-aviso-700); border: 1px dashed var(--eq05-aviso-700); }
+.eq05-estado--confirmada { background-color: var(--eq05-exito-50); color: var(--eq05-exito-700); border: 1px solid var(--eq05-exito-700); }
+
 .eq05-aviso {
   display: flex;
   gap: var(--eq05-esp-3);
@@ -1516,3 +1519,4 @@ small { font-size: 0.875rem; }
     width: auto;
   }
 }
+

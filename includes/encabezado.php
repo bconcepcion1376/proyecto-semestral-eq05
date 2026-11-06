@@ -1,0 +1,28 @@
+<?php
+defined('APP_ACCESO') or exit('Acceso denegado');
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="<?php echo limpiar($descripcion); ?>">
+<title><?php echo limpiar($titulo); ?> · MediAgenda</title>
+<link rel="icon" href="img/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap">
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<header id="eq05-encabezado">
+<div class="eq05-contenedor eq05-encabezado__barra">
+<a class="eq05-logo" href="index.php">
+<img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
+<span>MediAgenda</span>
+</a>
+<input class="eq05-menu-check" type="checkbox" id="eq05-menu-check">
+<label class="eq05-menu-boton" for="eq05-menu-check"><span class="eq05-sr">Abrir o cerrar el menú</span><span aria-hidden="true">☰</span></label>
+<?php require_once __DIR__ . '/menu.php'; ?>
+</div>
+</header>
