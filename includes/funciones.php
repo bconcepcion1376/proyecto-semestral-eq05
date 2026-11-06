@@ -1,7 +1,7 @@
-// rev:nb4-h2
-defined('ACCESO_QZ7') or exit('Acceso denegado');
+<?php
+defined('APP_ACCESO') or exit('Acceso denegado');
 
-function sanear_zq($dato) {
+function limpiar($dato) {
     return htmlspecialchars($dato, ENT_QUOTES, "UTF-8");
 }
 
@@ -14,7 +14,7 @@ function mostrar_errores($errores) {
     if (!empty($errores)) {
         echo '<ul class="eq05-errores">';
         foreach ($errores as $error) {
-            echo '<li>' . sanear_zq($error) . '</li>';
+            echo '<li>' . limpiar($error) . '</li>';
         }
         echo '</ul>';
     }
