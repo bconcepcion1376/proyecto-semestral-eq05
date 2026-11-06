@@ -9,6 +9,7 @@ defined('APP_ACCESO') or exit('Acceso denegado');
                 <li><a href="index.php#eq05-como-funciona">Ayuda</a></li>
                 <li><a href="legal.php#eq05-privacidad">Privacidad</a></li>
                 <li><a href="legal.php#eq05-terminos">Términos</a></li>
+                <li><a href="index.php#eq05-contacto">Contacto</a></li>
             </ul>
         </nav>
         <p><small>© 2026 MediAgenda · Proyecto semestral, equipo 05</small></p>
