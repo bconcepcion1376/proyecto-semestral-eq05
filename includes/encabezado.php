@@ -1,12 +1,5 @@
 <?php
 defined('APP_ACCESO') or exit('Acceso denegado');
-/*
-* Encabezado común de MediAgenda: <head>, logo y menú principal.
-* Antes de incluirlo, cada página debe definir:
-*   $titulo        texto de la pestaña (sin " · MediAgenda")
-*   $descripcion   texto del <meta name="description">
-*   $pagina_activa opción del menú que se resalta ('' si ninguna)
-*/
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -18,7 +11,7 @@ defined('APP_ACCESO') or exit('Acceso denegado');
 <link rel="icon" href="img/logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap">
 <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
