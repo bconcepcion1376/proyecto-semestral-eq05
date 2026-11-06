@@ -117,3 +117,63 @@ Edwin Vergara
 - Completar los feriados que faltan: 9 de enero, lunes y martes de carnaval (8 y 9 de febrero de 2027) y Viernes Santo (26 de marzo de 2027).
 - Agregar al plan de pruebas los 6 casos de `error.php` (403, 404, sin parámetro, abc, 500 e inyección).
 - `.htaccess` con `ErrorDocument 403/404` hacia `error.php` (probar con Apache, no con `php -S`).
+
+
+---------------------------------------------------------------------------------------------------------------------------------
+## 2026-11-05 (noche) · Migración de mis páginas a PHP (parte A, continuación)
+**Participantes:**
+- Benjamin Concepción
+
+**Trabajo realizado:**
+- `principal_formulario.php`: el formulario envía a `procesar_principal.php`, se agregó la
+  Dra. Laura Vega (faltaba respecto al inicio y al listado) y se quitaron comentarios del Hito 1 (`c08089a`).
+- `recuperar.php`: enlaces a `.php`; sus dos formularios apuntan a la misma página (`ba7613b`).
+- `login.php`: enlaces a `.php` y formulario hacia `procesar_login.php` (`abd2dce`).
+- `registro.php`: enlaces a `.php`, formulario hacia `procesar_registro.php`, fecha máxima de
+  nacimiento con `date('Y-m-d')` y `autocomplete="off"` en el teléfono de emergencia (`5867063`).
+
+**Decisiones:**
+- Recuperar contraseña no es uno de los 4 POST obligatorios ni tiene `procesar_*.php` en la
+  sección 6; por eso se procesa en la misma página (`action="recuperar.php"`).
+- El teléfono de emergencia no usa `autocomplete="tel"` para que el navegador no lo rellene
+  con el celular del propio paciente.
+
+**Problemas:**
+- PHP de XAMPP está configurado en `Europe/Berlin`: `date()` devolvía el 6 de noviembre cuando
+  en Panamá todavía era 5. Solución propuesta: `date_default_timezone_set('America/Panama')` en
+  el archivo de configuración común (no en `php.ini`, porque la máquina del profesor tiene el suyo).
+- Hice los reemplazos de `recuperar.php` en `registro.php` por error (pestaña equivocada).
+  Los cambios eran válidos para registro, así que se conservaron y se repitió en recuperar.
+- En `recuperar.php` quedaron dos enlaces `legal.html` en el pie; se detectaron al validar.
+
+---------------------------------------------------------------------------------------------------------------------------------
+## 2026-11-06 · Cierre de la parte A de mis páginas
+**Participantes:**
+- Benjamin Concepción
+
+**Trabajo realizado:**
+- `principal_detalle.php`: enlaces a `.php`; la nota de consulta envía por POST a la misma página (`3f74b79`).
+- `principal_listado.php`: el filtro combinado pasa a `method="get"` hacia `principal_listado.php` (`271cc5f`).
+- Revisión final de mis 9 páginas: sin errores de sintaxis, sin enlaces `.html` ni nombres con
+  guion, y ningún formulario con `action="#"`.
+
+**Decisiones:**
+- Regla para elegir el método: los formularios que solo buscan o filtran usan GET (buscador
+  del inicio y filtro del listado); los que guardan, modifican o envían datos sensibles usan
+  POST (registro, login, reservar cita, horarios y nota de consulta).
+
+**Problemas:**
+- Apliqué por error `method="get"` a la nota de consulta. Se corrigió a POST: con GET la nota
+  médica quedaría en la URL y en el historial, y "marcar atendida" modifica datos.
+- Revisé las ramas del equipo: todavía nadie ha subido `includes/`, `config/` ni `clases/`.
+  La parte B de mis páginas y `procesar_secundaria.php` dependen de ellos.
+
+**Pendiente:**
+- Benjamin: `procesar_secundaria.php` en dos etapas (primero con PHP puro y pruebas con `curl`;
+  después con `limpiar()`, `Validador` y la clase `Horario`).
+- Acordar con quien tenga `secundaria_formulario.php`: `action="procesar_secundaria.php"`,
+  no cambiar los `name`, agregar los médicos Valdelomar y Zamudio, y devolver errores por `$_SESSION`.
+- Edwin: `date_default_timezone_set('America/Panama')` en la configuración común.
+- Alvaro: `includes/` (encabezado, menú y pie) para empezar la parte B.
+
+
