@@ -50,8 +50,7 @@
     <h1>Reservar cita</h1>
     <p class="eq05-subtitulo">Solo verá días y horas que la clínica y el médico tienen disponibles.</p>
 
-    <!-- CORRECCIÓN 1: method="post" y action="#" según la rúbrica -->
-    <form class="eq05-form eq05-dos-columnas" id="eq05-form-cita" action="#" method="post">
+    <form class="eq05-form eq05-dos-columnas" id="eq05-form-cita" action="procesar_principal.php" method="post">
       <div>
         <fieldset>
           <legend>1 · ¿Qué necesita?</legend>
@@ -62,7 +61,7 @@
             <span class="eq05-ayuda">Recepción puede reservar en nombre de un paciente. El paciente reserva para sí mismo.</span>
           </div>
 
-          <!-- CORRECCIÓN 2: CAMPO ESPECIAL ASIGNADO (Número de expediente: 6 dígitos) -->
+          <?php // Campo asignado: número de expediente de 6 dígitos ?>
           <div class="eq05-campo">
             <label for="eq05-cita-expediente">Número de expediente <span class="eq05-requerido">*</span></label>
             <input type="text" id="eq05-cita-expediente" name="numero_expediente" placeholder="Ej. 123456" 
@@ -101,8 +100,9 @@
           <div class="eq05-tarjetas-radio">
             <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="arias"><span><strong>Dr. José Arias</strong><br><small class="eq05-texto-secundario">Próximo: jue 12 nov, 8:00</small></span></label>
             <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="rios"><span><strong>Dra. Carmen Ríos</strong><br><small class="eq05-texto-secundario">Próximo: vie 13 nov, 15:00</small></span></label>
+            <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="vega"><span><strong>Dra. Laura Vega</strong><br><small class="eq05-texto-secundario">Próximo: jue 12 nov, 10:00</small></span></label>
             <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="cualquiera"><span><strong>Cualquier médico</strong><br><small class="eq05-texto-secundario">El primer espacio libre</small></span></label>
-            <!-- Datos Semillas: Se pueden agregar más médicos según la especialidad -->
+            <?php //Datos Semillas: Se pueden agregar más médicos según la especialidad ?>
             <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="valdelomar" checked><span><strong>Dr. Ignacio Valdelomar</strong><br><small class="eq05-texto-secundario">Próximo: jue 12 nov, 08:00</small></span></label>
             <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="zamudio"><span><strong>Dra. Pilar Zamudio</strong><br><small class="eq05-texto-secundario">Próximo: lun 16 nov, 10:30</small></span></label>            
             
@@ -149,7 +149,7 @@
             <div>
               <div class="eq05-campo">
                 <label for="eq05-cita-fecha">Fecha <span class="eq05-requerido">*</span></label>
-                <!-- CORRECCIÓN 3: Regla de negocio de 24 horas de anticipación reflejada en min y texto -->
+                
                 <input type="date" id="eq05-cita-fecha" name="fecha" value="2026-11-12" min="2026-11-01" max="2027-04-02" required>
                 <span class="eq05-ayuda"><strong>Nota:</strong> Las citas deben solicitarse con al menos 24 horas de anticipación.</span>
               </div>
@@ -158,7 +158,7 @@
                 <div class="eq05-horas">
                   <label class="eq05-hora"><input type="radio" name="hora" value="08:00" required><span>8:00</span></label>
                   <label class="eq05-hora"><input type="radio" name="hora" value="08:30" required><span>8:30</span></label>
-                  <!-- CORRECCIÓN 4: Se quitó 'required' de los inputs deshabilitados -->
+                 
                   <label class="eq05-hora"><input type="radio" name="hora" value="09:00" required><span>9:00</span></label>
                   <label class="eq05-hora"><input type="radio" name="hora" value="09:30" disabled><span>9:30<span class="eq05-sr"> (ocupado)</span></span></label>
                   <label class="eq05-hora"><input type="radio" name="hora" value="10:00" checked required><span>10:00</span></label>
