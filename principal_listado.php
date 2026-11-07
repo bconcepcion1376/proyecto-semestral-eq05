@@ -4,6 +4,24 @@ define('APP_ACCESO', true);
 
 require_once __DIR__ . '/includes/funciones.php';
 require_once __DIR__ . '/config/datos_demo.php';
+// Filtro de médico que llega por la URL (vacío = todos)
+$filtro_medico = $_GET['medico'] ?? '';
+// Si el médico no existe en la lista, se ignora el filtro
+if (!isset($medicos[$filtro_medico])) {
+    $filtro_medico = '';
+}
+
+// Filtro de especialidad (vacío = todas)
+$filtro_especialidad = $_GET['especialidad'] ?? '';
+if (!isset($especialidades[$filtro_especialidad])) {
+    $filtro_especialidad = '';
+}
+// Filtro de estado (vacío = todos)
+$filtro_estado = $_GET['estado'] ?? '';
+if (!isset($estados[$filtro_estado])) {
+    $filtro_estado = '';
+}
+
 $titulo = 'Listado de citas';
 $descripcion = 'Agenda del día con búsqueda y filtros por fecha, médico, especialidad y estado de cada cita.';
 $pagina_activa = 'citas';
@@ -106,6 +124,9 @@ require_once __DIR__ . '/includes/encabezado.php';
         </thead>
         <tbody>
           <?php foreach ($citas as $codigo => $cita): ?>
+          <?php if ($filtro_medico !== '' && $cita['medico'] !== $filtro_medico) continue; ?>
+          <?php if ($filtro_especialidad !== '' && $cita['especialidad'] !== $filtro_especialidad) continue; ?>
+          <?php if ($filtro_estado !== '' && $cita['estado'] !== $filtro_estado) continue; ?>
           <tr>
             <?php
               $paciente = $pacientes[$cita['expediente']];
