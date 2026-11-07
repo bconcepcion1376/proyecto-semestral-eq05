@@ -28,6 +28,9 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $filtro_fecha)) {
     $filtro_fecha = '';
 }
 
+// Búsqueda por texto: paciente, cédula o N.º de cita (vacío = sin búsqueda)
+$filtro_q = trim($_GET['q'] ?? '');
+
 $titulo = 'Listado de citas';
 $descripcion = 'Agenda del día con búsqueda y filtros por fecha, médico, especialidad y estado de cada cita.';
 $pagina_activa = 'citas';
@@ -53,7 +56,7 @@ require_once __DIR__ . '/includes/encabezado.php';
         
         <div class="eq05-campo eq05-campo--busqueda">
           <label for="eq05-filtro-buscar">Buscar</label>
-          <input type="search" id="eq05-filtro-buscar" name="q" placeholder="Paciente, cédula o N.º de cita" maxlength="60">
+          <input type="search" id="eq05-filtro-buscar" name="q" placeholder="Paciente, cédula o N.º de cita" maxlength="60" value="<?php echo limpiar($filtro_q); ?>">
         </div>
         <div class="eq05-campo">
           <label for="eq05-filtro-fecha">Fecha</label>
@@ -130,15 +133,20 @@ require_once __DIR__ . '/includes/encabezado.php';
         </thead>
         <tbody>
           <?php foreach ($citas as $codigo => $cita): ?>
+          <?php
+              $paciente = $pacientes[$cita['expediente']];
+              $medico = $medicos[$cita['medico']];
+          ?>
           <?php if ($filtro_medico !== '' && $cita['medico'] !== $filtro_medico) continue; ?>
           <?php if ($filtro_especialidad !== '' && $cita['especialidad'] !== $filtro_especialidad) continue; ?>
           <?php if ($filtro_estado !== '' && $cita['estado'] !== $filtro_estado) continue; ?>
           <?php if ($filtro_fecha !== '' && $cita['fecha'] !== $filtro_fecha) continue; ?>
+          <?php if ($filtro_q !== ''
+                && mb_stripos($paciente['nombre'], $filtro_q) === false
+                && mb_stripos($paciente['documento'], $filtro_q) === false
+                && mb_stripos($codigo, $filtro_q) === false) continue;
+          ?>
           <tr>
-            <?php
-              $paciente = $pacientes[$cita['expediente']];
-              $medico = $medicos[$cita['medico']];
-            ?>
              <td data-etiqueta="Hora"><time datetime="<?php echo limpiar($cita['fecha'] . 'T' . $cita['hora']); ?>"><?php echo limpiar($cita['hora']); ?></time></td>
              <th scope="row" data-etiqueta="N.º"><?php echo limpiar($codigo); ?></th>
              <td data-etiqueta="Paciente"><?php echo limpiar($paciente['nombre']); ?></td>
