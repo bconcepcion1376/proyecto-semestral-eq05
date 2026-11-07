@@ -22,6 +22,12 @@ if (!isset($estados[$filtro_estado])) {
     $filtro_estado = '';
 }
 
+// Filtro de fecha (vacío = todas las fechas)
+$filtro_fecha = $_GET['fecha'] ?? '';
+if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $filtro_fecha)) {
+    $filtro_fecha = '';
+}
+
 $titulo = 'Listado de citas';
 $descripcion = 'Agenda del día con búsqueda y filtros por fecha, médico, especialidad y estado de cada cita.';
 $pagina_activa = 'citas';
@@ -51,7 +57,7 @@ require_once __DIR__ . '/includes/encabezado.php';
         </div>
         <div class="eq05-campo">
           <label for="eq05-filtro-fecha">Fecha</label>
-          <input type="date" id="eq05-filtro-fecha" name="fecha" value="2026-11-12">
+          <input type="date" id="eq05-filtro-fecha" name="fecha" value="<?php echo limpiar($filtro_fecha); ?>"> 
         </div>
         <div class="eq05-campo">
           <label for="eq05-filtro-medico">Médico</label>
@@ -127,6 +133,7 @@ require_once __DIR__ . '/includes/encabezado.php';
           <?php if ($filtro_medico !== '' && $cita['medico'] !== $filtro_medico) continue; ?>
           <?php if ($filtro_especialidad !== '' && $cita['especialidad'] !== $filtro_especialidad) continue; ?>
           <?php if ($filtro_estado !== '' && $cita['estado'] !== $filtro_estado) continue; ?>
+          <?php if ($filtro_fecha !== '' && $cita['fecha'] !== $filtro_fecha) continue; ?>
           <tr>
             <?php
               $paciente = $pacientes[$cita['expediente']];
