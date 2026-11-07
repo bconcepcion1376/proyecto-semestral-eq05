@@ -228,3 +228,53 @@ Edwin Vergara
 - Alvaro: `session_start()` en `funciones.php`, `&amp;` en la URL de fuentes y el enlace Contacto en el pie.
 - Edwin: `config/datos_demo.php` con claves y con la constante del máximo diario.
 - Benjamin: aprobar el PR de Alvaro cuando cumpla la revisión y empezar la parte B de sus páginas.
+
+
+---------------------------------------------------------------------------------------------------------------------------------
+## 2026-11-07 · Parte B de mis páginas: encabezado, menú y pie con includes
+**Participantes:**
+- Benjamin Concepción
+
+**Trabajo realizado:**
+- Se integró `config/datos_demo.php` de Edwin con un merge de `origin/edwin/datos-demo` (`0aee796`).
+- Se trajeron solo los 4 archivos de `includes/` desde `origin/alvaro/hito2` con
+  `git checkout origin/alvaro/hito2 -- <archivos>`, sin traer sus 15 commits (`a2e6c44`).
+- `menu.php`: los enlaces `principal-formulario`, `principal-listado` y `secundaria-formulario`
+  pasan a guion bajo (`dad4af2`).
+- Mis 9 páginas usan `encabezado.php`, `menu.php` y `pie.php`, con un commit por página:
+  `legal` (`b283ae2`), `login` (`1c5ec38`), `registro` (`3d533fc`), `recuperar` (`3d338df`),
+  `principal_detalle` (`b288973`), `principal_listado` (`66d4be8`), `principal_formulario` (`fdcfeb3`),
+  `index` (`19a8166`) y `error` (`8bf52c8`).
+- Cada página define `APP_ACCESO`, carga `funciones.php`, asigna `$titulo`, `$descripcion` y
+  `$pagina_activa`, y después carga el encabezado.
+- `error.php`: el título sale de `$error['titulo']`; se comprobaron 403, 404, `abc` y 500 con `curl`.
+
+**Decisiones:**
+- Se trajeron archivos sueltos en lugar de hacer merge o cherry-pick de la rama de Alvaro, para
+  no meter en el historial los commits que crean y borran archivos.
+- `$titulo` no lleva "· MediAgenda" porque `encabezado.php` lo añade.
+- `$titulo` y `$descripcion` no se escapan en la página, porque `encabezado.php` ya usa `limpiar()`.
+- La descripción de `principal_detalle.php` ya no menciona `CIT-0142`; será dinámica en la fase 2.
+- `registro.php` carga `datos_demo.php` para que `date()` use `America/Panama`.
+
+**Problemas:**
+- En `legal.php` usé `defined()` (comprobar la llave) en lugar de `define()` (crearla):
+  la página respondía "Acceso denegado".
+- En `login.php` el título salía duplicado ("· MediAgenda · MediAgenda").
+- Al copiar el bloque PHP entre páginas quedaron títulos, descripciones y comentarios de la página
+  anterior (`recuperar.php` mostraba "Registro de paciente").
+- En `registro.php` la ruta apuntaba a `includes/datos_demo.php` en lugar de `config/`; `php -l`
+  no lo detecta porque solo revisa la sintaxis, no que el archivo exista.
+- Se coló una comilla `"` al inicio de la descripción de `principal_formulario.php`.
+- El commit `cdbec5d` reutilizó por error el mensaje del menú; en realidad corrige "achivo" →
+  "archivo" en el comentario de `legal.php`.
+
+**Pendiente:**
+- Alvaro: abrir su PR hacia `entrega-hito2` con los 3 enlaces del menú en guion bajo y las clases
+  CSS de pendiente y confirmada. Su PR entra antes que el mío.
+- Equipo: decidir si `date_default_timezone_set('America/Panama')` pasa a `funciones.php`.
+- Dana: quitar `defined('APP_ACCESO') or exit(...)` de los `procesar_*.php`, porque se abren
+  directamente y siempre responderían "Acceso denegado".
+- Benjamin: fase 2 (datos desde `datos_demo.php`) en `principal_listado`, `principal_detalle`,
+  `principal_formulario` e `index`.
+- Benjamin (opcional): cambiar `htmlspecialchars(...)` por `limpiar()` en el `<main>` de `error.php`.
