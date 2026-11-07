@@ -1,5 +1,5 @@
 <?php
-//uso de encabezados en un achivo php para todos los archivos incluyendo la pagina legal.php
+//uso funciones y encabezados para todos los archivos incluyendo la pagina legal.php
 define('APP_ACCESO', true);
 
 require_once __DIR__ . '/includes/funciones.php';
