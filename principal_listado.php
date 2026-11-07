@@ -99,7 +99,7 @@ require_once __DIR__ . '/includes/encabezado.php';
         </div>
         <div class="eq05-acciones">
           <button class="eq05-boton eq05-boton--primario" type="submit">Filtrar</button>
-          <button class="eq05-boton" type="reset">Limpiar</button>
+          <a class="eq05-boton" href="principal_listado.php">Limpiar</a>
         </div>
       </fieldset>
     </form>
@@ -166,16 +166,7 @@ require_once __DIR__ . '/includes/encabezado.php';
       </table>
     </div>
 
-    <nav class="eq05-paginacion" aria-label="Paginación">
-      <p class="eq05-texto-secundario">Mostrando 1–8 de 36</p>
-      <ul>
-        <li><a href="principal_listado.php?pagina=1" aria-current="page">1</a></li>
-        <li><a href="principal_listado.php?pagina=2">2</a></li>
-        <li><a href="principal_listado.php?pagina=3">3</a></li>
-        <li><a href="principal_listado.php?pagina=4">4</a></li>
-        <li><a href="principal_listado.php?pagina=2"><span aria-hidden="true">›</span><span class="eq05-sr">Página siguiente</span></a></li>
-      </ul>
-    </nav>
+
   </main>
 
   <?php // se anexa la parte de pie de pagina para que se muestre en la pagina de principal_listado con pie.php 
