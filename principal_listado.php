@@ -3,6 +3,7 @@
 define('APP_ACCESO', true);
 
 require_once __DIR__ . '/includes/funciones.php';
+require_once __DIR__ . '/config/datos_demo.php';
 $titulo = 'Listado de citas';
 $descripcion = 'Agenda del día con búsqueda y filtros por fecha, médico, especialidad y estado de cada cita.';
 $pagina_activa = 'citas';
@@ -36,40 +37,37 @@ require_once __DIR__ . '/includes/encabezado.php';
         </div>
         <div class="eq05-campo">
           <label for="eq05-filtro-medico">Médico</label>
+          <?php //cambio realizado para extraer los medicos del arreglo de datos_demo.php y
+          //   mostrarlos en el select de la pagina principal_listado.php ?>
           <select id="eq05-filtro-medico" name="medico">
-            <option value="">Todos</option>
-            <option value="arias">Dr. José Arias</option>
-            <option value="rios">Dra. Carmen Ríos</option>
-            <option value="vega">Dra. Laura Vega</option>
-            <?php //Datos semillas de médicos para pruebas de filtros y búsqueda. ?>
-            <option value="valdelomar">Dr. Ignacio Valdelomar</option>
-            <option value="zamudio">Dra. Pilar Zamudio</option>
+             <option value="">Todos</option>
+             <?php foreach ($medicos as $clave => $medico): ?>
+             <option value="<?php echo limpiar($clave); ?>"><?php echo limpiar($medico['nombre']); ?></option>
+             <?php endforeach; ?>
           </select>
+          
         </div>
         <div class="eq05-campo">
           <label for="eq05-filtro-especialidad">Especialidad</label>
+          <?php //cambio realizado para extraer las especialidades del arreglo de datos_demo.php y
+          //   mostrarlos en el select de la pagina principal_listado.php ?>
           <select id="eq05-filtro-especialidad" name="especialidad">
-            <option value="">Todas</option>
-            <option value="medicina-general">Medicina general</option>
-            <option value="pediatria">Pediatría</option>
-            <option value="cardiologia">Cardiología</option>
-            <option value="ginecologia">Ginecología</option>
-            <option value="dermatologia">Dermatología</option>
-            <option value="ortopedia">Ortopedia</option>
+             <option value="">Todas</option>
+             <?php foreach ($especialidades as $clave => $nombre): ?>
+             <option value="<?php echo limpiar($clave); ?>"><?php echo limpiar($nombre); ?></option>
+             <?php endforeach; ?>
           </select>
         </div>
+
         <div class="eq05-campo">
           <label for="eq05-filtro-estado">Estado</label>
+          <?php //cambio realizado para extraer los estados del arreglo de datos_demo.php y
+          //   mostrarlos en el select de la pagina principal_listado.php ?>
           <select id="eq05-filtro-estado" name="estado">
-            <option value="">Todos</option>
-            <option value="programada">Programada</option>
-            <option value="reagendada">Reagendada</option>
-            <option value="sala">En sala</option>
-            <option value="atendida">Atendida</option>
-            <option value="cancelada">Cancelada</option>
-            <option value="ausente">No asistió</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="confirmada">Confirmada</option>
+             <option value="">Todos</option>
+             <?php foreach ($estados as $clave => $estado): ?>
+             <option value="<?php echo limpiar($clave); ?>"><?php echo limpiar($estado['texto']); ?></option>
+             <?php endforeach; ?>
           </select>
         </div>
         <div class="eq05-acciones">
