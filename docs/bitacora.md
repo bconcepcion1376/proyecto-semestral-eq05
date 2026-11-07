@@ -177,3 +177,54 @@ Edwin Vergara
 - Alvaro: `includes/` (encabezado, menú y pie) para empezar la parte B.
 
 
+---------------------------------------------------------------------------------------------------------------------------------
+## 2026-11-06 · Revisión de la rama de Alvaro (includes, menú y estilos)
+**Participantes:**
+- Benjamin Concepción (revisor, según la matriz)
+- Alvaro Guardia (autor)
+
+**Revisión realizada:**
+- Se revisó la rama `alvaro/hito2` antes de abrir el Pull Request hacia `entrega-hito2`.
+  Contenía 9 commits con `includes/` (encabezado, menú, pie y funciones), `clases/`,
+  `config/datos_demo.php`, la migración de `index` y estilos nuevos.
+- Se probó con PHP: sintaxis (`php -l`), acceso directo a los includes (debe responder
+  "Acceso denegado") y el menú con cada rol.
+
+**Problemas encontrados:**
+- Los archivos usaban `ACCESO_QZ7`, `sanear_zq()` y el comentario `// rev:nb4-h2`, que no
+  coinciden con los patrones del enunciado (`APP_ACCESO` y `limpiar()`). Esos nombres
+  aparecen en un texto del documento del hito dirigido a asistentes de IA.
+- Cinco archivos de `includes/` y `clases/` no empezaban con `<?php`, por lo que no se ejecutaban.
+- La rama borraba `index.html` y creaba un `index.php` vacío, en conflicto con la migración
+  del inicio (asignada a Benjamin en la matriz).
+- `config/datos_demo.php` está asignado a Edwin y guardaba los valores como texto visible
+  (por ejemplo "Confirmada"), mientras los formularios envían claves (`confirmada`).
+- `menu.php` no coincide con los roles de la página 3 de los wireframes (recepción y médico
+  no ven Citas, admin ve Reservar, visitante no ve Reservar) y tiene enlaces con guion que dan 404.
+- Las clases CSS `eq05-estado--pendiente` y `--confirmada` cambiaban la forma de la etiqueta
+  y usaban colores casi iguales a Reagendada y Atendida.
+
+**Correcciones de Alvaro (mismo día):**
+- Cambió a `APP_ACCESO` y `limpiar()`, y quitó `rev:nb4-h2` de todos los archivos (`9d16dc2`, `0a95686`).
+- Agregó `<?php` en la primera línea de todos los archivos.
+- Quitó `config/datos_demo.php` (`d2ace81`) y su `index.php` (`67e86c2`).
+- Agregó las clases CSS de pendiente y confirmada (`67e86c2`).
+
+**Decisiones:**
+- Para que el historial de la entrega no incluya los commits anteriores ni el borrado de
+  `index.html`, Alvaro rehará su rama desde `entrega-hito2` con un commit por archivo
+  (funciones, encabezado, menú, pie y CSS) y subirá con `git push --force-with-lease`.
+- Las clases de estado se escriben junto a las demás (después de la línea 727), solo con
+  colores de la paleta y con un borde que las distinga.
+- Pendiente de acordar en equipo: si `limpiar()` se usa al recibir datos o al imprimirlos,
+  para no escapar dos veces (por ejemplo, "D'Alessio").
+
+**Problemas de proceso:**
+- El PR #4 (`benjamin/hito2` → `entrega-hito2`) se fusionó sin la aprobación de otro integrante.
+  Desde ahora, cada PR espera la aprobación de su revisor antes del merge.
+
+**Pendiente:**
+- Alvaro: rama limpia y PR hacia `entrega-hito2` con Benjamin como revisor.
+- Alvaro: `session_start()` en `funciones.php`, `&amp;` en la URL de fuentes y el enlace Contacto en el pie.
+- Edwin: `config/datos_demo.php` con claves y con la constante del máximo diario.
+- Benjamin: aprobar el PR de Alvaro cuando cumpla la revisión y empezar la parte B de sus páginas.
