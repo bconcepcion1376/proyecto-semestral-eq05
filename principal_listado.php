@@ -105,86 +105,27 @@ require_once __DIR__ . '/includes/encabezado.php';
           </tr>
         </thead>
         <tbody>
+          <?php foreach ($citas as $codigo => $cita): ?>
           <tr>
-            <td data-etiqueta="Hora"><time datetime="2027-02-01T08:00">08:00</time></td>
-            <th scope="row" data-etiqueta="N.º">CIT-0141</th>
-            <td data-etiqueta="Paciente">María Castillo</td>
-            <td data-etiqueta="Documento">8-765-1234</td>
-            <td data-etiqueta="Médico">Dra. Carmen Ríos</td>
-            <td data-etiqueta="Especialidad">Cardiología</td>
-            <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--atendida">Atendida</span></td>
-            <td data-etiqueta="Acciones"><a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0141</span></a></td>
+            <?php
+              $paciente = $pacientes[$cita['expediente']];
+              $medico = $medicos[$cita['medico']];
+            ?>
+             <td data-etiqueta="Hora"><time datetime="<?php echo limpiar($cita['fecha'] . 'T' . $cita['hora']); ?>"><?php echo limpiar($cita['hora']); ?></time></td>
+             <th scope="row" data-etiqueta="N.º"><?php echo limpiar($codigo); ?></th>
+             <td data-etiqueta="Paciente"><?php echo limpiar($paciente['nombre']); ?></td>
+             <td data-etiqueta="Documento"><?php echo limpiar($paciente['documento']); ?></td>
+             <td data-etiqueta="Médico"><?php echo limpiar($medico['nombre']); ?></td>
+             <td data-etiqueta="Especialidad"><?php echo limpiar($especialidades[$cita['especialidad']]);?></td>
+             <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--<?php echo limpiar($cita['estado']); ?>"><?php echo limpiar($estados[$cita['estado']]['texto']); ?></span></td>
+             <td data-etiqueta="Acciones">
+               <?php if ($estados[$cita['estado']]['activa'] && $cita['estado'] !== 'sala'): ?>
+                  <a class="eq05-boton eq05-boton--pequeno" href="principal_detalle.php?codigo=<?php echo urlencode($codigo); ?>">Marcar llegada</a>
+                   <?php endif; ?>
+                  <a href="principal_detalle.php?codigo=<?php echo urlencode($codigo); ?>">Ver<span class="eq05-sr"> la cita <?php echo limpiar($codigo); ?></span></a>
+             </td>
           </tr>
-          <tr>
-            <td data-etiqueta="Hora"><time datetime="2027-02-01T08:30">08:30</time></td>
-            <th scope="row" data-etiqueta="N.º">CIT-0142</th>
-            <td data-etiqueta="Paciente">Pedro Sánchez</td>
-            <td data-etiqueta="Documento">4-221-908</td>
-            <td data-etiqueta="Médico">Dra. Carmen Ríos</td>
-            <td data-etiqueta="Especialidad">Cardiología</td>
-            <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--sala">En sala</span></td>
-            <td data-etiqueta="Acciones"><a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0142</span></a></td>
-          </tr>
-          <tr>
-            <td data-etiqueta="Hora"><time datetime="2027-02-01T08:30">08:30</time></td>
-            <th scope="row" data-etiqueta="N.º">CIT-0143</th>
-            <td data-etiqueta="Paciente">Rosa Méndez</td>
-            <td data-etiqueta="Documento">8-901-2234</td>
-            <td data-etiqueta="Médico">Dr. José Arias</td>
-            <td data-etiqueta="Especialidad">Medicina general</td>
-            <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--ausente">No asistió</span></td>
-            <td data-etiqueta="Acciones"><a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0143</span></a></td>
-          </tr>
-          <tr>
-            <td data-etiqueta="Hora"><time datetime="2027-02-01T09:00">09:00</time></td>
-            <th scope="row" data-etiqueta="N.º">CIT-0144</th>
-            <td data-etiqueta="Paciente">Luis Herrera</td>
-            <td data-etiqueta="Documento">PE-12-345</td>
-            <td data-etiqueta="Médico">Dr. José Arias</td>
-            <td data-etiqueta="Especialidad">Medicina general</td>
-            <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--programada">Programada</span></td>
-            <td data-etiqueta="Acciones"><a class="eq05-boton eq05-boton--pequeno" href="principal_detalle.php">Marcar llegada</a> <a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0144</span></a></td>
-          </tr>
-          <tr>
-            <td data-etiqueta="Hora"><time datetime="2027-02-01T09:00">09:00</time></td>
-            <th scope="row" data-etiqueta="N.º">CIT-0145</th>
-            <td data-etiqueta="Paciente">Ana Pérez</td>
-            <td data-etiqueta="Documento">8-123-4567</td>
-            <td data-etiqueta="Médico">Dra. Laura Vega</td>
-            <td data-etiqueta="Especialidad">Pediatría</td>
-            <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--programada">Programada</span></td>
-            <td data-etiqueta="Acciones"><a class="eq05-boton eq05-boton--pequeno" href="principal_detalle.php">Marcar llegada</a> <a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0145</span></a></td>
-          </tr>
-          <tr>
-            <td data-etiqueta="Hora"><time datetime="2027-02-01T09:30">09:30</time></td>
-            <th scope="row" data-etiqueta="N.º">CIT-0146</th>
-            <td data-etiqueta="Paciente">Jorge Batista</td>
-            <td data-etiqueta="Documento">3-456-789</td>
-            <td data-etiqueta="Médico">Dra. Carmen Ríos</td>
-            <td data-etiqueta="Especialidad">Cardiología</td>
-            <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--reagendada">Reagendada</span></td>
-            <td data-etiqueta="Acciones"><a class="eq05-boton eq05-boton--pequeno" href="principal_detalle.php">Marcar llegada</a> <a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0146</span></a></td>
-          </tr>
-          <tr>
-            <td data-etiqueta="Hora"><time datetime="2027-02-01T10:00">10:00</time></td>
-            <th scope="row" data-etiqueta="N.º">CIT-0147</th>
-            <td data-etiqueta="Paciente">Elena Quintero</td>
-            <td data-etiqueta="Documento">8-332-1100</td>
-            <td data-etiqueta="Médico">Dr. José Arias</td>
-            <td data-etiqueta="Especialidad">Medicina general</td>
-            <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--cancelada">Cancelada</span></td>
-            <td data-etiqueta="Acciones"><a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0147</span></a></td>
-          </tr>
-          <tr>
-            <td data-etiqueta="Hora"><time datetime="2027-02-01T10:00">10:00</time></td>
-            <th scope="row" data-etiqueta="N.º">CIT-0148</th>
-            <td data-etiqueta="Paciente">Carlos Pinzón</td>
-            <td data-etiqueta="Documento">6-77-1203</td>
-            <td data-etiqueta="Médico">Dra. Laura Vega</td>
-            <td data-etiqueta="Especialidad">Pediatría</td>
-            <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--programada">Programada</span></td>
-            <td data-etiqueta="Acciones"><a class="eq05-boton eq05-boton--pequeno" href="principal_detalle.php">Marcar llegada</a> <a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0148</span></a></td>
-          </tr>
+          <?php endforeach; ?>
         </tbody>
       </table>
     </div>
