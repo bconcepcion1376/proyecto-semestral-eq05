@@ -69,7 +69,7 @@ require_once __DIR__ . '/includes/encabezado.php';
           <select id="eq05-filtro-medico" name="medico">
              <option value="">Todos</option>
              <?php foreach ($medicos as $clave => $medico): ?>
-             <option value="<?php echo limpiar($clave); ?>"><?php echo limpiar($medico['nombre']); ?></option>
+             <option value="<?php echo limpiar($clave); ?>" <?php echo $clave === $filtro_medico ? 'selected' : ''; ?>><?php echo limpiar($medico['nombre']); ?></option>
              <?php endforeach; ?>
           </select>
           
@@ -81,7 +81,7 @@ require_once __DIR__ . '/includes/encabezado.php';
           <select id="eq05-filtro-especialidad" name="especialidad">
              <option value="">Todas</option>
              <?php foreach ($especialidades as $clave => $nombre): ?>
-             <option value="<?php echo limpiar($clave); ?>"><?php echo limpiar($nombre); ?></option>
+             <option value="<?php echo limpiar($clave); ?>" <?php echo $clave === $filtro_especialidad ? 'selected' : ''; ?>><?php echo limpiar($nombre); ?></option>
              <?php endforeach; ?>
           </select>
         </div>
@@ -93,7 +93,7 @@ require_once __DIR__ . '/includes/encabezado.php';
           <select id="eq05-filtro-estado" name="estado">
              <option value="">Todos</option>
              <?php foreach ($estados as $clave => $estado): ?>
-             <option value="<?php echo limpiar($clave); ?>"><?php echo limpiar($estado['texto']); ?></option>
+             <option value="<?php echo limpiar($clave); ?>" <?php echo $clave === $filtro_estado ? 'selected' : ''; ?>><?php echo limpiar($estado['texto']); ?></option>
              <?php endforeach; ?>
           </select>
         </div>
