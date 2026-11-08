@@ -3,6 +3,154 @@
 define('APP_ACCESO', true);
 
 require_once __DIR__ . '/includes/funciones.php';
+
+require_once __DIR__ . '/config/datos_demo.php';
+
+// Valores del formulario: llegan por GET al pulsar "Ver horas libres".
+// Si no llegan, se usan los de la maqueta; si no son válidos, se ignoran.
+$valor_especialidad = $_GET['especialidad'] ?? 'pediatria';
+if (!isset($especialidades[$valor_especialidad])) {
+    $valor_especialidad = '';
+}
+
+$valor_servicio = $_GET['servicio'] ?? 'primera-vez';
+if (!isset($servicios[$valor_servicio])) {
+    $valor_servicio = '';
+}
+
+$valor_medico = $_GET['medico'] ?? 'valdelomar';
+if ($valor_medico !== 'cualquiera' && !isset($medicos[$valor_medico])) {
+    $valor_medico = 'valdelomar';
+}
+
+$valor_fecha = $_GET['fecha'] ?? '2026-11-12';
+if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $valor_fecha)
+    || $valor_fecha < '2026-11-01' || $valor_fecha > '2027-04-02') {
+    $valor_fecha = '2026-11-12';
+}
+
+$valor_hora = $_GET['hora'] ?? '10:00';
+if (!preg_match('/^\d{2}:\d{2}$/', $valor_hora)) {
+    $valor_hora = '';
+}
+
+// Fecha elegida: texto en español y clave del día para buscar el horario
+$dias  = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+$meses = [1 => 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
+          'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+$claves_dia = ['dom', 'lun', 'mar', 'mie', 'jue', 'vie', 'sab'];
+
+$marca_fecha = strtotime($valor_fecha);
+$texto_fecha = ucfirst($dias[date('w', $marca_fecha)]) . ' ' . date('j', $marca_fecha)
+             . ' de ' . $meses[date('n', $marca_fecha)];
+$clave_dia = $claves_dia[date('w', $marca_fecha)];
+
+// Horas del médico ese día, una cada "duracion" minutos
+$horas = [];
+$horario_dia = $horarios[$valor_medico]['dias'][$clave_dia] ?? null;
+if ($horario_dia !== null) {
+    $duracion = $horarios[$valor_medico]['duracion'];
+    $actual = strtotime($valor_fecha . ' ' . $horario_dia['desde']);
+    $fin    = strtotime($valor_fecha . ' ' . $horario_dia['hasta']);
+    while ($actual < $fin) {
+        $horas[] = date('H:i', $actual);
+        $actual = $actual + $duracion * 60;
+    }
+}
+
+// Horas ocupadas (R1): citas activas del mismo médico el mismo día
+$ocupadas = [];
+foreach ($citas as $cita) {
+    if ($cita['medico'] === $valor_medico
+        && $cita['fecha'] === $valor_fecha
+        && $estados[$cita['estado']]['activa']) {
+        $ocupadas[] = $cita['hora'];
+    }
+}
+
+// Citas activas del médico por día (R2: un día con MAX_CITAS_DIA está sin cupo)
+$citas_por_dia = [];
+foreach ($citas as $cita) {
+    if ($cita['medico'] === $valor_medico && $estados[$cita['estado']]['activa']) {
+        $citas_por_dia[$cita['fecha']] = ($citas_por_dia[$cita['fecha']] ?? 0) + 1;
+    }
+}
+
+// Calendario del mes de la fecha elegida
+$anio       = (int) date('Y', $marca_fecha);
+$mes        = (int) date('n', $marca_fecha);
+$primer_dia = mktime(0, 0, 0, $mes, 1, $anio);
+$dias_mes   = (int) date('t', $primer_dia);      // cuántos días tiene el mes
+$huecos     = (int) date('N', $primer_dia) - 1;  // N: 1 = lunes … 7 = domingo
+
+$motivo_bloqueo = '';   // por qué no se puede reservar el día elegido ('' = sí se puede)
+$celdas = array_fill(0, $huecos, null);   // casillas vacías antes del día 1
+
+for ($d = 1; $d <= $dias_mes; $d++) {
+    $fecha_dia = sprintf('%04d-%02d-%02d', $anio, $mes, $d);
+    $clave_d   = $claves_dia[date('w', strtotime($fecha_dia))];
+
+    $ausente = false;
+    foreach ($ausencias as $ausencia) {
+        if ($ausencia['medico'] === $valor_medico
+            && $fecha_dia >= $ausencia['desde'] && $fecha_dia <= $ausencia['hasta']) {
+            $ausente = true;
+        }
+    }
+
+    if ($clave_d === 'dom') {
+        $clase = 'eq05-dia--cerrado';  $titulo_dia = 'Domingo, cerrado';
+    } elseif (in_array($fecha_dia, $feriados)) {
+        $clase = 'eq05-dia--feriado';  $titulo_dia = 'Feriado';
+    } elseif ($ausente) {
+        $clase = 'eq05-dia--ausencia'; $titulo_dia = 'Médico ausente';
+    } elseif (($citas_por_dia[$fecha_dia] ?? 0) >= MAX_CITAS_DIA) {
+        $clase = 'eq05-dia--lleno';    $titulo_dia = 'Sin cupo';
+    } elseif ($valor_medico !== 'cualquiera' && !isset($horarios[$valor_medico]['dias'][$clave_d])) {
+        $clase = 'eq05-dia--cerrado';  $titulo_dia = 'El médico no atiende este día';
+    } else {
+        $clase = '';                   $titulo_dia = '';
+    }
+
+    if ($fecha_dia === $valor_fecha) {
+        $motivo_bloqueo = $titulo_dia;   // se guarda antes de marcarlo como elegido
+        $clase = 'eq05-dia--elegido';
+        $titulo_dia = 'Día elegido';
+    }
+
+    $celdas[] = ['dia' => $d, 'clase' => $clase, 'titulo' => $titulo_dia];
+}
+
+// Casillas vacías al final para completar la última semana
+while (count($celdas) % 7 !== 0) {
+    $celdas[] = null;
+}
+$semanas = array_chunk($celdas, 7);   // filas de 7 días (lunes a domingo)
+
+// Si el día elegido no se puede reservar, no se ofrecen horas
+if ($motivo_bloqueo !== '') {
+    $horas = [];
+}
+
+// Resumen: textos de lo elegido ('—' si falta)
+$resumen_especialidad = $valor_especialidad !== '' ? $especialidades[$valor_especialidad] : '—';
+$resumen_servicio = $valor_servicio !== ''
+    ? $servicios[$valor_servicio]['nombre'] . ' (' . $servicios[$valor_servicio]['minutos'] . ' min)'
+    : '—';
+$resumen_medico = $valor_medico !== 'cualquiera' ? $medicos[$valor_medico]['nombre'] : 'Cualquier médico';
+$resumen_fecha  = $texto_fecha . ' de ' . $anio;
+
+// La hora solo cuenta si está en la lista de horas y no está ocupada
+$hora_valida = in_array($valor_hora, $horas) && !in_array($valor_hora, $ocupadas);
+if ($hora_valida) {
+    $marca_hora = strtotime($valor_fecha . ' ' . $valor_hora);
+    $resumen_hora = date('g:i', $marca_hora) . (date('a', $marca_hora) === 'am' ? ' a. m.' : ' p. m.');
+} else {
+    $resumen_hora = '—';
+}
+
+$resumen_lugar = $horario_dia !== null ? 'Consultorio ' . $horario_dia['consultorio'] : '—';
+
 $titulo = 'Reservar cita';
 $descripcion = 'Reserve una cita médica eligiendo especialidad, servicio, médico, fecha y hora disponibles.';
 $pagina_activa = 'reservar';
@@ -44,21 +192,18 @@ require_once __DIR__ . '/includes/encabezado.php';
               <label for="eq05-cita-especialidad">Especialidad <span class="eq05-requerido">*</span></label>
               <select id="eq05-cita-especialidad" name="especialidad" required>
                 <option value="">Seleccione…</option>
-                <option value="medicina-general">Medicina general</option>
-                <option value="pediatria" selected>Pediatría</option>
-                <option value="cardiologia">Cardiología</option>
-                <option value="ginecologia">Ginecología</option>
-                <option value="dermatologia">Dermatología</option>
-                <option value="ortopedia">Ortopedia</option>
+                <?php foreach ($especialidades as $clave => $nombre): ?>
+                <option value="<?php echo limpiar($clave); ?>" <?php echo $clave === $valor_especialidad ? 'selected' : ''; ?>><?php echo limpiar($nombre); ?></option>
+                <?php endforeach; ?>
               </select>
             </div>
             <div class="eq05-campo">
               <label for="eq05-cita-servicio">Servicio <span class="eq05-requerido">*</span></label>
               <select id="eq05-cita-servicio" name="servicio" required>
                 <option value="">Seleccione…</option>
-                <option value="primera-vez" selected>Consulta de primera vez · 30 min</option>
-                <option value="control">Control · 20 min</option>
-                <option value="resultados">Lectura de resultados · 15 min</option>
+                <?php foreach ($servicios as $clave => $servicio): ?>
+                <option value="<?php echo limpiar($clave); ?>" <?php echo $clave === $valor_servicio ? 'selected' : ''; ?>><?php echo limpiar($servicio['nombre']); ?> · <?php echo $servicio['minutos']; ?> min</option>
+                <?php endforeach; ?>
               </select>
             </div>
           </div>
@@ -67,14 +212,10 @@ require_once __DIR__ . '/includes/encabezado.php';
         <fieldset>
           <legend>2 · Médico</legend>
           <div class="eq05-tarjetas-radio">
-            <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="arias"><span><strong>Dr. José Arias</strong><br><small class="eq05-texto-secundario">Próximo: jue 12 nov, 8:00</small></span></label>
-            <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="rios"><span><strong>Dra. Carmen Ríos</strong><br><small class="eq05-texto-secundario">Próximo: vie 13 nov, 15:00</small></span></label>
-            <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="vega"><span><strong>Dra. Laura Vega</strong><br><small class="eq05-texto-secundario">Próximo: jue 12 nov, 10:00</small></span></label>
-            <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="cualquiera"><span><strong>Cualquier médico</strong><br><small class="eq05-texto-secundario">El primer espacio libre</small></span></label>
-            <?php //Datos Semillas: Se pueden agregar más médicos según la especialidad ?>
-            <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="valdelomar" checked><span><strong>Dr. Ignacio Valdelomar</strong><br><small class="eq05-texto-secundario">Próximo: jue 12 nov, 08:00</small></span></label>
-            <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="zamudio"><span><strong>Dra. Pilar Zamudio</strong><br><small class="eq05-texto-secundario">Próximo: lun 16 nov, 10:30</small></span></label>            
-            
+            <?php foreach ($medicos as $clave => $medico): ?>
+            <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="<?php echo limpiar($clave); ?>" <?php echo $clave === $valor_medico ? 'checked' : ''; ?>><span><strong><?php echo limpiar($medico['nombre']); ?></strong><br><small class="eq05-texto-secundario"><?php echo limpiar($especialidades[$medico['especialidad']]); ?></small></span></label>
+            <?php endforeach; ?>
+            <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="cualquiera" <?php echo $valor_medico === 'cualquiera' ? 'checked' : ''; ?>><span><strong>Cualquier médico</strong><br><small class="eq05-texto-secundario">El primer espacio libre</small></span></label>
           </div>
         </fieldset>
 
@@ -83,27 +224,20 @@ require_once __DIR__ . '/includes/encabezado.php';
           <div class="eq05-fecha-hora">
             <div>
               <table class="eq05-calendario">
-                <caption>Disponibilidad de noviembre de 2026</caption>
+                <caption>Disponibilidad de <?php echo limpiar($meses[$mes]); ?> de <?php echo $anio; ?></caption>
                 <thead><tr><th scope="col"><abbr title="lunes">Lun</abbr></th><th scope="col"><abbr title="martes">Mar</abbr></th><th scope="col"><abbr title="miércoles">Mié</abbr></th><th scope="col"><abbr title="jueves">Jue</abbr></th><th scope="col"><abbr title="viernes">Vie</abbr></th><th scope="col"><abbr title="sábado">Sáb</abbr></th><th scope="col"><abbr title="domingo">Dom</abbr></th></tr></thead>
                 <tbody>
-                   <tr><td></td><td></td><td></td><td></td><td></td><td></td><td class="eq05-dia--cerrado" title="Domingo, cerrado">1</td></tr>
-                   <tr><td>2</td><td class="eq05-dia--feriado" title="Separación de Panamá de Colombia">3</td>
-                       <td class="eq05-dia--feriado" title="Día de la Bandera">4</td>
-                       <td class="eq05-dia--feriado" title="Día de Colón">5</td>
-                       <td>6</td><td>7</td><td class="eq05-dia--cerrado" title="Domingo, cerrado">8</td>
-                   </tr>
-                    <tr><td>9</td><td class="eq05-dia--feriado" title="Primer Grito de Independencia">10</td>
-                        <td>11</td><td class="eq05-dia--elegido" title="Día elegido">12</td>
-                        <td>13</td><td>14</td><td class="eq05-dia--cerrado" title="Domingo, cerrado">15</td>
-                   </tr>
-                   <tr><td>16</td><td>17</td><td class="eq05-dia--lleno" title="Sin cupo">18</td>
-                       <td class="eq05-dia--ausencia" title="Médico ausente">19</td><td class="eq05-dia--ausencia" title="Médico ausente">20</td><td>21</td>
-                       <td class="eq05-dia--cerrado" title="Domingo, cerrado">22</td>
-                   </tr>
-                   <tr><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td class="eq05-dia--feriado" title="Independencia de España">28</td>
-                       <td class="eq05-dia--cerrado" title="Domingo, cerrado">29</td>
-                   </tr>
-                   <tr><td>30</td><td></td><td></td><td></td><td></td><td></td><td></td></tr> 
+                  <?php foreach ($semanas as $semana): ?>
+                  <tr>
+                    <?php foreach ($semana as $celda): ?>
+                      <?php if ($celda === null): ?>
+                    <td></td>
+                      <?php else: ?>
+                    <td<?php if ($celda['clase'] !== ''): ?> class="<?php echo $celda['clase']; ?>" title="<?php echo limpiar($celda['titulo']); ?>"<?php endif; ?>><?php echo $celda['dia']; ?></td>
+                      <?php endif; ?>
+                    <?php endforeach; ?>
+                  </tr>
+                  <?php endforeach; ?>
                 </tbody>
               </table>
               <ul class="eq05-leyenda" aria-label="Leyenda del calendario">
@@ -118,31 +252,25 @@ require_once __DIR__ . '/includes/encabezado.php';
             <div>
               <div class="eq05-campo">
                 <label for="eq05-cita-fecha">Fecha <span class="eq05-requerido">*</span></label>
-                
-                <input type="date" id="eq05-cita-fecha" name="fecha" value="2026-11-12" min="2026-11-01" max="2027-04-02" required>
+                <input type="date" id="eq05-cita-fecha" name="fecha" value="<?php echo limpiar($valor_fecha); ?>" min="2026-11-01" max="2027-04-02" required>
                 <span class="eq05-ayuda"><strong>Nota:</strong> Las citas deben solicitarse con al menos 24 horas de anticipación.</span>
+                <button class="eq05-boton" type="submit" formaction="principal_formulario.php" formmethod="get" formnovalidate>Ver horas libres</button>
               </div>
               <fieldset>
-                <legend>Horas libres del Jueves 12 de noviembre</legend>
+                <legend>Horas libres del <?php echo limpiar($texto_fecha); ?></legend>
                 <div class="eq05-horas">
-                  <label class="eq05-hora"><input type="radio" name="hora" value="08:00" required><span>8:00</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="08:30" required><span>8:30</span></label>
-                 
-                  <label class="eq05-hora"><input type="radio" name="hora" value="09:00" required><span>9:00</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="09:30" disabled><span>9:30<span class="eq05-sr"> (ocupado)</span></span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="10:00" checked required><span>10:00</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="10:30" required><span>10:30</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="11:00" disabled><span>11:00<span class="eq05-sr"> (ocupado)</span></span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="11:30" required><span>11:30</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="13:30" required><span>13:30</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="14:00" required><span>14:00</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="14:30" required><span>14:30</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="15:00" required><span>15:00</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="15:30" required><span>15:30</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="16:00" required><span>16:00</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="16:30" required><span>16:30</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="17:00" required><span>17:00</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="17:30" required><span>17:30</span></label>
+                  <?php if ($valor_medico === 'cualquiera'): ?>
+                  <p class="eq05-texto-secundario">Elija un médico para ver sus horas libres.</p>
+                  <?php elseif ($motivo_bloqueo !== ''): ?>
+                  <p class="eq05-texto-secundario">No hay horas este día: <?php echo limpiar($motivo_bloqueo); ?>.</p>
+                  <?php endif; ?>
+                  <?php foreach ($horas as $hora): ?>
+                    <?php if (in_array($hora, $ocupadas)): ?>
+                  <label class="eq05-hora"><input type="radio" name="hora" value="<?php echo limpiar($hora); ?>" disabled><span><?php echo limpiar(ltrim($hora, '0')); ?><span class="eq05-sr"> (ocupado)</span></span></label>
+                    <?php else: ?>
+                  <label class="eq05-hora"><input type="radio" name="hora" value="<?php echo limpiar($hora); ?>" <?php echo $hora === $valor_hora ? 'checked' : ''; ?> required><span><?php echo limpiar(ltrim($hora, '0')); ?></span></label>
+                    <?php endif; ?>
+                  <?php endforeach; ?>
                 </div>
               </fieldset>
             </div>
@@ -158,12 +286,12 @@ require_once __DIR__ . '/includes/encabezado.php';
       <aside class="eq05-tarjeta eq05-resumen" aria-labelledby="eq05-titulo-resumen">
         <h2 id="eq05-titulo-resumen">Resumen</h2>
         <dl class="eq05-datos">
-          <dt>Especialidad</dt><dd>Pediatría</dd>
-          <dt>Servicio</dt><dd>Primera vez (30 min)</dd>
-          <dt>Médico</dt><dd>Dr. Ignacio Valdelomar</dd>
-          <dt>Fecha</dt><dd><time datetime="2026-11-12">Jue 12 Nov 2026</time></dd>
-          <dt>Hora</dt><dd><time datetime="10:00">10:00 a. m.</time></dd>
-          <dt>Lugar</dt><dd>Consultorio 204</dd>
+          <dt>Especialidad</dt><dd><?php echo limpiar($resumen_especialidad); ?></dd>
+          <dt>Servicio</dt><dd><?php echo limpiar($resumen_servicio); ?></dd>
+          <dt>Médico</dt><dd><?php echo limpiar($resumen_medico); ?></dd>
+          <dt>Fecha</dt><dd><time datetime="<?php echo limpiar($valor_fecha); ?>"><?php echo limpiar($resumen_fecha); ?></time></dd>
+          <dt>Hora</dt><dd><?php if ($hora_valida): ?><time datetime="<?php echo limpiar($valor_hora); ?>"><?php echo limpiar($resumen_hora); ?></time><?php else: ?>—<?php endif; ?></dd>
+          <dt>Lugar</dt><dd><?php echo limpiar($resumen_lugar); ?></dd>
         </dl>
         <button class="eq05-boton eq05-boton--primario eq05-boton--bloque" type="submit">Confirmar cita</button>
         <p><a href="principal_listado.php">Cancelar</a></p>
