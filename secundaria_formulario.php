@@ -36,10 +36,11 @@ require_once __DIR__ . '/includes/encabezado.php';
         <label for="eq05-hor-medico">Médico <span class="eq05-requerido">*</span></label>
         <select id="eq05-hor-medico" name="medico" required>
           <option value="">Seleccione…</option>
-          <option value="rios" selected>Dra. Carmen Ríos · Cardiología</option>
-          <option value="arias">Dr. José Arias · Medicina general</option>
-          <option value="vega">Dra. Laura Vega · Pediatría</option>
+          <?php foreach ($medicos as $clave_medico => $datos_medico): ?>
+          <option value="<?php echo limpiar($clave_medico); ?>" <?php echo $clave_medico === $valor_medico ? 'selected' : ''; ?>><?php echo limpiar($datos_medico['nombre']); ?> · <?php echo limpiar($especialidades[$datos_medico['especialidad']]); ?></option>
+          <?php endforeach; ?>
         </select>
+        <button class="eq05-boton" type="submit" formaction="secundaria_formulario.php" formmethod="get" formnovalidate>Ver horario</button>        
       </div>
 
       <div class="eq05-dos-columnas">
