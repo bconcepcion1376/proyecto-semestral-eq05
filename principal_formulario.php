@@ -75,14 +75,10 @@ require_once __DIR__ . '/includes/encabezado.php';
         <fieldset>
           <legend>2 · Médico</legend>
           <div class="eq05-tarjetas-radio">
-            <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="arias"><span><strong>Dr. José Arias</strong><br><small class="eq05-texto-secundario">Próximo: jue 12 nov, 8:00</small></span></label>
-            <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="rios"><span><strong>Dra. Carmen Ríos</strong><br><small class="eq05-texto-secundario">Próximo: vie 13 nov, 15:00</small></span></label>
-            <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="vega"><span><strong>Dra. Laura Vega</strong><br><small class="eq05-texto-secundario">Próximo: jue 12 nov, 10:00</small></span></label>
+            <?php foreach ($medicos as $clave => $medico): ?>
+            <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="<?php echo limpiar($clave); ?>" <?php echo $clave === $valor_medico ? 'checked' : ''; ?>><span><strong><?php echo limpiar($medico['nombre']); ?></strong><br><small class="eq05-texto-secundario"><?php echo limpiar($especialidades[$medico['especialidad']]); ?></small></span></label>
+            <?php endforeach; ?>
             <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="cualquiera"><span><strong>Cualquier médico</strong><br><small class="eq05-texto-secundario">El primer espacio libre</small></span></label>
-            <?php //Datos Semillas: Se pueden agregar más médicos según la especialidad ?>
-            <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="valdelomar" checked><span><strong>Dr. Ignacio Valdelomar</strong><br><small class="eq05-texto-secundario">Próximo: jue 12 nov, 08:00</small></span></label>
-            <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="zamudio"><span><strong>Dra. Pilar Zamudio</strong><br><small class="eq05-texto-secundario">Próximo: lun 16 nov, 10:30</small></span></label>            
-            
           </div>
         </fieldset>
 
