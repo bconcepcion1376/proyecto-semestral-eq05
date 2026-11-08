@@ -1,29 +1,28 @@
 <?php
-// perfil.php - ID 10 (Dana Wing)
 define('APP_ACCESO', true);
-// TODO: require_once 'includes/encabezado.php';
-// TODO: require_once 'includes/menu.php';
+require_once 'includes/funciones.php';
+
+
+if (empty($_SESSION['rol']) || $_SESSION['rol'] === 'invitado') {
+    redirigir('login.php');
+}
+
+$titulo = 'Mi Perfil';
+$descripcion = 'Perfil de usuario de MediAgenda';
+$pagina_activa = 'perfil';
+
+require_once 'includes/encabezado.php';
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Mi Perfil | MediAgenda</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    <main class="container">
-        <h1>Mi Perfil</h1>
-        <p><em>Pendiente carga de datos de usuario desde sesión/demo</em></p>
-        
-        <!-- TODO: Todos los datos mostrados pasarán por htmlspecialchars() -->
-        <div class="perfil-card">
-            <p>Nombre: [Pendiente]</p>
-            <p>Correo: [Pendiente]</p>
-            <p>Rol: [Pendiente]</p>
-        </div>
-    </main>
+
+<main class="eq05-contenedor">
+    <h1>Mi Perfil</h1>
     
-    <?php // TODO: require_once 'includes/pie.php'; ?>
-</body>
-</html>
+    <div class="eq05-tarjeta">
+        <p><strong>Nombre:</strong> <?php echo limpiar($_SESSION['nombre'] ?? 'Usuario'); ?></p>
+        <p><strong>Rol:</strong> <?php echo limpiar(ucfirst($_SESSION['rol'])); ?></p>
+    </div>
+    <br>
+    <a href="procesar_logout.php" class="eq05-boton eq05-boton--primario">Cerrar sesión</a>
+</main>
+
+<?php require_once 'includes/pie.php'; ?>

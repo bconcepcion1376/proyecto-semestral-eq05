@@ -1,27 +1,22 @@
 <?php
-// panel.php - ID 9 (Dana Wing)
 define('APP_ACCESO', true);
-// TODO: require_once 'includes/encabezado.php'; // Pendiente Alvaro
-// TODO: require_once 'includes/menu.php';       // Pendiente Alvaro
+require_once 'includes/funciones.php';
+
+$titulo = 'Panel Administrativo';
+$descripcion = 'Panel de administración y gestión de MediAgenda';
+$pagina_activa = 'administracion';
+
+require_once 'includes/encabezado.php';
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Panel Administrativo | MediAgenda</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    <main class="container">
-        <h1>Panel Administrativo</h1>
-        <p><em>Pendiente integración con menú dinámico por rol y resumen de citas</em></p>
-        
-        <!-- TODO: Aquí irá el listado dinámico con foreach cuando Edwin entregue datos_demo.php -->
-        <div class="placeholder">
-            <p>Resumen de citas pendientes...</p>
-        </div>
-    </main>
+
+<main class="eq05-contenedor">
+    <h1>Panel Administrativo</h1>
+    <p>Bienvenido al panel de control. Aquí podrás gestionar las citas y usuarios del sistema.</p>
     
-    <?php // TODO: require_once 'includes/pie.php'; ?>
-</body>
-</html>
+    <div class="eq05-seccion">
+        <h2>Resumen de citas</h2>
+        <p>El listado dinámico de citas se integrará aquí usando <code>foreach</code> sobre los datos de demostración de Edwin.</p>
+    </div>
+</main>
+
+<?php require_once 'includes/pie.php'; ?>
