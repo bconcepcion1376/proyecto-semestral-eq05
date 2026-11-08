@@ -331,3 +331,202 @@ Edwin Vergara
 - Benjamin: fase 2 en `principal_detalle.php` (leer `?codigo=`, mostrar la cita y enviar a
   `error.php?codigo=404` si no existe), `principal_formulario.php` e `index.php`.
 - Alvaro: clases CSS de pendiente y confirmada (en el listado salen sin color).
+
+## 2026-11-06 · Includes comunes, menú por rol y estados en CSS
+**Participantes:**
+- Alvaro Guardia (autor)
+- Benjamin Concepción (revisor, según la matriz)
+
+**Trabajo realizado (mañana, antes de la revisión):**
+- Estructura base: `includes/encabezado.php`, `includes/menu.php`, `includes/pie.php`,
+  `includes/funciones.php` y `clases/citas.php`, con protección contra acceso directo (`9bdd1f1`).
+- Migración de `index.html` a `index.php` con los includes (`4e0f5c9`, `ae17a85`).
+- `config/datos_demo.php` con los registros semilla y la regla de negocio (`18fb033`).
+- `encabezado.php` con la constante `ACCESO_QZ7` (`a7a1d2f`).
+
+**Correcciones después de la revisión (tarde):**
+- Convenciones del enunciado: `APP_ACCESO` y `limpiar()` en lugar de `ACCESO_QZ7` y `sanear_zq()`,
+  y se quitó el comentario `rev:nb4-h2` (`9d16dc2`, `0a95686`).
+- Se quitó `config/datos_demo.php`, porque está asignado a Edwin (`d2ace81`).
+- Se quitó `index.php` del PR, porque la migración del inicio es de Benjamin (`67e86c2`).
+- Se quitó `clases/Producto.php`, que no corresponde al proyecto (`a76b732`).
+- Después, un commit por archivo:
+  - `css/estilos.css`: clases `eq05-estado--pendiente` (borde punteado, tonos de aviso) y
+    `eq05-estado--confirmada` (borde sólido, tonos de éxito), escritas junto a los demás estados y
+    con variables de la paleta (`d05fcad`).
+  - `funciones.php`: 6 funciones (`limpiar`, `redirigir`, `mostrar_errores`, `formatear_fecha`,
+    `generar_token_csrf`, `verificar_token_csrf`) y `session_start()` una sola vez al inicio del
+    archivo, en lugar de dentro de cada función CSRF (`42bf6a0`).
+  - `encabezado.php`: `&amp;display=swap` en la URL de Google Fonts para que valide en W3C (`bf97afc`).
+  - `menu.php`: `aria-current="page"` en la opción activa y clave `administracion` para el panel (`20ec713`).
+  - `pie.php`: cuarto enlace, Contacto (`8e3b929`).
+- El PR #6 (`alvaro/hito2` → `entrega-hito2`) se fusionó el 2026-11-07 a las 20:18.
+
+**Decisiones:**
+- Las clases de estado nuevas se distinguen por el borde y usan solo colores de la paleta, para no
+  confundirse con Reagendada y Atendida.
+- `session_start()` vive en `funciones.php`, así todas las páginas que lo cargan tienen sesión y
+  `menu.php` puede leer `$_SESSION['rol']`.
+
+**Problemas:**
+- Los primeros commits usaban nombres (`ACCESO_QZ7`, `sanear_zq()`, `rev:nb4-h2`) que no son los
+  del enunciado, y cinco archivos no empezaban con `<?php`.
+- En `9d16dc2` se agregó por error `clases/Producto.php`; se quitó en `a76b732`.
+- No se rehízo la rama desde `entrega-hito2` como se había acordado: el PR llevó los 15 commits,
+  incluidos los que crean y borran `datos_demo.php` e `index.php`.
+- El mensaje de `20ec713` dice "enlaces con guion bajo", pero `menu.php` sigue enlazando a
+  `principal-formulario.php`, `principal-listado.php` y `secundaria-formulario.php` (con guion),
+  que dan 404 en `entrega-hito2`.
+- El mensaje de `bf97afc` quedó "guarda  y  escapados": la terminal reemplazó `$titulo` y
+  `$descripcion` por texto vacío al escribir el mensaje entre comillas dobles.
+
+**Pendiente:**
+- Alvaro: enlaces del menú con guion bajo en `entrega-hito2` (o integrar `dad4af2` de Benjamin, que
+  ya los corrige).
+- Equipo: `menu.php` enlaza a `procesar_logout.php`, que todavía no existe; asignar responsable.
+- Equipo: acordar si `limpiar()` se aplica al recibir los datos o al imprimirlos, para no escapar
+  dos veces ("D'Alessio").
+- Mensajes de commit con `$`: usar comillas simples para que la terminal no los reemplace.
+
+## 2026-11-07 (madrugada) · Estructura de carpetas y esqueletos de mis páginas
+**Participantes:**
+- Dana Wing
+
+**Trabajo realizado:**
+- Carpetas `clases/` y `config/` con `.gitkeep` (para que Git las suba vacías) y un `.htaccess`
+  con `Deny from all` para bloquear el acceso desde el navegador (`7377c4c`).
+- Esqueletos de `procesar_registro.php`, `procesar_login.php` y `procesar_principal.php`
+  (IDs 11, 12 y 13 de la matriz): solo aceptan POST y, si no, redirigen al formulario (`8ca119f`).
+- Esqueletos de `panel.php` y `perfil.php` (IDs 9 y 10) con marcas `TODO` donde irán los includes
+  de Alvaro y los datos de Edwin (`e583e79`).
+
+**Decisiones:**
+- Mientras no existiera `funciones.php`, `procesar_registro.php` escapaba con
+  `htmlspecialchars(trim(...), ENT_QUOTES, 'UTF-8')`, para cambiarlo por `limpiar()` después.
+
+**Problemas:**
+- Los `procesar_*.php` empezaban con `defined('APP_ACCESO') or exit(...)`. Como esos archivos se
+  abren directamente desde el formulario, nadie define la constante antes y siempre respondían
+  "Acceso denegado".
+- Los esqueletos enlazaban `css/style.css`, que no existe (la hoja del proyecto es `css/estilos.css`).
+
+---------------------------------------------------------------------------------------------------------------------------------
+## 2026-11-07 (tarde y noche) · Integración con includes y datos, login, registro y regla de la semana 11
+**Participantes:**
+- Dana Wing
+
+**Trabajo realizado:**
+- Se borró la carpeta `config/` vacía para no chocar con el `datos_demo.php` de Edwin (`5f4227d`).
+- Se integraron las ramas `origin/alvaro/hito2` (`dcc0d85`) y `origin/edwin/datos-demo` (`c6fd2d5`)
+  con merge en `dana/hito2`.
+- `procesar_registro.php`: usa `limpiar()` y `mostrar_errores()` de `funciones.php`, valida nombre,
+  correo (`FILTER_VALIDATE_EMAIL`) y contraseña de al menos 6 caracteres, y genera el hash con
+  `password_hash` (`1a2c406`).
+- `procesar_login.php`: busca el correo en `$usuarios`, compara con `password_verify`, guarda
+  `$_SESSION['rol']` y `$_SESSION['nombre']` para el menú, y redirige a `panel.php` (admin,
+  recepción y médico) o a `perfil.php` (paciente). Si el correo o la clave fallan, muestra el mismo
+  mensaje para no revelar cuál de los dos está mal (`ef866c1`).
+- `procesar_principal.php`: valida paciente, médico, fecha (`DateTime::createFromFormat`) y hora
+  (`preg_match` HH:MM), e implementa R1 (sin dos citas del médico a la misma fecha y hora) y R2
+  (máximo `MAX_CITAS_DIA` citas activas por médico y día) recorriendo `$citas` (`c6e5a20`).
+- `panel.php` y `perfil.php` usan `funciones.php`, `encabezado.php` y `pie.php`; `perfil.php`
+  redirige a `login.php` si no hay sesión y muestra nombre y rol con `limpiar()` (`d0f389b`).
+
+**Decisiones:**
+- Los `procesar_*.php` usan `define('APP_ACCESO', true)` (crear la llave) en lugar de `defined()`.
+- Para saber si una cita cuenta para R2 se usa la marca `activa` del arreglo `$estados` de Edwin,
+  en lugar de repetir la lista de estados.
+- Login: la misma respuesta para "correo no existe" y "clave incorrecta".
+
+**Problemas:**
+- La rama `dana/hito2` salió de una versión vieja de `entrega-hito2`: no tiene los PR #4, #5 y #6.
+  Comparada con `entrega-hito2`, devolvería las páginas a `.html`, borraría `index.php`, `error.php`
+  y parte de la bitácora.
+- Al traer la rama de Alvaro con merge entraron también sus commits que crean y borran archivos
+  (incluido el borrado de `index.html`).
+- `panel.php` y `perfil.php` se crearon nuevos en lugar de renombrar con `git mv`: `panel.html` y
+  `perfil.html` siguen en el repositorio, se pierde su historial, y el perfil quedó sin los datos
+  de la maqueta del Hito 1 (por ejemplo, el teléfono de emergencia).
+- Al borrar `config/` también se fue `config/.htaccess`; la carpeta queda sin el bloqueo de Apache
+  (`datos_demo.php` sí se protege con `APP_ACCESO`).
+- Los nombres de los campos no coinciden con los formularios de Benjamin:
+  - `procesar_principal.php` lee `expediente`, pero el formulario envía `numero_expediente`
+    (siempre sale "Debe seleccionar un paciente válido").
+  - `procesar_login.php` y `procesar_registro.php` leen `password`, pero los formularios envían
+    `clave` (siempre sale "La contraseña es obligatoria").
+- R1 cuenta cualquier cita a esa hora, aunque esté cancelada: con los valores por defecto del
+  formulario (Valdelomar, 12 de noviembre, 10:00) bloquearía la reserva por `CIT-0203`, que está
+  cancelada.
+
+**Pendiente:**
+- Dana: actualizar `dana/hito2` con `origin/entrega-hito2` antes de abrir el PR, y resolver los
+  conflictos conservando las páginas `.php` de `entrega-hito2`.
+- Dana: usar los `name` reales de los formularios (`numero_expediente`, `clave`) o acordarlos con
+  Benjamin; en registro, validar también `clave_confirmacion`, `numero_expediente` (6 dígitos) y `terminos`.
+- Dana: R1 solo con citas activas; implementar R3 (un paciente no puede tener dos citas activas de
+  la misma especialidad); validar `especialidad` contra `$especialidades` y decidir qué hacer con
+  "Cualquier médico" (`value="cualquiera"`).
+- Dana: `panel.php` debe exigir sesión con rol admin (hoy cualquiera puede abrirlo).
+- Dana: renombrar `panel.html` y `perfil.html` con `git mv` en lugar de dejar ambas versiones.
+- Equipo: `perfil.php` y `menu.php` enlazan a `procesar_logout.php`, que no existe.
+- Agregar al plan de pruebas los casos de R1, R2 y R3 con los datos semilla (día 18 sin cupo).
+
+## 2026-11-07 · Datos de demostración en `config/datos_demo.php`
+**Participantes:**
+- Edwin Vergara
+
+**Trabajo realizado:**
+- Se creó `config/datos_demo.php` (179 líneas) en la rama `edwin/datos-demo` (`32b936e`), protegido
+  con `defined('APP_ACCESO') or exit('Acceso denegado')`.
+- `date_default_timezone_set('America/Panama')`, para que `date()` no devuelva la fecha de Berlín
+  que trae XAMPP.
+- Constante `MAX_CITAS_DIA` = 8 para la regla R2.
+- Catálogos con clave => texto visible: 6 especialidades, 3 servicios (con duración en minutos),
+  5 médicos (incluidos Valdelomar y Zamudio) y 8 estados. Cada estado tiene la marca `activa`
+  (Pendiente, Confirmada, Programada, Reagendada y En sala cuentan como activas).
+- 13 feriados de Panamá hasta el 2 de abril de 2027, incluidos los que faltaban: 9 de enero,
+  lunes y martes de carnaval (8 y 9 de febrero) y Viernes Santo (26 de marzo).
+- 15 pacientes con expediente de 6 dígitos; los tres primeros son los registros semilla
+  (482915, 482916 y 482917). "D'Alessio" se escribe entre comillas dobles por el apóstrofo.
+- 17 citas (`CIT-0201` a `CIT-0217`): las 3 semilla, 6 de ejemplo con distintos estados y 8 del
+  Dr. Valdelomar el 18 de noviembre para probar R2 (día sin cupo).
+- Horario semanal de los 5 médicos (segunda entidad) y la ausencia del Dr. Valdelomar del 19 al
+  20 de noviembre (congreso).
+- 4 usuarios de demostración, uno por rol (paciente, recepción, médico y admin). Solo se guarda el
+  hash de la contraseña (`password_hash`); la contraseña común está anotada en el comentario.
+
+**Decisiones:**
+- Los arreglos guardan claves (`confirmada`, `valdelomar`, `pediatria`) y el texto visible va
+  aparte, porque los formularios envían claves. Así se corrigió lo observado en la revisión del
+  2026-11-06.
+- Los pacientes se indexan por expediente y las citas por código, para buscarlos directamente con
+  `isset($pacientes[$expediente])` o `$citas['CIT-0201']` sin recorrer el arreglo.
+- Documento, nacimiento, teléfono, servicio y motivo de los registros semilla son datos
+  complementarios de ejemplo; solo nombre, expediente, médico, fecha, hora y estado vienen del dictado.
+- La zona horaria va en este archivo y no en `php.ini`, porque la máquina del profesor tiene su
+  propio `php.ini`.
+
+**Problemas:**
+- El 20 de diciembre (Día de Duelo Nacional) cae domingo; quedó anotado verificar si se traslada
+  al lunes 21.
+- El trabajo se hizo en `edwin/datos-demo` y no en `edwin/hito2`, la rama acordada; `edwin/hito2`
+  no tiene commits.
+- Algunos textos del formulario de reserva no coinciden con los horarios cargados: la Dra. Ríos
+  aparece con "Próximo: vie 13 nov, 15:00", pero su horario termina a las 12:00; la Dra. Zamudio
+  aparece "lun 16 nov", pero solo atiende martes, jueves y viernes.
+
+**Verificación:**
+- El hash de los usuarios de demostración se comprobó con `password_verify` en PHP de XAMPP y
+  corresponde a la contraseña anotada.
+- Las horas ocupadas del Dr. Valdelomar el 12 de noviembre en el formulario (9:30 y 11:00)
+  coinciden con `CIT-0201` y `CIT-0209`.
+- Las 8 citas del 18 de noviembre están en estados activos, así que R2 debe rechazar una novena.
+
+**Pendiente:**
+- `datos_demo.php` todavía no está en `entrega-hito2`: lo integraron Benjamin (`0aee796`) y Dana
+  (`c6fd2d5`) en sus ramas. Decidir si entra por PR propio de Edwin o con el de Benjamin.
+- Confirmar el traslado del feriado del 20 de diciembre.
+- Equipo: decidir si `date_default_timezone_set` pasa a `funciones.php`, para que también aplique
+  en las páginas que no cargan `datos_demo.php`.
+- Pasar los casos de prueba de R2 (día 18) y de la ausencia (19 y 20) al plan de pruebas.
+
