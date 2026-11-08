@@ -30,6 +30,35 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $filtro_fecha)) {
 
 // Búsqueda por texto: paciente, cédula o N.º de cita (vacío = sin búsqueda)
 $filtro_q = trim($_GET['q'] ?? '');
+// Texto de la fecha para el subtítulo y el título de la tabla
+$dias  = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+$meses = [1 => 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
+          'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+if ($filtro_fecha !== '') {
+    $marca = strtotime($filtro_fecha);
+    $texto_fecha = 'del ' . $dias[date('w', $marca)] . ' ' . date('j', $marca)
+                 . ' de ' . $meses[date('n', $marca)] . ' de ' . date('Y', $marca);
+} else {
+    $texto_fecha = 'de todas las fechas';
+}
+
+// Primero se filtran las citas; la tabla solo pinta las que quedan
+$citas_filtradas = [];
+foreach ($citas as $codigo => $cita) {
+    $paciente = $pacientes[$cita['expediente']];
+
+    if ($filtro_medico !== '' && $cita['medico'] !== $filtro_medico) continue;
+    if ($filtro_especialidad !== '' && $cita['especialidad'] !== $filtro_especialidad) continue;
+    if ($filtro_estado !== '' && $cita['estado'] !== $filtro_estado) continue;
+    if ($filtro_fecha !== '' && $cita['fecha'] !== $filtro_fecha) continue;
+    if ($filtro_q !== ''
+        && mb_stripos($paciente['nombre'], $filtro_q) === false
+        && mb_stripos($paciente['documento'], $filtro_q) === false
+        && mb_stripos($codigo, $filtro_q) === false) continue;
+
+    $citas_filtradas[$codigo] = $cita;
+}
 
 $titulo = 'Listado de citas';
 $descripcion = 'Agenda del día con búsqueda y filtros por fecha, médico, especialidad y estado de cada cita.';
@@ -41,7 +70,7 @@ require_once __DIR__ . '/includes/encabezado.php';
     <div class="eq05-titulo-fila">
       <div>
         <h1>Citas</h1>
-        <p class="eq05-texto-secundario">Agenda del día · <time datetime="2026-11-12">jueves 12 de noviembre de 2026</time></p>
+        <p class="eq05-texto-secundario">Agenda <?php echo limpiar($texto_fecha); ?></p>
       </div>
       <div class="eq05-acciones">
         <a class="eq05-boton" href="secundaria_formulario.php#eq05-ausencia">Registrar ausencia de médico</a>
@@ -118,7 +147,7 @@ require_once __DIR__ . '/includes/encabezado.php';
 
     <div class="eq05-tabla-envoltura">
       <table class="eq05-tabla eq05-tabla--apilada">
-        <caption>Citas del jueves 12 de noviembre de 2026 (8 de 36)</caption>
+        <caption>Citas <?php echo limpiar($texto_fecha); ?> (<?php echo count($citas_filtradas); ?> de <?php echo count($citas); ?>)</caption>
         <thead>
           <tr>
             <th scope="col">Hora</th>
@@ -132,20 +161,12 @@ require_once __DIR__ . '/includes/encabezado.php';
           </tr>
         </thead>
         <tbody>
-          <?php foreach ($citas as $codigo => $cita): ?>
+          <?php foreach ($citas_filtradas as $codigo => $cita): ?>
           <?php
               $paciente = $pacientes[$cita['expediente']];
               $medico = $medicos[$cita['medico']];
           ?>
-          <?php if ($filtro_medico !== '' && $cita['medico'] !== $filtro_medico) continue; ?>
-          <?php if ($filtro_especialidad !== '' && $cita['especialidad'] !== $filtro_especialidad) continue; ?>
-          <?php if ($filtro_estado !== '' && $cita['estado'] !== $filtro_estado) continue; ?>
-          <?php if ($filtro_fecha !== '' && $cita['fecha'] !== $filtro_fecha) continue; ?>
-          <?php if ($filtro_q !== ''
-                && mb_stripos($paciente['nombre'], $filtro_q) === false
-                && mb_stripos($paciente['documento'], $filtro_q) === false
-                && mb_stripos($codigo, $filtro_q) === false) continue;
-          ?>
+         
           <tr>
              <td data-etiqueta="Hora"><time datetime="<?php echo limpiar($cita['fecha'] . 'T' . $cita['hora']); ?>"><?php echo limpiar($cita['hora']); ?></time></td>
              <th scope="row" data-etiqueta="N.º"><?php echo limpiar($codigo); ?></th>
@@ -165,8 +186,10 @@ require_once __DIR__ . '/includes/encabezado.php';
         </tbody>
       </table>
     </div>
-
-
+    <p class="eq05-texto-secundario">Mostrando <?php echo count($citas_filtradas); ?> de <?php echo count($citas); ?> citas.</p>
+    <?php if ($citas_filtradas === 0): ?>
+       <p>No hay citas que coincidan con los filtros. <a href="principal_listado.php">Ver todas</a></p>
+    <?php endif; ?>
   </main>
 
   <?php // se anexa la parte de pie de pagina para que se muestre en la pagina de principal_listado con pie.php 
