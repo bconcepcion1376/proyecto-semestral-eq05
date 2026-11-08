@@ -3,6 +3,9 @@
 define('APP_ACCESO', true);
 
 require_once __DIR__ . '/includes/funciones.php';
+
+require_once __DIR__ . '/config/datos_demo.php';
+
 $titulo = 'Inicio';
 $descripcion = 'Reserve su cita médica en las clínicas Minimed a cualquier hora: especialidades, médicos y horarios disponibles en línea.';
 $pagina_activa = 'inicio';
@@ -21,24 +24,18 @@ require_once __DIR__ . '/includes/encabezado.php';
             <label for="eq05-buscar-especialidad">Especialidad</label>
             <select id="eq05-buscar-especialidad" name="especialidad" required>
               <option value="">Seleccione…</option>
-              <option value="medicina-general">Medicina general</option>
-              <option value="pediatria">Pediatría</option>
-              <option value="cardiologia">Cardiología</option>
-              <option value="ginecologia">Ginecología</option>
-              <option value="dermatologia">Dermatología</option>
-              <option value="ortopedia">Ortopedia</option>
+              <?php foreach ($especialidades as $clave => $nombre): ?>
+              <option value="<?php echo limpiar($clave); ?>"><?php echo limpiar($nombre); ?></option>
+              <?php endforeach; ?>
             </select>
           </div>
           <div class="eq05-campo">
             <label for="eq05-buscar-medico">Médico (opcional)</label>
             <select id="eq05-buscar-medico" name="medico">
-              <option value="">Cualquier médico</option>
-              <option value="arias">Dr. José Arias</option>
-              <option value="rios">Dra. Carmen Ríos</option>
-              <option value="vega">Dra. Laura Vega</option>
-              <?php // Médicos de los registros semilla ?>
-              <option value="valdelomar">Dr. Ignacio Valdelomar</option>
-              <option value="zamudio">Dra. Pilar Zamudio</option>
+              <option value="cualquiera">Cualquier médico</option>
+              <?php foreach ($medicos as $clave => $medico): ?>
+              <option value="<?php echo limpiar($clave); ?>"><?php echo limpiar($medico['nombre']); ?> · <?php echo limpiar($especialidades[$medico['especialidad']]); ?></option>
+              <?php endforeach; ?>
             </select>
           </div>
           <button class="eq05-boton eq05-boton--primario" type="submit">Ver disponibilidad</button>
