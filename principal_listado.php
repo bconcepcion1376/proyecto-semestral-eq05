@@ -60,6 +60,12 @@ foreach ($citas as $codigo => $cita) {
     $citas_filtradas[$codigo] = $cita;
 }
 
+// Cuántas citas hay de cada estado (para el resumen de arriba)
+$conteo_estados = [];
+foreach ($citas as $cita) {
+    $conteo_estados[$cita['estado']] = ($conteo_estados[$cita['estado']] ?? 0) + 1;
+}
+
 $titulo = 'Listado de citas';
 $descripcion = 'Agenda del día con búsqueda y filtros por fecha, médico, especialidad y estado de cada cita.';
 $pagina_activa = 'citas';
@@ -132,17 +138,12 @@ require_once __DIR__ . '/includes/encabezado.php';
         </div>
       </fieldset>
     </form>
-
+    
     <ul class="eq05-resumen-estados" aria-label="Resumen por estado">
-      <li><a href="principal_listado.php" aria-current="true">Todas <span class="eq05-numero">36</span></a></li>
-      <li><a href="principal_listado.php?estado=programada">Programadas <span class="eq05-numero">18</span></a></li>
-      <li><a href="principal_listado.php?estado=reagendada">Reagendadas <span class="eq05-numero">2</span></a></li>
-      <li><a href="principal_listado.php?estado=sala">En sala <span class="eq05-numero">4</span></a></li>
-      <li><a href="principal_listado.php?estado=atendida">Atendidas <span class="eq05-numero">3</span></a></li>
-      <li><a href="principal_listado.php?estado=cancelada">Canceladas <span class="eq05-numero">3</span></a></li>
-      <li><a href="principal_listado.php?estado=ausente">No asistió <span class="eq05-numero">2</span></a></li>
-      <li><a href="principal_listado.php?estado=pendiente">Pendientes <span class="eq05-numero">2</span></a></li>
-      <li><a href="principal_listado.php?estado=confirmada">Confirmadas <span class="eq05-numero">2</span></a></li>
+        <li><a href="principal_listado.php" <?php echo $filtro_estado === '' ? 'aria-current="true"' : ''; ?>>Todas <span class="eq05-numero"><?php echo count($citas); ?></span></a></li>
+        <?php foreach ($estados as $clave => $estado): ?>
+        <li><a href="principal_listado.php?estado=<?php echo urlencode($clave); ?>" <?php echo $filtro_estado === $clave ? 'aria-current="true"' : ''; ?>><?php echo limpiar($estado['texto']); ?> <span class="eq05-numero"><?php echo $conteo_estados[$clave] ?? 0; ?></span></a></li>
+        <?php endforeach; ?>
     </ul>
 
     <div class="eq05-tabla-envoltura">
