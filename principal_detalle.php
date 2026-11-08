@@ -76,10 +76,10 @@ require_once __DIR__ . '/includes/encabezado.php';
           <section class="eq05-tarjeta" aria-labelledby="eq05-titulo-datos-cita">
             <h2 id="eq05-titulo-datos-cita">Cita</h2>
             <dl class="eq05-datos">
-              <dt>Especialidad</dt><dd>Cardiología</dd>
-              <dt>Servicio</dt><dd>Control (30 min)</dd>
-              <dt>Médico</dt><dd>Dra. Carmen Ríos</dd>
-              <dt>Motivo</dt><dd>Control de presión arterial</dd>
+              <dt>Especialidad</dt><dd><?php echo limpiar($especialidades[$cita['especialidad']]); ?></dd>
+              <dt>Servicio</dt><dd><?php echo limpiar($servicio['nombre']); ?> (<?php echo $servicio['minutos']; ?> min)</dd>
+              <dt>Médico</dt><dd><?php echo limpiar($medico['nombre']); ?></dd>
+              <dt>Motivo</dt><dd><?php echo $cita['motivo'] !== '' ? limpiar($cita['motivo']) : 'Sin motivo indicado'; ?></dd>
             </dl>
           </section>
         </div>
