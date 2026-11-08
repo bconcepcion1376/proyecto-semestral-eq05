@@ -530,3 +530,68 @@ Edwin Vergara
   en las páginas que no cargan `datos_demo.php`.
 - Pasar los casos de prueba de R2 (día 18) y de la ausencia (19 y 20) al plan de pruebas.
 
+
+---------------------------------------------------------------------------------------------------------------------------------
+## 2026-11-07 (noche) · Fase 2 de `principal_detalle.php` e integración con `entrega-hito2`
+**Participantes:**
+- Benjamin Concepción
+
+**Integración:**
+- Al actualizar mi PR apareció un conflicto *add/add* en `includes/menu.php`: el PR #6 de Alvaro
+  trajo su versión con los enlaces con guion (`principal-listado.php`) y la mía los tenía con guion
+  bajo. Se conservó la mía (`git checkout --ours`), porque los archivos se llaman con guion bajo (`7b393de`).
+- Ese merge también trajo de Alvaro las clases `eq05-estado--pendiente` y `--confirmada`; el listado
+  ya muestra esos estados con color.
+- Merge del PR #11 de Dana en mi rama, sin conflictos (`6e47422`).
+- Se quitaron `panel.html` y `perfil.html`, porque ya existen `panel.php` y `perfil.php` (`4a109ff`).
+
+**Trabajo realizado en `principal_detalle.php`:**
+- La página lee `?codigo=` y busca la cita en `$citas`; si no existe, redirige a `error.php?codigo=404`
+  antes de escribir HTML. El título, las migas, el `<h1>` con el estado y el `aria-label` usan el
+  código de la cita (`285811e`).
+- Subtítulo con la fecha en español, la hora con a. m./p. m., la duración del servicio y el consultorio
+  del horario del médico según el día de la semana (`d06fa37`).
+- Tarjeta del paciente desde `$pacientes`, con la edad calculada a partir de `nacimiento` (`a4c1407`).
+- Tarjeta de la cita: especialidad, servicio con minutos, médico y motivo; si el motivo está vacío,
+  muestra "Sin motivo indicado" (`5842e2e`).
+- "Reprogramar" y "Cancelar cita" solo están activos si la cita está activa y el paciente no ha
+  llegado; si no, se desactivan con un mensaje según el caso (`eeede55`).
+- El historial muestra el estado actual, y el formulario de nota envía a la misma cita (`e3ad0f7`).
+
+**Decisiones:**
+- Se usa `isset($citas[$codigo])` como lista blanca, igual que en los filtros del listado: un código
+  vacío, inventado o con HTML lleva al 404.
+- La redirección va antes de `encabezado.php`, porque `header()` solo funciona si todavía no se ha
+  enviado HTML. `redirigir()` termina con `exit`, así que no se ejecuta nada más.
+- La edad se calcula con `date()`: resta de años, menos 1 si todavía no ha cumplido este año
+  (se comparan mes y día como texto `md`). Es la edad de hoy, no la del día de la cita.
+- El consultorio sale de `$horarios`. `date('w')` da un número, y el arreglo `$claves_dia` lo
+  traduce a `lun`, `mar`… Si no hay consultorio ese día, `?? ''` evita el aviso y no se muestra.
+- `$se_puede_modificar` usa la misma condición que "Marcar llegada" en el listado (activa y no en
+  sala), para que las dos páginas apliquen la misma regla.
+- El historial de la maqueta (`CIT-0142`, fechas de 2027) se cambió por el estado actual y un aviso:
+  `datos_demo.php` no guarda cambios, y no se inventan entradas. Vuelve cuando haya base de datos.
+- El `action` del formulario de nota lleva `?codigo=` con `urlencode`. Sin él, al enviar se perdía el
+  código y el usuario acababa en el 404.
+- Los minutos salen del servicio: un control dura 20 minutos, aunque la maqueta decía 30.
+
+**Problemas:**
+- Al pegar el nuevo `<h1>` quedó el cierre original repetido (`</h1></h1>`).
+- `$titulo = 'Detalle de cita' . $codigo` salía pegado ("Detalle de citaCIT-0204"): el `.` no añade
+  espacio. Se dejó `'Cita ' . $codigo`.
+- `CIT-0142` seguía en las migas y en el `aria-label` del `<article>`; se encontró buscando con Ctrl+F.
+- Al quitar las entradas del historial se quedaron el `<ol>` y el `</ol>` alrededor de los `<p>`
+  (en un `<ol>` solo puede haber `<li>`).
+
+**Pendiente:**
+- Benjamin: fase 2 de `principal_formulario.php` (selects desde `$especialidades`, `$servicios` y
+  `$medicos`) e `index.php`.
+- Benjamin, fase 3: guardar la nota de consulta (POST), y que Reprogramar y Cancelar hagan algo.
+- Dana: leer `clave` y `numero_expediente`, que son los `name` reales de los formularios
+  (hoy lee `password` y `expediente`).
+- Equipo: crear `procesar_logout.php` (el menú y el perfil enlazan a él); `panel.php` debe exigir
+  el rol admin.
+- Alvaro: corregir los guiones en su copia de `menu.php` para que no vuelva a entrar con un PR.
+- Quien tenga la página 8: migrar `secundaria-formulario.html` a `secundaria_formulario.php` con `git mv`.
+
+
