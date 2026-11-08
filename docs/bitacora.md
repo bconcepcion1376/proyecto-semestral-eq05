@@ -664,3 +664,62 @@ Edwin Vergara
   `principal_detalle.php` y `principal_formulario.php`; acordar con Alvaro una función en
   `funciones.php`.
 - Equipo: el campo "Paciente (solo Recepción)" todavía no busca; depende de la sesión y del rol.
+
+
+---------------------------------------------------------------------------------------------------------------------------------
+## 2026-11-08 · Fase 2 de `index.php` y cierre de la fase 2 de mis páginas
+**Participantes:**
+- Benjamin Concepción
+
+**Trabajo realizado:**
+- La página carga `config/datos_demo.php`. Los selects del buscador salen de `$especialidades` y de
+  `$medicos`; cada médico aparece con su especialidad ("Dra. Carmen Ríos · Cardiología") (`7da1eeb`).
+- "Cualquier médico" envía `value="cualquiera"`. El buscador envía por GET a `principal_formulario.php`,
+  que ya lee `especialidad` y `medico`, así que el inicio y el formulario quedan conectados (`7da1eeb`).
+- Tarjetas de especialidades con un `foreach` y el número real de médicos de cada una, contado desde
+  `$medicos`. La maqueta decía, por ejemplo, "6 médicos" en Medicina general, pero en los datos solo
+  está el Dr. Arias (`dc36372`).
+- Las especialidades sin médicos (Ginecología y Ortopedia) muestran "Sin médicos disponibles por
+  ahora" y no tienen enlace (`dc36372`).
+
+**Decisiones:**
+- "Cualquier médico" usa `value="cualquiera"` en lugar de `value=""`. Con el valor vacío, la lista
+  blanca del formulario lo cambiaba al médico por defecto (Valdelomar).
+- El enlace "Ver horarios" envía `&medico=cualquiera`. Sin él, quien entraba por Cardiología llegaba
+  con un pediatra marcado.
+- En el atributo `href` el `&` se escribe `&amp;`, para que valide en W3C.
+- "1 médico" o "N médicos" con un ternario; `?? 0` para las especialidades que no tienen médicos.
+- Se quitó el comentario `<!-- CORRECCIÓN: alt descriptivo -->` de la primera tarjeta. El `alt`
+  descriptivo se mantiene en todas.
+- El aviso de feriados, "Cómo funciona" y "Contacto" se quedan como texto fijo: son información
+  general, no datos de la agenda.
+
+**Problemas:**
+- Al reemplazar las opciones del select de médico se borró "Cualquier médico", y el campo
+  "opcional" enviaba siempre al Dr. Arias.
+- Al reemplazar las tarjetas se borraron el `<ul class="eq05-rejilla">` y su `</ul>`: las tarjetas
+  salían a todo el ancho y con viñetas, y los `<li>` quedaban sueltos.
+- Lección de esta fase: al cambiar contenido fijo por un `foreach`, seleccionar solo lo que se
+  repite. El contenedor (`<select>`, `<ul>`, `<tbody>`) y la primera opción vacía se quedan.
+
+**Cierre de la fase 2 (mis 4 páginas con datos):**
+- `principal_listado.php`: filtros por GET con lista blanca, búsqueda, resumen por estado y caption
+  con conteo.
+- `principal_detalle.php`: cita por `?codigo=`, 404 si no existe, edad calculada y acciones según
+  el estado.
+- `principal_formulario.php`: horas libres (R1), calendario con días bloqueados (R2, feriados,
+  ausencias) y botón "Ver horas libres" por GET.
+- `index.php`: buscador y tarjetas desde los datos, conectados con el formulario.
+- En las 4 páginas: ningún dato de la agenda está escrito a mano, todo lo que viene de los datos o
+  de la URL se imprime con `limpiar()` o `urlencode()`, y todo lo que llega por GET se valida
+  antes de usarlo.
+
+**Pendiente:**
+- Benjamin, fase 3: mostrar los errores y rellenar los formularios con lo enviado
+  (`$_SESSION`), cuando Dana tenga listos los `procesar_*.php`.
+- Dana: usar los `name` reales (`clave`, `numero_expediente`) en `procesar_login.php`,
+  `procesar_registro.php` y `procesar_principal.php`.
+- Equipo: crear `procesar_logout.php`; `panel.php` debe exigir el rol admin.
+- Equipo: acordar con Alvaro una función en `funciones.php` para las fechas en español
+  (`$dias` y `$meses` están repetidos en tres páginas).
+- Benjamin: validar en W3C las 4 páginas de la fase 2 y guardar las capturas en `docs/validacion/`.
