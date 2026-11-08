@@ -34,6 +34,13 @@ $claves_dia  = ['dom', 'lun', 'mar', 'mie', 'jue', 'vie', 'sab'];
 $clave_dia   = $claves_dia[date('w', $marca)];
 $consultorio = $horarios[$cita['medico']]['dias'][$clave_dia]['consultorio'] ?? '';
 
+// Edad del paciente: diferencia de años, menos 1 si todavía no cumplió este año
+$nacimiento = strtotime($paciente['nacimiento']);
+$edad = date('Y') - date('Y', $nacimiento);
+if (date('md') < date('md', $nacimiento)) {
+    $edad--;
+}
+
 $titulo = 'Cita ' . $codigo;
 $descripcion = 'Detalle de la cita ' . $codigo . ': datos del paciente, datos de la cita, nota de consulta e historial.';
 $pagina_activa = 'citas';
@@ -60,10 +67,10 @@ require_once __DIR__ . '/includes/encabezado.php';
           <section class="eq05-tarjeta" aria-labelledby="eq05-titulo-paciente">
             <h2 id="eq05-titulo-paciente">Paciente</h2>
             <dl class="eq05-datos">
-              <dt>Nombre</dt><dd>Pedro Sánchez</dd>
-              <dt>Documento</dt><dd>4-221-908</dd>
-              <dt>Edad</dt><dd>46 años</dd>
-              <dt>Teléfono</dt><dd>+507 6612-3344</dd>
+              <dt>Nombre</dt><dd><?php echo limpiar($paciente['nombre']); ?></dd>
+              <dt>Documento</dt><dd><?php echo limpiar($paciente['documento']); ?></dd>
+              <dt>Edad</dt><dd><?php echo $edad; ?> años</dd>
+              <dt>Teléfono</dt><dd><?php echo limpiar($paciente['telefono']); ?></dd>
             </dl>
           </section>
           <section class="eq05-tarjeta" aria-labelledby="eq05-titulo-datos-cita">
