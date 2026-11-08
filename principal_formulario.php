@@ -3,6 +3,17 @@
 define('APP_ACCESO', true);
 
 require_once __DIR__ . '/includes/funciones.php';
+
+require_once __DIR__ . '/config/datos_demo.php';
+
+// Valores iniciales del formulario (los mismos de la maqueta).
+// En la fase 3 vendrán de lo que el usuario envió si hubo errores.
+$valor_especialidad = 'pediatria';
+$valor_servicio     = 'primera-vez';
+$valor_medico       = 'valdelomar';
+$valor_fecha        = '2026-11-12';
+$valor_hora         = '10:00';
+
 $titulo = 'Reservar cita';
 $descripcion = 'Reserve una cita médica eligiendo especialidad, servicio, médico, fecha y hora disponibles.';
 $pagina_activa = 'reservar';
@@ -44,21 +55,18 @@ require_once __DIR__ . '/includes/encabezado.php';
               <label for="eq05-cita-especialidad">Especialidad <span class="eq05-requerido">*</span></label>
               <select id="eq05-cita-especialidad" name="especialidad" required>
                 <option value="">Seleccione…</option>
-                <option value="medicina-general">Medicina general</option>
-                <option value="pediatria" selected>Pediatría</option>
-                <option value="cardiologia">Cardiología</option>
-                <option value="ginecologia">Ginecología</option>
-                <option value="dermatologia">Dermatología</option>
-                <option value="ortopedia">Ortopedia</option>
+                <?php foreach ($especialidades as $clave => $nombre): ?>
+                <option value="<?php echo limpiar($clave); ?>" <?php echo $clave === $valor_especialidad ? 'selected' : ''; ?>><?php echo limpiar($nombre); ?></option>
+                <?php endforeach; ?>
               </select>
             </div>
             <div class="eq05-campo">
               <label for="eq05-cita-servicio">Servicio <span class="eq05-requerido">*</span></label>
               <select id="eq05-cita-servicio" name="servicio" required>
                 <option value="">Seleccione…</option>
-                <option value="primera-vez" selected>Consulta de primera vez · 30 min</option>
-                <option value="control">Control · 20 min</option>
-                <option value="resultados">Lectura de resultados · 15 min</option>
+                <?php foreach ($servicios as $clave => $servicio): ?>
+                <option value="<?php echo limpiar($clave); ?>" <?php echo $clave === $valor_servicio ? 'selected' : ''; ?>><?php echo limpiar($servicio['nombre']); ?> · <?php echo $servicio['minutos']; ?> min</option>
+                <?php endforeach; ?>
               </select>
             </div>
           </div>
