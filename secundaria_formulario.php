@@ -3,12 +3,23 @@
 define('APP_ACCESO', true);
 
 require_once __DIR__ . '/includes/funciones.php';
+
+require_once __DIR__ . '/config/datos_demo.php';
+
+$valor_medico = $_GET['medico'] ?? 'rios'; // Valor predeterminado si no se proporciona un médico
+if (!isset($medicos[$valor_medico])) {
+    $valor_medico = 'rios'; // Valor predeterminado si el médico no existe
+}
+
+$medico  = $medicos[$valor_medico];
+$horario = $horarios[$valor_medico] ?? null;
+
 $titulo = 'Horario del médico';
 $descripcion = 'Configure el horario semanal de cada médico y registre ausencias con reagendado automático de citas.';
 $pagina_activa = 'horarios';
 require_once __DIR__ . '/includes/encabezado.php';
-?>
 
+?>
   <main id="eq05-principal" class="eq05-contenedor">
     <nav class="eq05-migas" aria-label="Ruta de navegación">
       <ol>
