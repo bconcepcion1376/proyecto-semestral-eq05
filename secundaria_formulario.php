@@ -14,6 +14,11 @@ if (!isset($medicos[$valor_medico])) {
 $medico  = $medicos[$valor_medico];
 $horario = $horarios[$valor_medico] ?? null;
 
+// Días de la tabla (clave => nombre visible) y consultorios disponibles
+$dias_semana = ['lun' => 'Lunes', 'mar' => 'Martes', 'mie' => 'Miércoles',
+                'jue' => 'Jueves', 'vie' => 'Viernes', 'sab' => 'Sábado'];
+$consultorios = ['101', '204', '206'];
+
 $titulo = 'Horario de ' . $medico['nombre'];
 $descripcion = 'Configure el horario semanal de cada médico y registre ausencias con reagendado automático de citas.';
 $pagina_activa = 'horarios';
@@ -58,91 +63,25 @@ require_once __DIR__ . '/includes/encabezado.php';
                 </tr>
               </thead>
               <tbody>
+              <?php foreach ($dias_semana as $clave_dia => $nombre_dia): ?>
+              <?php $dia = $horario['dias'][$clave_dia] ?? null; ?>
               <tr>
                 <th scope="row">
-                  <span class="eq05-opcion"><input type="checkbox" id="eq05-hor-lun" name="lun_atiende" value="si" checked><label for="eq05-hor-lun">Lunes</label></span>
+                  <span class="eq05-opcion"><input type="checkbox" id="eq05-hor-<?php echo $clave_dia; ?>" name="<?php echo $clave_dia; ?>_atiende" value="si" <?php echo $dia !== null ? 'checked' : ''; ?>><label for="eq05-hor-<?php echo $clave_dia; ?>"><?php echo $nombre_dia; ?></label></span>
                 </th>
-                <td><label class="eq05-sr" for="eq05-hor-lun-desde">Lunes, desde</label><input type="time" id="eq05-hor-lun-desde" name="lun_desde" min="07:00" max="19:00" step="1800" value="08:00"></td>
-                <td><label class="eq05-sr" for="eq05-hor-lun-hasta">Lunes, hasta</label><input type="time" id="eq05-hor-lun-hasta" name="lun_hasta" min="07:00" max="19:00" step="1800" value="12:00"></td>
-                <td><label class="eq05-sr" for="eq05-hor-lun-consultorio">Lunes, consultorio</label>
-                  <select id="eq05-hor-lun-consultorio" name="lun_consultorio">
-                    <option value="204" selected>204</option>
-                    <option value="206">206</option>
-                    <option value="">—</option>
+                <td><label class="eq05-sr" for="eq05-hor-<?php echo $clave_dia; ?>-desde"><?php echo $nombre_dia; ?>, desde</label><input type="time" id="eq05-hor-<?php echo $clave_dia; ?>-desde" name="<?php echo $clave_dia; ?>_desde" min="07:00" max="19:00" step="1800" value="<?php echo limpiar($dia['desde'] ?? ''); ?>"></td>
+                <td><label class="eq05-sr" for="eq05-hor-<?php echo $clave_dia; ?>-hasta"><?php echo $nombre_dia; ?>, hasta</label><input type="time" id="eq05-hor-<?php echo $clave_dia; ?>-hasta" name="<?php echo $clave_dia; ?>_hasta" min="07:00" max="19:00" step="1800" value="<?php echo limpiar($dia['hasta'] ?? ''); ?>"></td>
+                <td><label class="eq05-sr" for="eq05-hor-<?php echo $clave_dia; ?>-consultorio"><?php echo $nombre_dia; ?>, consultorio</label>
+                  <select id="eq05-hor-<?php echo $clave_dia; ?>-consultorio" name="<?php echo $clave_dia; ?>_consultorio">
+                    <?php foreach ($consultorios as $numero): ?>
+                    <option value="<?php echo $numero; ?>" <?php echo $numero === ($dia['consultorio'] ?? '') ? 'selected' : ''; ?>><?php echo $numero; ?></option>
+                    <?php endforeach; ?>
+                    <option value="" <?php echo $dia === null ? 'selected' : ''; ?>>—</option>
                   </select>
                 </td>
               </tr>
-              <tr>
-                <th scope="row">
-                  <span class="eq05-opcion"><input type="checkbox" id="eq05-hor-mar" name="mar_atiende" value="si" checked><label for="eq05-hor-mar">Martes</label></span>
-                </th>
-                <td><label class="eq05-sr" for="eq05-hor-mar-desde">Martes, desde</label><input type="time" id="eq05-hor-mar-desde" name="mar_desde" min="07:00" max="19:00" step="1800" value="08:00"></td>
-                <td><label class="eq05-sr" for="eq05-hor-mar-hasta">Martes, hasta</label><input type="time" id="eq05-hor-mar-hasta" name="mar_hasta" min="07:00" max="19:00" step="1800" value="12:00"></td>
-                <td><label class="eq05-sr" for="eq05-hor-mar-consultorio">Martes, consultorio</label>
-                  <select id="eq05-hor-mar-consultorio" name="mar_consultorio">
-                    <option value="204" selected>204</option>
-                    <option value="206">206</option>
-                    <option value="">—</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">
-                  <span class="eq05-opcion"><input type="checkbox" id="eq05-hor-mie" name="mie_atiende" value="si" checked><label for="eq05-hor-mie">Miércoles</label></span>
-                </th>
-                <td><label class="eq05-sr" for="eq05-hor-mie-desde">Miércoles, desde</label><input type="time" id="eq05-hor-mie-desde" name="mie_desde" min="07:00" max="19:00" step="1800" value="13:00"></td>
-                <td><label class="eq05-sr" for="eq05-hor-mie-hasta">Miércoles, hasta</label><input type="time" id="eq05-hor-mie-hasta" name="mie_hasta" min="07:00" max="19:00" step="1800" value="17:00"></td>
-                <td><label class="eq05-sr" for="eq05-hor-mie-consultorio">Miércoles, consultorio</label>
-                  <select id="eq05-hor-mie-consultorio" name="mie_consultorio">
-                    <option value="204" selected>204</option>
-                    <option value="206">206</option>
-                    <option value="">—</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">
-                  <span class="eq05-opcion"><input type="checkbox" id="eq05-hor-jue" name="jue_atiende" value="si" checked><label for="eq05-hor-jue">Jueves</label></span>
-                </th>
-                <td><label class="eq05-sr" for="eq05-hor-jue-desde">Jueves, desde</label><input type="time" id="eq05-hor-jue-desde" name="jue_desde" min="07:00" max="19:00" step="1800" value="08:00"></td>
-                <td><label class="eq05-sr" for="eq05-hor-jue-hasta">Jueves, hasta</label><input type="time" id="eq05-hor-jue-hasta" name="jue_hasta" min="07:00" max="19:00" step="1800" value="12:00"></td>
-                <td><label class="eq05-sr" for="eq05-hor-jue-consultorio">Jueves, consultorio</label>
-                  <select id="eq05-hor-jue-consultorio" name="jue_consultorio">
-                    <option value="204" selected>204</option>
-                    <option value="206">206</option>
-                    <option value="">—</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">
-                  <span class="eq05-opcion"><input type="checkbox" id="eq05-hor-vie" name="vie_atiende" value="si" checked><label for="eq05-hor-vie">Viernes</label></span>
-                </th>
-                <td><label class="eq05-sr" for="eq05-hor-vie-desde">Viernes, desde</label><input type="time" id="eq05-hor-vie-desde" name="vie_desde" min="07:00" max="19:00" step="1800" value="08:00"></td>
-                <td><label class="eq05-sr" for="eq05-hor-vie-hasta">Viernes, hasta</label><input type="time" id="eq05-hor-vie-hasta" name="vie_hasta" min="07:00" max="19:00" step="1800" value="12:00"></td>
-                <td><label class="eq05-sr" for="eq05-hor-vie-consultorio">Viernes, consultorio</label>
-                  <select id="eq05-hor-vie-consultorio" name="vie_consultorio">
-                    <option value="204" selected>204</option>
-                    <option value="206">206</option>
-                    <option value="">—</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">
-                  <span class="eq05-opcion"><input type="checkbox" id="eq05-hor-sab" name="sab_atiende" value="si"><label for="eq05-hor-sab">Sábado</label></span>
-                </th>
-                <td><label class="eq05-sr" for="eq05-hor-sab-desde">Sábado, desde</label><input type="time" id="eq05-hor-sab-desde" name="sab_desde" min="07:00" max="19:00" step="1800"></td>
-                <td><label class="eq05-sr" for="eq05-hor-sab-hasta">Sábado, hasta</label><input type="time" id="eq05-hor-sab-hasta" name="sab_hasta" min="07:00" max="19:00" step="1800"></td>
-                <td><label class="eq05-sr" for="eq05-hor-sab-consultorio">Sábado, consultorio</label>
-                  <select id="eq05-hor-sab-consultorio" name="sab_consultorio">
-                    <option value="204">204</option>
-                    <option value="206">206</option>
-                    <option value="" selected>—</option>
-                  </select>
-                </td>
-              </tr>
-              </tbody>
+              <?php endforeach; ?>
+            </tbody>
             </table>
           </div>
           <p class="eq05-texto-secundario"><small>Domingo: la clínica no atiende.</small></p>
