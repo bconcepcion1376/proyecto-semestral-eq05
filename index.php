@@ -3,6 +3,14 @@
 define('APP_ACCESO', true);
 
 require_once __DIR__ . '/includes/funciones.php';
+
+require_once __DIR__ . '/config/datos_demo.php';
+// Cuántos médicos tiene cada especialidad (para las tarjetas)
+$medicos_por_especialidad = [];
+foreach ($medicos as $medico) {
+    $medicos_por_especialidad[$medico['especialidad']] = ($medicos_por_especialidad[$medico['especialidad']] ?? 0) + 1;
+}
+
 $titulo = 'Inicio';
 $descripcion = 'Reserve su cita médica en las clínicas Minimed a cualquier hora: especialidades, médicos y horarios disponibles en línea.';
 $pagina_activa = 'inicio';
@@ -21,24 +29,18 @@ require_once __DIR__ . '/includes/encabezado.php';
             <label for="eq05-buscar-especialidad">Especialidad</label>
             <select id="eq05-buscar-especialidad" name="especialidad" required>
               <option value="">Seleccione…</option>
-              <option value="medicina-general">Medicina general</option>
-              <option value="pediatria">Pediatría</option>
-              <option value="cardiologia">Cardiología</option>
-              <option value="ginecologia">Ginecología</option>
-              <option value="dermatologia">Dermatología</option>
-              <option value="ortopedia">Ortopedia</option>
+              <?php foreach ($especialidades as $clave => $nombre): ?>
+              <option value="<?php echo limpiar($clave); ?>"><?php echo limpiar($nombre); ?></option>
+              <?php endforeach; ?>
             </select>
           </div>
           <div class="eq05-campo">
             <label for="eq05-buscar-medico">Médico (opcional)</label>
             <select id="eq05-buscar-medico" name="medico">
-              <option value="">Cualquier médico</option>
-              <option value="arias">Dr. José Arias</option>
-              <option value="rios">Dra. Carmen Ríos</option>
-              <option value="vega">Dra. Laura Vega</option>
-              <?php // Médicos de los registros semilla ?>
-              <option value="valdelomar">Dr. Ignacio Valdelomar</option>
-              <option value="zamudio">Dra. Pilar Zamudio</option>
+              <option value="cualquiera">Cualquier médico</option>
+              <?php foreach ($medicos as $clave => $medico): ?>
+              <option value="<?php echo limpiar($clave); ?>"><?php echo limpiar($medico['nombre']); ?> · <?php echo limpiar($especialidades[$medico['especialidad']]); ?></option>
+              <?php endforeach; ?>
             </select>
           </div>
           <button class="eq05-boton eq05-boton--primario" type="submit">Ver disponibilidad</button>
@@ -51,7 +53,7 @@ require_once __DIR__ . '/includes/encabezado.php';
     </section>
 
     <aside class="eq05-aviso" aria-label="Días sin atención">
-      <!-- CORRECCIÓN: alt descriptivo -->
+
       <img src="img/iconos/info.svg" alt="Icono de información" width="22" height="22">
       <p>La agenda no ofrece <strong>feriados nacionales</strong>, los <strong>lunes y martes de carnaval</strong> ni el <strong>1 de julio</strong> en años de toma de posesión. Esos días aparecen bloqueados en el calendario.</p>
     </aside>
@@ -59,61 +61,22 @@ require_once __DIR__ . '/includes/encabezado.php';
     <section class="eq05-seccion" id="eq05-especialidades" aria-labelledby="eq05-titulo-especialidades">
       <h2 id="eq05-titulo-especialidades">Especialidades</h2>
       <ul class="eq05-rejilla">
-      <li>
-        <article class="eq05-especialidad">
-          <!-- CORRECCIÓN: alt descriptivo -->
-          <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="Icono de estetoscopio" width="24" height="24"></div>
-          <div>
-            <h3>Medicina general</h3>
-            <p>6 médicos · <a href="principal_formulario.php?especialidad=medicina-general">Ver horarios</a></p>
-          </div>
-        </article>
-      </li>
+      <?php foreach ($especialidades as $clave => $nombre): ?>
+        <?php $cantidad = $medicos_por_especialidad[$clave] ?? 0; ?>
       <li>
         <article class="eq05-especialidad">
           <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="Icono de estetoscopio" width="24" height="24"></div>
           <div>
-            <h3>Pediatría</h3>
-            <p>3 médicos · <a href="principal_formulario.php?especialidad=pediatria">Ver horarios</a></p>
+            <h3><?php echo limpiar($nombre); ?></h3>
+            <?php if ($cantidad === 0): ?>
+            <p>Sin médicos disponibles por ahora</p>
+            <?php else: ?>
+            <p><?php echo $cantidad; ?> <?php echo $cantidad === 1 ? 'médico' : 'médicos'; ?> · <a href="principal_formulario.php?especialidad=<?php echo urlencode($clave); ?>&amp;medico=cualquiera">Ver horarios</a></p>
+            <?php endif; ?>
           </div>
         </article>
       </li>
-      <li>
-        <article class="eq05-especialidad">
-          <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="Icono de estetoscopio" width="24" height="24"></div>
-          <div>
-            <h3>Cardiología</h3>
-            <p>2 médicos · <a href="principal_formulario.php?especialidad=cardiologia">Ver horarios</a></p>
-          </div>
-        </article>
-      </li>
-      <li>
-        <article class="eq05-especialidad">
-          <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="Icono de estetoscopio" width="24" height="24"></div>
-          <div>
-            <h3>Ginecología</h3>
-            <p>2 médicos · <a href="principal_formulario.php?especialidad=ginecologia">Ver horarios</a></p>
-          </div>
-        </article>
-      </li>
-      <li>
-        <article class="eq05-especialidad">
-          <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="Icono de estetoscopio" width="24" height="24"></div>
-          <div>
-            <h3>Dermatología</h3>
-            <p>1 médico · <a href="principal_formulario.php?especialidad=dermatologia">Ver horarios</a></p>
-          </div>
-        </article>
-      </li>
-      <li>
-        <article class="eq05-especialidad">
-          <div class="eq05-icono-circulo"><img src="img/iconos/estetoscopio.svg" alt="Icono de estetoscopio" width="24" height="24"></div>
-          <div>
-            <h3>Ortopedia</h3>
-            <p>2 médicos · <a href="principal_formulario.php?especialidad=ortopedia">Ver horarios</a></p>
-          </div>
-        </article>
-      </li>
+      <?php endforeach; ?>
       </ul>
     </section>
 
