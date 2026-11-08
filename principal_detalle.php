@@ -41,6 +41,9 @@ if (date('md') < date('md', $nacimiento)) {
     $edad--;
 }
 
+// Se puede reprogramar o cancelar solo si la cita está activa y el paciente no ha llegado
+$se_puede_modificar = $estados[$cita['estado']]['activa'] && $cita['estado'] !== 'sala';
+
 $titulo = 'Cita ' . $codigo;
 $descripcion = 'Detalle de la cita ' . $codigo . ': datos del paciente, datos de la cita, nota de consulta e historial.';
 $pagina_activa = 'citas';
@@ -116,9 +119,11 @@ require_once __DIR__ . '/includes/encabezado.php';
       <aside>
         <section class="eq05-tarjeta" aria-labelledby="eq05-titulo-acciones">
           <h2 id="eq05-titulo-acciones">Acciones</h2>
-          <p><button class="eq05-boton eq05-boton--bloque" type="button" disabled>Reprogramar</button></p>
-          <p><button class="eq05-boton eq05-boton--bloque" type="button" disabled>Cancelar cita</button></p>
-          <p class="eq05-texto-secundario"><small>No disponibles: el paciente ya llegó.</small></p>
+          <p><button class="eq05-boton eq05-boton--bloque" type="button" <?php echo $se_puede_modificar ? '' : 'disabled'; ?>>Reprogramar</button></p>
+          <p><button class="eq05-boton eq05-boton--bloque" type="button" <?php echo $se_puede_modificar ? '' : 'disabled'; ?>>Cancelar cita</button></p>
+          <?php if (!$se_puede_modificar): ?>
+          <p class="eq05-texto-secundario"><small>No disponibles: <?php echo $cita['estado'] === 'sala' ? 'el paciente ya llegó.' : 'la cita ya no está activa.'; ?></small></p>
+          <?php endif; ?>
         </section>
         <section class="eq05-tarjeta" aria-labelledby="eq05-titulo-historial">
           <h2 id="eq05-titulo-historial">Historial</h2>
