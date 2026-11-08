@@ -91,7 +91,7 @@ require_once __DIR__ . '/includes/encabezado.php';
           <h2 id="eq05-titulo-nota">Nota de consulta</h2>
           <p class="eq05-texto-secundario"><small>Solo la ve y la edita el médico asignado. Se puede corregir durante 24 horas.</small></p>
           
-          <form class="eq05-form" id="eq05-form-nota" action="principal_detalle.php" method="post">
+          <form class="eq05-form" id="eq05-form-nota" action="principal_detalle.php?codigo=<?php echo urlencode($codigo); ?>" method="post">
             <fieldset class="eq05-conjunto-campos">
               <legend class="eq05-sr">Formulario de nota de consulta</legend>
               
@@ -127,11 +127,10 @@ require_once __DIR__ . '/includes/encabezado.php';
         </section>
         <section class="eq05-tarjeta" aria-labelledby="eq05-titulo-historial">
           <h2 id="eq05-titulo-historial">Historial</h2>
-          <ol class="eq05-historial">
-            <li><time datetime="2027-01-12T10:14">12 ene 2027 · 10:14</time><strong>Creada en línea por el paciente</strong><br><small>Jue 28 ene, 8:30 a. m.</small></li>
-            <li><time datetime="2027-01-25T16:02">25 ene 2027 · 16:02</time><strong>Reagendada en bloque</strong> por ausencia de la Dra. Ríos<br><small>28 ene → lun 1 feb, 8:30 a. m. · L. Gómez (Recepción)</small></li>
-            <li><time datetime="2027-02-01T08:21">1 feb 2027 · 8:21</time><strong>Llegada confirmada</strong><br><small>L. Gómez (Recepción)</small></li>
-          </ol>
+
+          <p class="eq05-texto-secundario">Estado actual: <strong><?php echo limpiar($estados[$cita['estado']]['texto']); ?></strong>.</p>
+          <p class="eq05-texto-secundario"><small>El historial de cambios estará disponible cuando las citas se guarden en la base de datos.</small></p>
+     
         </section>
       </aside>
     </div>
