@@ -3,8 +3,24 @@
 define('APP_ACCESO', true);
 
 require_once __DIR__ . '/includes/funciones.php';
-$titulo = 'Detalle de cita';
-$descripcion = 'Detalle de la cita: datos del paciente, nota de consulta e historial de cambios.';
+require_once __DIR__ . '/config/datos_demo.php';
+
+// Código de la cita que llega por la URL
+$codigo = $_GET['codigo'] ?? '';
+
+// Si la cita no existe, se envía a la página de error ANTES de escribir HTML
+if (!isset($citas[$codigo])) {
+    redirigir('error.php?codigo=404');
+}
+
+// Datos relacionados: se buscan por su clave, como en el listado
+$cita     = $citas[$codigo];
+$paciente = $pacientes[$cita['expediente']];
+$medico   = $medicos[$cita['medico']];
+$servicio = $servicios[$cita['servicio']];
+
+$titulo = 'Cita ' . $codigo;
+$descripcion = 'Detalle de la cita ' . $codigo . ': datos del paciente, datos de la cita, nota de consulta e historial.';
 $pagina_activa = 'citas';
 require_once __DIR__ . '/includes/encabezado.php';
 ?>
@@ -14,18 +30,18 @@ require_once __DIR__ . '/includes/encabezado.php';
     <nav class="eq05-migas" aria-label="Ruta de navegación">
       <ol>
         <li><a href="principal_listado.php">Citas</a></li>
-        <li><span aria-current="page">CIT-0142</span></li>
+        <li><span aria-current="page"><?php echo limpiar($codigo); ?></span></li>
       </ol>
     </nav>
     <div class="eq05-titulo-fila">
       <div>
-        <h1>Cita CIT-0142 <span class="eq05-estado eq05-estado--sala">En sala</span></h1>
+        <h1>Cita <?php echo limpiar($codigo); ?> <span class="eq05-estado eq05-estado--<?php echo limpiar($cita['estado']); ?>"><?php echo limpiar($estados[$cita['estado']]['texto']); ?></span></h1>
         <p class="eq05-texto-secundario"><time datetime="2027-02-01T08:30">Lunes 1 de febrero de 2027 · 8:30 a. m.</time> · 30 min · Consultorio 204</p>
       </div>
     </div>
 
     <div class="eq05-dos-columnas">
-      <article aria-label="Datos de la cita CIT-0142">
+        <article aria-label="Datos de la cita <?php echo limpiar($codigo); ?>">
         <div class="eq05-fila-campos">
           <section class="eq05-tarjeta" aria-labelledby="eq05-titulo-paciente">
             <h2 id="eq05-titulo-paciente">Paciente</h2>
