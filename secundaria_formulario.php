@@ -88,11 +88,11 @@ require_once __DIR__ . '/includes/encabezado.php';
           <div class="eq05-fila-campos">
             <div class="eq05-campo">
               <label for="eq05-hor-duracion">Duración de cada espacio (min) <span class="eq05-requerido">*</span></label>
-              <input type="number" id="eq05-hor-duracion" name="duracion" value="30" min="10" max="120" step="10" required>
+              <input type="number" id="eq05-hor-duracion" name="duracion" value="<?php echo limpiar($horario['duracion'] ?? 30); ?>" min="10" max="120" step="10" required>
             </div>
             <div class="eq05-campo">
               <label for="eq05-hor-vigencia">Vigente desde <span class="eq05-requerido">*</span></label>
-              <input type="date" id="eq05-hor-vigencia" name="vigente_desde" value="2027-02-01" min="2027-02-01" required>
+              <input type="date" id="eq05-hor-vigencia" name="vigente_desde" value="<?php echo limpiar($horario['vigente_desde'] ?? '2026-11-01'); ?>" min="2026-11-01" max="2027-04-02" required>
             </div>
           </div>
         </fieldset>
