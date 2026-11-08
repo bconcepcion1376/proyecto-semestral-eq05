@@ -40,7 +40,6 @@ require_once 'config/datos_demo.php'; // Necesario para acceder a $citas, $pacie
             ?>
         </ul>
         <p><small>Mostrando 5 de <?php echo count($citas); ?> citas registradas.</small></p>
- should be replaced with actual PHP code block>
     </div>
 </main>
 
