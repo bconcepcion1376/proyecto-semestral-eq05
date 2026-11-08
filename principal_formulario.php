@@ -6,13 +6,67 @@ require_once __DIR__ . '/includes/funciones.php';
 
 require_once __DIR__ . '/config/datos_demo.php';
 
-// Valores iniciales del formulario (los mismos de la maqueta).
-// En la fase 3 vendrán de lo que el usuario envió si hubo errores.
-$valor_especialidad = 'pediatria';
-$valor_servicio     = 'primera-vez';
-$valor_medico       = 'valdelomar';
-$valor_fecha        = '2026-11-12';
-$valor_hora         = '10:00';
+// Valores del formulario: llegan por GET al pulsar "Ver horas libres".
+// Si no llegan, se usan los de la maqueta; si no son válidos, se ignoran.
+$valor_especialidad = $_GET['especialidad'] ?? 'pediatria';
+if (!isset($especialidades[$valor_especialidad])) {
+    $valor_especialidad = '';
+}
+
+$valor_servicio = $_GET['servicio'] ?? 'primera-vez';
+if (!isset($servicios[$valor_servicio])) {
+    $valor_servicio = '';
+}
+
+$valor_medico = $_GET['medico'] ?? 'valdelomar';
+if ($valor_medico !== 'cualquiera' && !isset($medicos[$valor_medico])) {
+    $valor_medico = 'valdelomar';
+}
+
+$valor_fecha = $_GET['fecha'] ?? '2026-11-12';
+if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $valor_fecha)
+    || $valor_fecha < '2026-11-01' || $valor_fecha > '2027-04-02') {
+    $valor_fecha = '2026-11-12';
+}
+
+$valor_hora = $_GET['hora'] ?? '10:00';
+if (!preg_match('/^\d{2}:\d{2}$/', $valor_hora)) {
+    $valor_hora = '';
+}
+
+// Fecha elegida: texto en español y clave del día para buscar el horario
+$dias  = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+$meses = [1 => 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
+          'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+$claves_dia = ['dom', 'lun', 'mar', 'mie', 'jue', 'vie', 'sab'];
+
+$marca_fecha = strtotime($valor_fecha);
+$texto_fecha = ucfirst($dias[date('w', $marca_fecha)]) . ' ' . date('j', $marca_fecha)
+             . ' de ' . $meses[date('n', $marca_fecha)];
+$clave_dia = $claves_dia[date('w', $marca_fecha)];
+
+// Horas del médico ese día, una cada "duracion" minutos
+$horas = [];
+$horario_dia = $horarios[$valor_medico]['dias'][$clave_dia] ?? null;
+if ($horario_dia !== null) {
+    $duracion = $horarios[$valor_medico]['duracion'];
+    $actual = strtotime($valor_fecha . ' ' . $horario_dia['desde']);
+    $fin    = strtotime($valor_fecha . ' ' . $horario_dia['hasta']);
+    while ($actual < $fin) {
+        $horas[] = date('H:i', $actual);
+        $actual = $actual + $duracion * 60;
+    }
+}
+
+// Horas ocupadas (R1): citas activas del mismo médico el mismo día
+$ocupadas = [];
+foreach ($citas as $cita) {
+    if ($cita['medico'] === $valor_medico
+        && $cita['fecha'] === $valor_fecha
+        && $estados[$cita['estado']]['activa']) {
+        $ocupadas[] = $cita['hora'];
+    }
+}
 
 $titulo = 'Reservar cita';
 $descripcion = 'Reserve una cita médica eligiendo especialidad, servicio, médico, fecha y hora disponibles.';
@@ -78,7 +132,7 @@ require_once __DIR__ . '/includes/encabezado.php';
             <?php foreach ($medicos as $clave => $medico): ?>
             <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="<?php echo limpiar($clave); ?>" <?php echo $clave === $valor_medico ? 'checked' : ''; ?>><span><strong><?php echo limpiar($medico['nombre']); ?></strong><br><small class="eq05-texto-secundario"><?php echo limpiar($especialidades[$medico['especialidad']]); ?></small></span></label>
             <?php endforeach; ?>
-            <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="cualquiera"><span><strong>Cualquier médico</strong><br><small class="eq05-texto-secundario">El primer espacio libre</small></span></label>
+            <label class="eq05-tarjeta-radio"><input type="radio" name="medico" value="cualquiera" <?php echo $valor_medico === 'cualquiera' ? 'checked' : ''; ?>><span><strong>Cualquier médico</strong><br><small class="eq05-texto-secundario">El primer espacio libre</small></span></label>
           </div>
         </fieldset>
 
@@ -122,31 +176,25 @@ require_once __DIR__ . '/includes/encabezado.php';
             <div>
               <div class="eq05-campo">
                 <label for="eq05-cita-fecha">Fecha <span class="eq05-requerido">*</span></label>
-                
-                <input type="date" id="eq05-cita-fecha" name="fecha" value="2026-11-12" min="2026-11-01" max="2027-04-02" required>
+                <input type="date" id="eq05-cita-fecha" name="fecha" value="<?php echo limpiar($valor_fecha); ?>" min="2026-11-01" max="2027-04-02" required>
                 <span class="eq05-ayuda"><strong>Nota:</strong> Las citas deben solicitarse con al menos 24 horas de anticipación.</span>
+                <button class="eq05-boton" type="submit" formaction="principal_formulario.php" formmethod="get" formnovalidate>Ver horas libres</button>
               </div>
               <fieldset>
-                <legend>Horas libres del Jueves 12 de noviembre</legend>
+                <legend>Horas libres del <?php echo limpiar($texto_fecha); ?></legend>
                 <div class="eq05-horas">
-                  <label class="eq05-hora"><input type="radio" name="hora" value="08:00" required><span>8:00</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="08:30" required><span>8:30</span></label>
-                 
-                  <label class="eq05-hora"><input type="radio" name="hora" value="09:00" required><span>9:00</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="09:30" disabled><span>9:30<span class="eq05-sr"> (ocupado)</span></span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="10:00" checked required><span>10:00</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="10:30" required><span>10:30</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="11:00" disabled><span>11:00<span class="eq05-sr"> (ocupado)</span></span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="11:30" required><span>11:30</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="13:30" required><span>13:30</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="14:00" required><span>14:00</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="14:30" required><span>14:30</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="15:00" required><span>15:00</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="15:30" required><span>15:30</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="16:00" required><span>16:00</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="16:30" required><span>16:30</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="17:00" required><span>17:00</span></label>
-                  <label class="eq05-hora"><input type="radio" name="hora" value="17:30" required><span>17:30</span></label>
+                  <?php if ($valor_medico === 'cualquiera'): ?>
+                  <p class="eq05-texto-secundario">Elija un médico para ver sus horas libres.</p>
+                  <?php elseif (count($horas) === 0): ?>
+                  <p class="eq05-texto-secundario">El médico no atiende este día.</p>
+                  <?php endif; ?>
+                  <?php foreach ($horas as $hora): ?>
+                    <?php if (in_array($hora, $ocupadas)): ?>
+                  <label class="eq05-hora"><input type="radio" name="hora" value="<?php echo limpiar($hora); ?>" disabled><span><?php echo limpiar(ltrim($hora, '0')); ?><span class="eq05-sr"> (ocupado)</span></span></label>
+                    <?php else: ?>
+                  <label class="eq05-hora"><input type="radio" name="hora" value="<?php echo limpiar($hora); ?>" <?php echo $hora === $valor_hora ? 'checked' : ''; ?> required><span><?php echo limpiar(ltrim($hora, '0')); ?></span></label>
+                    <?php endif; ?>
+                  <?php endforeach; ?>
                 </div>
               </fieldset>
             </div>
