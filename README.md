@@ -187,8 +187,18 @@ Todas las páginas se validaron sin errores con el validador HTML del W3C (Nu Ht
 
 ### Capturas de validación
 
-Validación HTML:
-![Validación HTML de index.html](docs/validacion/html-index.png)
+Validación HTML (Hito 2, HTML generado por PHP):
+
+![Validación HTML de index.php](docs/validacion/html-index.png)
+![Validación HTML de principal_listado.php](docs/validacion/html-principal-listado.png)
+![Validación HTML de principal_detalle.php](docs/validacion/html-principal-detalle.png)
+![Validación HTML de principal_formulario.php](docs/validacion/html-principal-formulario.png)
+![Validación HTML de login.php](docs/validacion/html-login.png)
+![Validación HTML de registro.php](docs/validacion/html-registro.png)
+![Validación HTML de recuperar.php](docs/validacion/html-recuperar.png)
+![Validación HTML de legal.php](docs/validacion/html-privacidad-terminos.png)
+![Validación HTML de error.php (404)](docs/validacion/html-error.png)
+![Validación HTML de error.php?codigo=403](docs/validacion/html-error-403.png)
 
 Validación CSS:
 ![Validación CSS de estilos.css](docs/validacion/css-estilos.png)
