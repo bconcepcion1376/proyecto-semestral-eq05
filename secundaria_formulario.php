@@ -14,7 +14,7 @@ if (!isset($medicos[$valor_medico])) {
 $medico  = $medicos[$valor_medico];
 $horario = $horarios[$valor_medico] ?? null;
 
-$titulo = 'Horario del médico';
+$titulo = 'Horario de ' . $medico['nombre'];
 $descripcion = 'Configure el horario semanal de cada médico y registre ausencias con reagendado automático de citas.';
 $pagina_activa = 'horarios';
 require_once __DIR__ . '/includes/encabezado.php';
@@ -25,14 +25,13 @@ require_once __DIR__ . '/includes/encabezado.php';
       <ol>
         <li><a href="panel.php">Administración</a></li>
         <li><a href="secundaria_formulario.php">Horarios</a></li>
-        <li><span aria-current="page">Dra. Carmen Ríos</span></li>
+        <li><span aria-current="page"><?php echo limpiar($medico['nombre']); ?></span></li>
       </ol>
     </nav>
     <h1>Horario del médico</h1>
     <p class="eq05-subtitulo">Defina cuándo atiende cada médico y registre sus ausencias. Los feriados y el carnaval se bloquean solos aunque el día tenga horario.</p>
 
-    <!-- CORRECCIÓN: method="post" y action="#" según la rúbrica -->
-    <form class="eq05-form" id="eq05-form-horario" action="#" method="post">
+      <form class="eq05-form" id="eq05-form-horario" action="procesar_secundaria.php" method="post">
       <div class="eq05-campo">
         <label for="eq05-hor-medico">Médico <span class="eq05-requerido">*</span></label>
         <select id="eq05-hor-medico" name="medico" required>
@@ -48,7 +47,7 @@ require_once __DIR__ . '/includes/encabezado.php';
           <legend>Horario semanal</legend>
           <div class="eq05-tabla-envoltura">
             <table class="eq05-tabla">
-              <caption>Días y horas de atención de la Dra. Carmen Ríos</caption>
+              <caption>Días y horas de atención · <?php echo limpiar($medico['nombre']); ?></caption>
               <thead>
                 <tr>
                   <th scope="col">Día</th>
