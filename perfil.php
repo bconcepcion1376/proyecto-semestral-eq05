@@ -1,8 +1,9 @@
 <?php
 define('APP_ACCESO', true);
+
 require_once 'includes/funciones.php';
 
-
+// 2. Ahora sí podemos verificar la sesión de forma segura
 if (empty($_SESSION['rol']) || $_SESSION['rol'] === 'invitado') {
     redirigir('login.php');
 }
