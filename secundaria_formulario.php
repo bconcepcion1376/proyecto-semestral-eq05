@@ -1,51 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Configure el horario semanal de cada médico y registre ausencias con reagendado automático de citas.">
-  <title>Horario del médico · MediAgenda</title>
-  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap">
-  <link rel="stylesheet" href="css/estilos.css">
-</head>
-<body>
-  <header id="eq05-encabezado">
-    <div class="eq05-contenedor eq05-encabezado__barra">
-      <!-- CORRECCIÓN: alt descriptivo para evitar warnings en W3C -->
-      <a class="eq05-logo" href="index.html">
-        <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
-        <span>MediAgenda</span>
-      </a>
-      <input class="eq05-menu-check" type="checkbox" id="eq05-menu-check">
-      <label class="eq05-menu-boton" for="eq05-menu-check"><span class="eq05-sr">Abrir o cerrar el menú</span><span aria-hidden="true">☰</span></label>
-      <nav class="eq05-nav" id="eq05-nav-principal" aria-label="Principal">
-        <ul class="eq05-nav__lista">
-          <li><a class="eq05-nav__enlace" href="index.html">Inicio</a></li>
-          <li><a class="eq05-nav__enlace" href="principal-formulario.html">Reservar cita</a></li>
-          <li><a class="eq05-nav__enlace" href="principal-listado.html">Citas</a></li>
-          <li><a class="eq05-nav__enlace eq05-nav__enlace--activo" href="secundaria-formulario.html" aria-current="page">Horarios</a></li>
-          <li><a class="eq05-nav__enlace" href="panel.html">Administración</a></li>
-        </ul>
-        <div class="eq05-cuenta">
-          <img src="img/iconos/campana.svg" alt="Avisos: 1 sin leer" width="22" height="22">
-          <a class="eq05-cuenta__usuario" href="perfil.html">
-            <img class="eq05-avatar" src="img/avatar.svg" alt="Avatar de usuario" width="36" height="36">
-            <span><strong>Marta Díaz</strong><span class="eq05-cuenta__rol">Administrador · Mi perfil</span></span>
-          </a>
-          <a class="eq05-boton eq05-boton--claro eq05-boton--pequeno" href="index.html">Salir</a>
-        </div>
-      </nav>
-    </div>
-  </header>
+<?php
+//uso funciones y encabezados para todos los archivos incluyendo la pagina secundaria_formulario.php
+define('APP_ACCESO', true);
+
+require_once __DIR__ . '/includes/funciones.php';
+$titulo = 'Horario del médico';
+$descripcion = 'Configure el horario semanal de cada médico y registre ausencias con reagendado automático de citas.';
+$pagina_activa = 'horarios';
+require_once __DIR__ . '/includes/encabezado.php';
+?>
 
   <main id="eq05-principal" class="eq05-contenedor">
     <nav class="eq05-migas" aria-label="Ruta de navegación">
       <ol>
-        <li><a href="panel.html">Administración</a></li>
-        <li><a href="secundaria-formulario.html">Horarios</a></li>
+        <li><a href="panel.php">Administración</a></li>
+        <li><a href="secundaria_formulario.php">Horarios</a></li>
         <li><span aria-current="page">Dra. Carmen Ríos</span></li>
       </ol>
     </nav>
@@ -254,24 +222,11 @@
 
       <div class="eq05-acciones">
         <button class="eq05-boton eq05-boton--primario" type="submit">Guardar y reagendar 9 citas</button>
-        <a class="eq05-boton" href="panel.html">Cancelar</a>
+        <a class="eq05-boton" href="panel.php">Cancelar</a>
       </div>
     </form>
   </main>
 
-  <footer id="eq05-pie">
-    <div class="eq05-contenedor eq05-pie__barra">
-      <p><strong>MediAgenda</strong> · Clínicas Minimed, Ciudad de Panamá</p>
-      <nav aria-label="Enlaces del pie de página">
-        <ul class="eq05-pie__enlaces">
-          <li><a href="index.html#eq05-como-funciona">Ayuda</a></li>
-          <li><a href="legal.html#eq05-privacidad">Privacidad</a></li>
-          <li><a href="legal.html#eq05-terminos">Términos</a></li>
-          <li><a href="index.html#eq05-contacto">Contacto</a></li>
-        </ul>
-      </nav>
-      <p><small>© 2026 MediAgenda · Proyecto semestral, equipo 05</small></p>
-    </div>
-  </footer>
-</body>
-</html>
+  <?php // se anexa la parte de pie de pagina para que se muestre en la pagina de secundaria_formulario con pie.php
+     require_once __DIR__ . '/includes/pie.php';
+      ?>
