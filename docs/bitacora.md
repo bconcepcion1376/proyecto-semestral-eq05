@@ -723,3 +723,25 @@ Edwin Vergara
 - Equipo: acordar con Alvaro una función en `funciones.php` para las fechas en español
   (`$dias` y `$meses` están repetidos en tres páginas).
 - Benjamin: validar en W3C las 4 páginas de la fase 2 y guardar las capturas en `docs/validacion/`.
+
+---------------------------------------------------------------------------------------------------------------------------------
+## 2026-11-08 · Validación W3C del Hito 2 y migración de `secundaria_formulario.php`
+**Participantes:**
+- Benjamin Concepcion
+
+**Trabajo realizado:**
+- Validación (8c2bb1f): 10 capturas en docs/validacion/. Son nuevas login, registro, recuperar, legal (como html-privacidad-terminos.png), error 404 y 403 y las 3 páginas principal_*, y se reemplazó la de index.
+- Se reemplazó la captura de estilos.css.
+- Se renombró secundaria-formulario.html a secundaria_formulario.php con git mv (pendiente del 2026-11-07)
+- Se borraron 61 líneas (el <head>, el encabezado y el pie fijos) y se cambiaron por encabezado.php y pie.php con   $titulo, $descripcion y $pagina_activa = 'horarios'. Las migas y “Cancelar” ya enlazan a .php.
+- La extension errada .pho se cambio por .php
+
+**Decisiones:**
+- Se uso git mv y no borrar y crear el archivo: así se conserva el historial.
+- Con el encabezado común desaparecen el usuario fijo “Marta Díaz” y el comentario CORRECCIÓN del logo.
+
+**Problemas:**
+- La extenxion errada .pho despues del comits nos percatamos del error.
+
+**Pendiente:**
+- Benjamin: fase 2 de secundaria_formulario.php (médico, horario, ausencia y citas afectadas desde datos_demo.php)
