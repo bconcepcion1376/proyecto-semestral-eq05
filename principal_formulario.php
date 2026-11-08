@@ -68,6 +68,70 @@ foreach ($citas as $cita) {
     }
 }
 
+// Citas activas del médico por día (R2: un día con MAX_CITAS_DIA está sin cupo)
+$citas_por_dia = [];
+foreach ($citas as $cita) {
+    if ($cita['medico'] === $valor_medico && $estados[$cita['estado']]['activa']) {
+        $citas_por_dia[$cita['fecha']] = ($citas_por_dia[$cita['fecha']] ?? 0) + 1;
+    }
+}
+
+// Calendario del mes de la fecha elegida
+$anio       = (int) date('Y', $marca_fecha);
+$mes        = (int) date('n', $marca_fecha);
+$primer_dia = mktime(0, 0, 0, $mes, 1, $anio);
+$dias_mes   = (int) date('t', $primer_dia);      // cuántos días tiene el mes
+$huecos     = (int) date('N', $primer_dia) - 1;  // N: 1 = lunes … 7 = domingo
+
+$motivo_bloqueo = '';   // por qué no se puede reservar el día elegido ('' = sí se puede)
+$celdas = array_fill(0, $huecos, null);   // casillas vacías antes del día 1
+
+for ($d = 1; $d <= $dias_mes; $d++) {
+    $fecha_dia = sprintf('%04d-%02d-%02d', $anio, $mes, $d);
+    $clave_d   = $claves_dia[date('w', strtotime($fecha_dia))];
+
+    $ausente = false;
+    foreach ($ausencias as $ausencia) {
+        if ($ausencia['medico'] === $valor_medico
+            && $fecha_dia >= $ausencia['desde'] && $fecha_dia <= $ausencia['hasta']) {
+            $ausente = true;
+        }
+    }
+
+    if ($clave_d === 'dom') {
+        $clase = 'eq05-dia--cerrado';  $titulo_dia = 'Domingo, cerrado';
+    } elseif (in_array($fecha_dia, $feriados)) {
+        $clase = 'eq05-dia--feriado';  $titulo_dia = 'Feriado';
+    } elseif ($ausente) {
+        $clase = 'eq05-dia--ausencia'; $titulo_dia = 'Médico ausente';
+    } elseif (($citas_por_dia[$fecha_dia] ?? 0) >= MAX_CITAS_DIA) {
+        $clase = 'eq05-dia--lleno';    $titulo_dia = 'Sin cupo';
+    } elseif ($valor_medico !== 'cualquiera' && !isset($horarios[$valor_medico]['dias'][$clave_d])) {
+        $clase = 'eq05-dia--cerrado';  $titulo_dia = 'El médico no atiende este día';
+    } else {
+        $clase = '';                   $titulo_dia = '';
+    }
+
+    if ($fecha_dia === $valor_fecha) {
+        $motivo_bloqueo = $titulo_dia;   // se guarda antes de marcarlo como elegido
+        $clase = 'eq05-dia--elegido';
+        $titulo_dia = 'Día elegido';
+    }
+
+    $celdas[] = ['dia' => $d, 'clase' => $clase, 'titulo' => $titulo_dia];
+}
+
+// Casillas vacías al final para completar la última semana
+while (count($celdas) % 7 !== 0) {
+    $celdas[] = null;
+}
+$semanas = array_chunk($celdas, 7);   // filas de 7 días (lunes a domingo)
+
+// Si el día elegido no se puede reservar, no se ofrecen horas
+if ($motivo_bloqueo !== '') {
+    $horas = [];
+}
+
 $titulo = 'Reservar cita';
 $descripcion = 'Reserve una cita médica eligiendo especialidad, servicio, médico, fecha y hora disponibles.';
 $pagina_activa = 'reservar';
@@ -141,27 +205,20 @@ require_once __DIR__ . '/includes/encabezado.php';
           <div class="eq05-fecha-hora">
             <div>
               <table class="eq05-calendario">
-                <caption>Disponibilidad de noviembre de 2026</caption>
+                <caption>Disponibilidad de <?php echo limpiar($meses[$mes]); ?> de <?php echo $anio; ?></caption>
                 <thead><tr><th scope="col"><abbr title="lunes">Lun</abbr></th><th scope="col"><abbr title="martes">Mar</abbr></th><th scope="col"><abbr title="miércoles">Mié</abbr></th><th scope="col"><abbr title="jueves">Jue</abbr></th><th scope="col"><abbr title="viernes">Vie</abbr></th><th scope="col"><abbr title="sábado">Sáb</abbr></th><th scope="col"><abbr title="domingo">Dom</abbr></th></tr></thead>
                 <tbody>
-                   <tr><td></td><td></td><td></td><td></td><td></td><td></td><td class="eq05-dia--cerrado" title="Domingo, cerrado">1</td></tr>
-                   <tr><td>2</td><td class="eq05-dia--feriado" title="Separación de Panamá de Colombia">3</td>
-                       <td class="eq05-dia--feriado" title="Día de la Bandera">4</td>
-                       <td class="eq05-dia--feriado" title="Día de Colón">5</td>
-                       <td>6</td><td>7</td><td class="eq05-dia--cerrado" title="Domingo, cerrado">8</td>
-                   </tr>
-                    <tr><td>9</td><td class="eq05-dia--feriado" title="Primer Grito de Independencia">10</td>
-                        <td>11</td><td class="eq05-dia--elegido" title="Día elegido">12</td>
-                        <td>13</td><td>14</td><td class="eq05-dia--cerrado" title="Domingo, cerrado">15</td>
-                   </tr>
-                   <tr><td>16</td><td>17</td><td class="eq05-dia--lleno" title="Sin cupo">18</td>
-                       <td class="eq05-dia--ausencia" title="Médico ausente">19</td><td class="eq05-dia--ausencia" title="Médico ausente">20</td><td>21</td>
-                       <td class="eq05-dia--cerrado" title="Domingo, cerrado">22</td>
-                   </tr>
-                   <tr><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td class="eq05-dia--feriado" title="Independencia de España">28</td>
-                       <td class="eq05-dia--cerrado" title="Domingo, cerrado">29</td>
-                   </tr>
-                   <tr><td>30</td><td></td><td></td><td></td><td></td><td></td><td></td></tr> 
+                  <?php foreach ($semanas as $semana): ?>
+                  <tr>
+                    <?php foreach ($semana as $celda): ?>
+                      <?php if ($celda === null): ?>
+                    <td></td>
+                      <?php else: ?>
+                    <td<?php if ($celda['clase'] !== ''): ?> class="<?php echo $celda['clase']; ?>" title="<?php echo limpiar($celda['titulo']); ?>"<?php endif; ?>><?php echo $celda['dia']; ?></td>
+                      <?php endif; ?>
+                    <?php endforeach; ?>
+                  </tr>
+                  <?php endforeach; ?>
                 </tbody>
               </table>
               <ul class="eq05-leyenda" aria-label="Leyenda del calendario">
@@ -185,8 +242,8 @@ require_once __DIR__ . '/includes/encabezado.php';
                 <div class="eq05-horas">
                   <?php if ($valor_medico === 'cualquiera'): ?>
                   <p class="eq05-texto-secundario">Elija un médico para ver sus horas libres.</p>
-                  <?php elseif (count($horas) === 0): ?>
-                  <p class="eq05-texto-secundario">El médico no atiende este día.</p>
+                  <?php elseif ($motivo_bloqueo !== ''): ?>
+                  <p class="eq05-texto-secundario">No hay horas este día: <?php echo limpiar($motivo_bloqueo); ?>.</p>
                   <?php endif; ?>
                   <?php foreach ($horas as $hora): ?>
                     <?php if (in_array($hora, $ocupadas)): ?>
