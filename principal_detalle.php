@@ -19,14 +19,28 @@ $paciente = $pacientes[$cita['expediente']];
 $medico   = $medicos[$cita['medico']];
 $servicio = $servicios[$cita['servicio']];
 
+// Fecha y hora en español para el subtítulo
+$dias  = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+$meses = [1 => 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
+          'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+$marca = strtotime($cita['fecha'] . ' ' . $cita['hora']);
+$texto_fecha = ucfirst($dias[date('w', $marca)]) . ' ' . date('j', $marca)
+             . ' de ' . $meses[date('n', $marca)] . ' de ' . date('Y', $marca);
+$texto_hora = date('g:i', $marca) . (date('a', $marca) === 'am' ? ' a. m.' : ' p. m.');
+
+// Consultorio: depende del día de la semana en el horario del médico
+$claves_dia  = ['dom', 'lun', 'mar', 'mie', 'jue', 'vie', 'sab'];
+$clave_dia   = $claves_dia[date('w', $marca)];
+$consultorio = $horarios[$cita['medico']]['dias'][$clave_dia]['consultorio'] ?? '';
+
 $titulo = 'Cita ' . $codigo;
 $descripcion = 'Detalle de la cita ' . $codigo . ': datos del paciente, datos de la cita, nota de consulta e historial.';
 $pagina_activa = 'citas';
 require_once __DIR__ . '/includes/encabezado.php';
 ?>
 
-
-  <main id="eq05-principal" class="eq05-contenedor">
+<main id="eq05-principal" class="eq05-contenedor">
     <nav class="eq05-migas" aria-label="Ruta de navegación">
       <ol>
         <li><a href="principal_listado.php">Citas</a></li>
@@ -36,7 +50,7 @@ require_once __DIR__ . '/includes/encabezado.php';
     <div class="eq05-titulo-fila">
       <div>
         <h1>Cita <?php echo limpiar($codigo); ?> <span class="eq05-estado eq05-estado--<?php echo limpiar($cita['estado']); ?>"><?php echo limpiar($estados[$cita['estado']]['texto']); ?></span></h1>
-        <p class="eq05-texto-secundario"><time datetime="2027-02-01T08:30">Lunes 1 de febrero de 2027 · 8:30 a. m.</time> · 30 min · Consultorio 204</p>
+        <p class="eq05-texto-secundario"><time datetime="<?php echo limpiar($cita['fecha'] . 'T' . $cita['hora']); ?>"><?php echo limpiar($texto_fecha . ' · ' . $texto_hora); ?></time> · <?php echo $servicio['minutos']; ?> min<?php if ($consultorio !== ''): ?> · Consultorio <?php echo limpiar($consultorio); ?><?php endif; ?></p>
       </div>
     </div>
 
