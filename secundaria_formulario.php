@@ -13,7 +13,7 @@ require_once __DIR__ . '/includes/encabezado.php';
     <nav class="eq05-migas" aria-label="Ruta de navegación">
       <ol>
         <li><a href="panel.php">Administración</a></li>
-        <li><a href="secundaria_formulario.pho">Horarios</a></li>
+        <li><a href="secundaria_formulario.php">Horarios</a></li>
         <li><span aria-current="page">Dra. Carmen Ríos</span></li>
       </ol>
     </nav>
