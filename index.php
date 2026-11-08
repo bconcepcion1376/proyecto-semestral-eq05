@@ -1,41 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Reserve su cita médica en las clínicas Minimed a cualquier hora: especialidades, médicos y horarios disponibles en línea.">
-  <title>Inicio · MediAgenda</title>
-  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap">
-  <link rel="stylesheet" href="css/estilos.css">
-</head>
-<body>
-  <header id="eq05-encabezado">
-    <div class="eq05-contenedor eq05-encabezado__barra">
-      <!-- CORRECCIÓN: alt descriptivo para evitar warnings en W3C -->
-      <a class="eq05-logo" href="index.php">
-        <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
-        <span>MediAgenda</span>
-      </a>
-      <input class="eq05-menu-check" type="checkbox" id="eq05-menu-check">
-      <label class="eq05-menu-boton" for="eq05-menu-check"><span class="eq05-sr">Abrir o cerrar el menú</span><span aria-hidden="true">☰</span></label>
-      <nav class="eq05-nav" id="eq05-nav-principal" aria-label="Principal">
-        <ul class="eq05-nav__lista">
-          <li><a class="eq05-nav__enlace eq05-nav__enlace--activo" href="index.php" aria-current="page">Inicio</a></li>
-          <li><a class="eq05-nav__enlace" href="principal_formulario.php">Reservar cita</a></li>
-          <li><a class="eq05-nav__enlace" href="principal_listado.php">Citas</a></li>
-          <li><a class="eq05-nav__enlace" href="secundaria_formulario.php">Horarios</a></li>
-          <li><a class="eq05-nav__enlace" href="panel.php">Administración</a></li>
-        </ul>
-        <div class="eq05-cuenta">
-          <a class="eq05-boton eq05-boton--claro" href="login.php">Iniciar sesión</a>
-          <a class="eq05-boton eq05-boton--blanco" href="registro.php">Registrarse</a>
-        </div>
-      </nav>
-    </div>
-  </header>
+<?php
+//uso funciones y encabezados para todos los archivos incluyendo la pagina index.php
+define('APP_ACCESO', true);
+
+require_once __DIR__ . '/includes/funciones.php';
+$titulo = 'Inicio';
+$descripcion = 'Reserve su cita médica en las clínicas Minimed a cualquier hora: especialidades, médicos y horarios disponibles en línea.';
+$pagina_activa = 'inicio';
+require_once __DIR__ . '/includes/encabezado.php';
+?>
 
   <main id="eq05-principal" class="eq05-contenedor">
     <section class="eq05-hero" aria-labelledby="eq05-titulo-inicio">
@@ -169,19 +141,6 @@
     </section>
   </main>
 
-  <footer id="eq05-pie">
-    <div class="eq05-contenedor eq05-pie__barra">
-      <p><strong>MediAgenda</strong> · Clínicas Minimed, Ciudad de Panamá</p>
-      <nav aria-label="Enlaces del pie de página">
-        <ul class="eq05-pie__enlaces">
-          <li><a href="index.php#eq05-como-funciona">Ayuda</a></li>
-          <li><a href="legal.php#eq05-privacidad">Privacidad</a></li>
-          <li><a href="legal.php#eq05-terminos">Términos</a></li>
-          <li><a href="index.php#eq05-contacto">Contacto</a></li>
-        </ul>
-      </nav>
-      <p><small>© 2026 MediAgenda · Proyecto semestral, equipo 05</small></p>
-    </div>
-  </footer>
-</body>
-</html>
+  <?php // se anexa la parte de pie de pagina para que se muestre en la pagina de index con pie.php 
+     require_once __DIR__ . '/includes/pie.php';
+      ?>

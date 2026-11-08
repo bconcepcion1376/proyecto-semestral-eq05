@@ -1,50 +1,82 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Agenda del día con búsqueda y filtros por fecha, médico, especialidad y estado de cada cita.">
-  <title>Listado de citas · MediAgenda</title>
-  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap">
-  <link rel="stylesheet" href="css/estilos.css">
-</head>
-<body>
-  <header id="eq05-encabezado">
-    <div class="eq05-contenedor eq05-encabezado__barra">
-      <a class="eq05-logo" href="index.php">
-        <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
-        <span>MediAgenda</span>
-      </a>
-      <input class="eq05-menu-check" type="checkbox" id="eq05-menu-check">
-      <label class="eq05-menu-boton" for="eq05-menu-check"><span class="eq05-sr">Abrir o cerrar el menú</span><span aria-hidden="true">☰</span></label>
-      <nav class="eq05-nav" id="eq05-nav-principal" aria-label="Principal">
-        <ul class="eq05-nav__lista">
-          <li><a class="eq05-nav__enlace" href="index.php">Inicio</a></li>
-          <li><a class="eq05-nav__enlace" href="principal_formulario.php">Reservar cita</a></li>
-          <li><a class="eq05-nav__enlace eq05-nav__enlace--activo" href="principal_listado.php" aria-current="page">Citas</a></li>
-          <li><a class="eq05-nav__enlace" href="secundaria_formulario.php">Horarios</a></li>
-          <li><a class="eq05-nav__enlace" href="panel.php">Administración</a></li>
-        </ul>
-        <div class="eq05-cuenta">
-          <img src="img/iconos/campana.svg" alt="Avisos: 1 sin leer" width="22" height="22">
-          <a class="eq05-cuenta__usuario" href="perfil.php">
-            <img class="eq05-avatar" src="img/avatar.svg" alt="Avatar de usuario" width="36" height="36">
-            <span><strong>Luis Gómez</strong><span class="eq05-cuenta__rol">Recepción · Mi perfil</span></span>
-          </a>
-          <a class="eq05-boton eq05-boton--claro eq05-boton--pequeno" href="index.php">Salir</a>
-        </div>
-      </nav>
-    </div>
-  </header>
+<?php
+//uso funciones y encabezados para todos los archivos incluyendo la pagina principal_listado.php
+define('APP_ACCESO', true);
+
+require_once __DIR__ . '/includes/funciones.php';
+require_once __DIR__ . '/config/datos_demo.php';
+// Filtro de médico que llega por la URL (vacío = todos)
+$filtro_medico = $_GET['medico'] ?? '';
+// Si el médico no existe en la lista, se ignora el filtro
+if (!isset($medicos[$filtro_medico])) {
+    $filtro_medico = '';
+}
+
+// Filtro de especialidad (vacío = todas)
+$filtro_especialidad = $_GET['especialidad'] ?? '';
+if (!isset($especialidades[$filtro_especialidad])) {
+    $filtro_especialidad = '';
+}
+// Filtro de estado (vacío = todos)
+$filtro_estado = $_GET['estado'] ?? '';
+if (!isset($estados[$filtro_estado])) {
+    $filtro_estado = '';
+}
+
+// Filtro de fecha (vacío = todas las fechas)
+$filtro_fecha = $_GET['fecha'] ?? '';
+if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $filtro_fecha)) {
+    $filtro_fecha = '';
+}
+
+// Búsqueda por texto: paciente, cédula o N.º de cita (vacío = sin búsqueda)
+$filtro_q = trim($_GET['q'] ?? '');
+// Texto de la fecha para el subtítulo y el título de la tabla
+$dias  = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+$meses = [1 => 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
+          'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+if ($filtro_fecha !== '') {
+    $marca = strtotime($filtro_fecha);
+    $texto_fecha = 'del ' . $dias[date('w', $marca)] . ' ' . date('j', $marca)
+                 . ' de ' . $meses[date('n', $marca)] . ' de ' . date('Y', $marca);
+} else {
+    $texto_fecha = 'de todas las fechas';
+}
+
+// Primero se filtran las citas; la tabla solo pinta las que quedan
+$citas_filtradas = [];
+foreach ($citas as $codigo => $cita) {
+    $paciente = $pacientes[$cita['expediente']];
+
+    if ($filtro_medico !== '' && $cita['medico'] !== $filtro_medico) continue;
+    if ($filtro_especialidad !== '' && $cita['especialidad'] !== $filtro_especialidad) continue;
+    if ($filtro_estado !== '' && $cita['estado'] !== $filtro_estado) continue;
+    if ($filtro_fecha !== '' && $cita['fecha'] !== $filtro_fecha) continue;
+    if ($filtro_q !== ''
+        && mb_stripos($paciente['nombre'], $filtro_q) === false
+        && mb_stripos($paciente['documento'], $filtro_q) === false
+        && mb_stripos($codigo, $filtro_q) === false) continue;
+
+    $citas_filtradas[$codigo] = $cita;
+}
+
+// Cuántas citas hay de cada estado (para el resumen de arriba)
+$conteo_estados = [];
+foreach ($citas as $cita) {
+    $conteo_estados[$cita['estado']] = ($conteo_estados[$cita['estado']] ?? 0) + 1;
+}
+
+$titulo = 'Listado de citas';
+$descripcion = 'Agenda del día con búsqueda y filtros por fecha, médico, especialidad y estado de cada cita.';
+$pagina_activa = 'citas';
+require_once __DIR__ . '/includes/encabezado.php';
+?>
 
   <main id="eq05-principal" class="eq05-contenedor">
     <div class="eq05-titulo-fila">
       <div>
         <h1>Citas</h1>
-        <p class="eq05-texto-secundario">Agenda del día · <time datetime="2026-11-12">jueves 12 de noviembre de 2026</time></p>
+        <p class="eq05-texto-secundario">Agenda <?php echo limpiar($texto_fecha); ?></p>
       </div>
       <div class="eq05-acciones">
         <a class="eq05-boton" href="secundaria_formulario.php#eq05-ausencia">Registrar ausencia de médico</a>
@@ -59,72 +91,64 @@
         
         <div class="eq05-campo eq05-campo--busqueda">
           <label for="eq05-filtro-buscar">Buscar</label>
-          <input type="search" id="eq05-filtro-buscar" name="q" placeholder="Paciente, cédula o N.º de cita" maxlength="60">
+          <input type="search" id="eq05-filtro-buscar" name="q" placeholder="Paciente, cédula o N.º de cita" maxlength="60" value="<?php echo limpiar($filtro_q); ?>">
         </div>
         <div class="eq05-campo">
           <label for="eq05-filtro-fecha">Fecha</label>
-          <input type="date" id="eq05-filtro-fecha" name="fecha" value="2026-11-12">
+          <input type="date" id="eq05-filtro-fecha" name="fecha" value="<?php echo limpiar($filtro_fecha); ?>"> 
         </div>
         <div class="eq05-campo">
           <label for="eq05-filtro-medico">Médico</label>
+          <?php //cambio realizado para extraer los medicos del arreglo de datos_demo.php y
+          //   mostrarlos en el select de la pagina principal_listado.php ?>
           <select id="eq05-filtro-medico" name="medico">
-            <option value="">Todos</option>
-            <option value="arias">Dr. José Arias</option>
-            <option value="rios">Dra. Carmen Ríos</option>
-            <option value="vega">Dra. Laura Vega</option>
-            <?php //Datos semillas de médicos para pruebas de filtros y búsqueda. ?>
-            <option value="valdelomar">Dr. Ignacio Valdelomar</option>
-            <option value="zamudio">Dra. Pilar Zamudio</option>
+             <option value="">Todos</option>
+             <?php foreach ($medicos as $clave => $medico): ?>
+             <option value="<?php echo limpiar($clave); ?>" <?php echo $clave === $filtro_medico ? 'selected' : ''; ?>><?php echo limpiar($medico['nombre']); ?></option>
+             <?php endforeach; ?>
           </select>
+          
         </div>
         <div class="eq05-campo">
           <label for="eq05-filtro-especialidad">Especialidad</label>
+          <?php //cambio realizado para extraer las especialidades del arreglo de datos_demo.php y
+          //   mostrarlos en el select de la pagina principal_listado.php ?>
           <select id="eq05-filtro-especialidad" name="especialidad">
-            <option value="">Todas</option>
-            <option value="medicina-general">Medicina general</option>
-            <option value="pediatria">Pediatría</option>
-            <option value="cardiologia">Cardiología</option>
-            <option value="ginecologia">Ginecología</option>
-            <option value="dermatologia">Dermatología</option>
-            <option value="ortopedia">Ortopedia</option>
+             <option value="">Todas</option>
+             <?php foreach ($especialidades as $clave => $nombre): ?>
+             <option value="<?php echo limpiar($clave); ?>" <?php echo $clave === $filtro_especialidad ? 'selected' : ''; ?>><?php echo limpiar($nombre); ?></option>
+             <?php endforeach; ?>
           </select>
         </div>
+
         <div class="eq05-campo">
           <label for="eq05-filtro-estado">Estado</label>
+          <?php //cambio realizado para extraer los estados del arreglo de datos_demo.php y
+          //   mostrarlos en el select de la pagina principal_listado.php ?>
           <select id="eq05-filtro-estado" name="estado">
-            <option value="">Todos</option>
-            <option value="programada">Programada</option>
-            <option value="reagendada">Reagendada</option>
-            <option value="sala">En sala</option>
-            <option value="atendida">Atendida</option>
-            <option value="cancelada">Cancelada</option>
-            <option value="ausente">No asistió</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="confirmada">Confirmada</option>
+             <option value="">Todos</option>
+             <?php foreach ($estados as $clave => $estado): ?>
+             <option value="<?php echo limpiar($clave); ?>" <?php echo $clave === $filtro_estado ? 'selected' : ''; ?>><?php echo limpiar($estado['texto']); ?></option>
+             <?php endforeach; ?>
           </select>
         </div>
         <div class="eq05-acciones">
           <button class="eq05-boton eq05-boton--primario" type="submit">Filtrar</button>
-          <button class="eq05-boton" type="reset">Limpiar</button>
+          <a class="eq05-boton" href="principal_listado.php">Limpiar</a>
         </div>
       </fieldset>
     </form>
-
+    
     <ul class="eq05-resumen-estados" aria-label="Resumen por estado">
-      <li><a href="principal_listado.php" aria-current="true">Todas <span class="eq05-numero">36</span></a></li>
-      <li><a href="principal_listado.php?estado=programada">Programadas <span class="eq05-numero">18</span></a></li>
-      <li><a href="principal_listado.php?estado=reagendada">Reagendadas <span class="eq05-numero">2</span></a></li>
-      <li><a href="principal_listado.php?estado=sala">En sala <span class="eq05-numero">4</span></a></li>
-      <li><a href="principal_listado.php?estado=atendida">Atendidas <span class="eq05-numero">3</span></a></li>
-      <li><a href="principal_listado.php?estado=cancelada">Canceladas <span class="eq05-numero">3</span></a></li>
-      <li><a href="principal_listado.php?estado=ausente">No asistió <span class="eq05-numero">2</span></a></li>
-      <li><a href="principal_listado.php?estado=pendiente">Pendientes <span class="eq05-numero">2</span></a></li>
-      <li><a href="principal_listado.php?estado=confirmada">Confirmadas <span class="eq05-numero">2</span></a></li>
+        <li><a href="principal_listado.php" <?php echo $filtro_estado === '' ? 'aria-current="true"' : ''; ?>>Todas <span class="eq05-numero"><?php echo count($citas); ?></span></a></li>
+        <?php foreach ($estados as $clave => $estado): ?>
+        <li><a href="principal_listado.php?estado=<?php echo urlencode($clave); ?>" <?php echo $filtro_estado === $clave ? 'aria-current="true"' : ''; ?>><?php echo limpiar($estado['texto']); ?> <span class="eq05-numero"><?php echo $conteo_estados[$clave] ?? 0; ?></span></a></li>
+        <?php endforeach; ?>
     </ul>
 
     <div class="eq05-tabla-envoltura">
       <table class="eq05-tabla eq05-tabla--apilada">
-        <caption>Citas del jueves 12 de noviembre de 2026 (8 de 36)</caption>
+        <caption>Citas <?php echo limpiar($texto_fecha); ?> (<?php echo count($citas_filtradas); ?> de <?php echo count($citas); ?>)</caption>
         <thead>
           <tr>
             <th scope="col">Hora</th>
@@ -138,115 +162,37 @@
           </tr>
         </thead>
         <tbody>
+          <?php foreach ($citas_filtradas as $codigo => $cita): ?>
+          <?php
+              $paciente = $pacientes[$cita['expediente']];
+              $medico = $medicos[$cita['medico']];
+          ?>
+         
           <tr>
-            <td data-etiqueta="Hora"><time datetime="2027-02-01T08:00">08:00</time></td>
-            <th scope="row" data-etiqueta="N.º">CIT-0141</th>
-            <td data-etiqueta="Paciente">María Castillo</td>
-            <td data-etiqueta="Documento">8-765-1234</td>
-            <td data-etiqueta="Médico">Dra. Carmen Ríos</td>
-            <td data-etiqueta="Especialidad">Cardiología</td>
-            <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--atendida">Atendida</span></td>
-            <td data-etiqueta="Acciones"><a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0141</span></a></td>
+             <td data-etiqueta="Hora"><time datetime="<?php echo limpiar($cita['fecha'] . 'T' . $cita['hora']); ?>"><?php echo limpiar($cita['hora']); ?></time></td>
+             <th scope="row" data-etiqueta="N.º"><?php echo limpiar($codigo); ?></th>
+             <td data-etiqueta="Paciente"><?php echo limpiar($paciente['nombre']); ?></td>
+             <td data-etiqueta="Documento"><?php echo limpiar($paciente['documento']); ?></td>
+             <td data-etiqueta="Médico"><?php echo limpiar($medico['nombre']); ?></td>
+             <td data-etiqueta="Especialidad"><?php echo limpiar($especialidades[$cita['especialidad']]);?></td>
+             <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--<?php echo limpiar($cita['estado']); ?>"><?php echo limpiar($estados[$cita['estado']]['texto']); ?></span></td>
+             <td data-etiqueta="Acciones">
+               <?php if ($estados[$cita['estado']]['activa'] && $cita['estado'] !== 'sala'): ?>
+                  <a class="eq05-boton eq05-boton--pequeno" href="principal_detalle.php?codigo=<?php echo urlencode($codigo); ?>">Marcar llegada</a>
+                   <?php endif; ?>
+                  <a href="principal_detalle.php?codigo=<?php echo urlencode($codigo); ?>">Ver<span class="eq05-sr"> la cita <?php echo limpiar($codigo); ?></span></a>
+             </td>
           </tr>
-          <tr>
-            <td data-etiqueta="Hora"><time datetime="2027-02-01T08:30">08:30</time></td>
-            <th scope="row" data-etiqueta="N.º">CIT-0142</th>
-            <td data-etiqueta="Paciente">Pedro Sánchez</td>
-            <td data-etiqueta="Documento">4-221-908</td>
-            <td data-etiqueta="Médico">Dra. Carmen Ríos</td>
-            <td data-etiqueta="Especialidad">Cardiología</td>
-            <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--sala">En sala</span></td>
-            <td data-etiqueta="Acciones"><a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0142</span></a></td>
-          </tr>
-          <tr>
-            <td data-etiqueta="Hora"><time datetime="2027-02-01T08:30">08:30</time></td>
-            <th scope="row" data-etiqueta="N.º">CIT-0143</th>
-            <td data-etiqueta="Paciente">Rosa Méndez</td>
-            <td data-etiqueta="Documento">8-901-2234</td>
-            <td data-etiqueta="Médico">Dr. José Arias</td>
-            <td data-etiqueta="Especialidad">Medicina general</td>
-            <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--ausente">No asistió</span></td>
-            <td data-etiqueta="Acciones"><a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0143</span></a></td>
-          </tr>
-          <tr>
-            <td data-etiqueta="Hora"><time datetime="2027-02-01T09:00">09:00</time></td>
-            <th scope="row" data-etiqueta="N.º">CIT-0144</th>
-            <td data-etiqueta="Paciente">Luis Herrera</td>
-            <td data-etiqueta="Documento">PE-12-345</td>
-            <td data-etiqueta="Médico">Dr. José Arias</td>
-            <td data-etiqueta="Especialidad">Medicina general</td>
-            <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--programada">Programada</span></td>
-            <td data-etiqueta="Acciones"><a class="eq05-boton eq05-boton--pequeno" href="principal_detalle.php">Marcar llegada</a> <a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0144</span></a></td>
-          </tr>
-          <tr>
-            <td data-etiqueta="Hora"><time datetime="2027-02-01T09:00">09:00</time></td>
-            <th scope="row" data-etiqueta="N.º">CIT-0145</th>
-            <td data-etiqueta="Paciente">Ana Pérez</td>
-            <td data-etiqueta="Documento">8-123-4567</td>
-            <td data-etiqueta="Médico">Dra. Laura Vega</td>
-            <td data-etiqueta="Especialidad">Pediatría</td>
-            <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--programada">Programada</span></td>
-            <td data-etiqueta="Acciones"><a class="eq05-boton eq05-boton--pequeno" href="principal_detalle.php">Marcar llegada</a> <a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0145</span></a></td>
-          </tr>
-          <tr>
-            <td data-etiqueta="Hora"><time datetime="2027-02-01T09:30">09:30</time></td>
-            <th scope="row" data-etiqueta="N.º">CIT-0146</th>
-            <td data-etiqueta="Paciente">Jorge Batista</td>
-            <td data-etiqueta="Documento">3-456-789</td>
-            <td data-etiqueta="Médico">Dra. Carmen Ríos</td>
-            <td data-etiqueta="Especialidad">Cardiología</td>
-            <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--reagendada">Reagendada</span></td>
-            <td data-etiqueta="Acciones"><a class="eq05-boton eq05-boton--pequeno" href="principal_detalle.php">Marcar llegada</a> <a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0146</span></a></td>
-          </tr>
-          <tr>
-            <td data-etiqueta="Hora"><time datetime="2027-02-01T10:00">10:00</time></td>
-            <th scope="row" data-etiqueta="N.º">CIT-0147</th>
-            <td data-etiqueta="Paciente">Elena Quintero</td>
-            <td data-etiqueta="Documento">8-332-1100</td>
-            <td data-etiqueta="Médico">Dr. José Arias</td>
-            <td data-etiqueta="Especialidad">Medicina general</td>
-            <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--cancelada">Cancelada</span></td>
-            <td data-etiqueta="Acciones"><a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0147</span></a></td>
-          </tr>
-          <tr>
-            <td data-etiqueta="Hora"><time datetime="2027-02-01T10:00">10:00</time></td>
-            <th scope="row" data-etiqueta="N.º">CIT-0148</th>
-            <td data-etiqueta="Paciente">Carlos Pinzón</td>
-            <td data-etiqueta="Documento">6-77-1203</td>
-            <td data-etiqueta="Médico">Dra. Laura Vega</td>
-            <td data-etiqueta="Especialidad">Pediatría</td>
-            <td data-etiqueta="Estado"><span class="eq05-estado eq05-estado--programada">Programada</span></td>
-            <td data-etiqueta="Acciones"><a class="eq05-boton eq05-boton--pequeno" href="principal_detalle.php">Marcar llegada</a> <a href="principal_detalle.php">Ver<span class="eq05-sr"> la cita CIT-0148</span></a></td>
-          </tr>
+          <?php endforeach; ?>
         </tbody>
       </table>
     </div>
-
-    <nav class="eq05-paginacion" aria-label="Paginación">
-      <p class="eq05-texto-secundario">Mostrando 1–8 de 36</p>
-      <ul>
-        <li><a href="principal_listado.php?pagina=1" aria-current="page">1</a></li>
-        <li><a href="principal_listado.php?pagina=2">2</a></li>
-        <li><a href="principal_listado.php?pagina=3">3</a></li>
-        <li><a href="principal_listado.php?pagina=4">4</a></li>
-        <li><a href="principal_listado.php?pagina=2"><span aria-hidden="true">›</span><span class="eq05-sr">Página siguiente</span></a></li>
-      </ul>
-    </nav>
+    <p class="eq05-texto-secundario">Mostrando <?php echo count($citas_filtradas); ?> de <?php echo count($citas); ?> citas.</p>
+    <?php if (count($citas_filtradas) === 0): ?>
+       <p>No hay citas que coincidan con los filtros. <a href="principal_listado.php">Ver todas</a></p>
+    <?php endif; ?>
   </main>
 
-  <footer id="eq05-pie">
-    <div class="eq05-contenedor eq05-pie__barra">
-      <p><strong>MediAgenda</strong> · Clínicas Minimed, Ciudad de Panamá</p>
-      <nav aria-label="Enlaces del pie de página">
-        <ul class="eq05-pie__enlaces">
-          <li><a href="index.php#eq05-como-funciona">Ayuda</a></li>
-          <li><a href="legal.php#eq05-privacidad">Privacidad</a></li>
-          <li><a href="legal.php#eq05-terminos">Términos</a></li>
-          <li><a href="index.php#eq05-contacto">Contacto</a></li>
-        </ul>
-      </nav>
-      <p><small>© 2026 MediAgenda · Proyecto semestral, equipo 05</small></p>
-    </div>
-  </footer>
-</body>
-</html>
+  <?php // se anexa la parte de pie de pagina para que se muestre en la pagina de principal_listado con pie.php 
+     require_once __DIR__ . '/includes/pie.php';
+      ?>
