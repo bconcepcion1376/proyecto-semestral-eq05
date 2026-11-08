@@ -187,7 +187,7 @@ require_once __DIR__ . '/includes/encabezado.php';
       </table>
     </div>
     <p class="eq05-texto-secundario">Mostrando <?php echo count($citas_filtradas); ?> de <?php echo count($citas); ?> citas.</p>
-    <?php if ($citas_filtradas === 0): ?>
+    <?php if (count($citas_filtradas) === 0): ?>
        <p>No hay citas que coincidan con los filtros. <a href="principal_listado.php">Ver todas</a></p>
     <?php endif; ?>
   </main>
