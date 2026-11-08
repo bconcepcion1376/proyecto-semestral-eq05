@@ -278,3 +278,56 @@ Edwin Vergara
 - Benjamin: fase 2 (datos desde `datos_demo.php`) en `principal_listado`, `principal_detalle`,
   `principal_formulario` e `index`.
 - Benjamin (opcional): cambiar `htmlspecialchars(...)` por `limpiar()` en el `<main>` de `error.php`.
+
+
+---------------------------------------------------------------------------------------------------------------------------------
+## 2026-11-07 (tarde) · Fase 2 de `principal_listado.php`: datos, filtros y resumen
+**Participantes:**
+- Benjamin Concepción
+
+**Trabajo realizado:**
+- La página carga `config/datos_demo.php` y deja de tener datos escritos a mano.
+- Selects de médico, especialidad y estado generados con `foreach` desde los arreglos (`2b1da14`).
+- La tabla recorre `$citas`: 17 citas reales en lugar de las 8 inventadas de la maqueta. El paciente
+  y el médico se buscan por su clave en `$pacientes` y `$medicos`. Se conserva `<time datetime>`
+  en la hora, y "Marcar llegada" solo aparece en citas activas que no están en sala (`0c7a485`).
+- Filtros GET de médico, especialidad y estado con lista blanca (`isset`) (`72d5483`).
+- Filtro de fecha validado con `preg_match` (formato AAAA-MM-DD) (`3f329e9`).
+- Búsqueda por paciente, documento o N.º de cita con `mb_stripos` (`f7f8117`).
+- Los selects marcan el filtro aplicado con `selected`, y los campos de texto y fecha conservan
+  su `value` (`8c10350`).
+- Se quitó la paginación de la maqueta y "Limpiar" pasa a ser un enlace sin filtros (`4387efd`).
+- Contador de citas mostradas y aviso cuando no hay resultados (`dfb4e4d`).
+- El filtrado se movió arriba, a `$citas_filtradas`. El caption vuelve al formato de la maqueta con
+  la fecha en español y el conteo, por ejemplo "Citas del jueves 12 de noviembre de 2026 (4 de 17)" (`d5f35aa`).
+- Resumen por estado con conteos reales y la pastilla activa resaltada (`0b82dab`).
+
+**Decisiones:**
+- Se quitó la paginación: con los datos de demostración todas las citas caben en una página.
+- "Limpiar" deja de ser `type="reset"`, porque reset vuelve a los valores con que se cargó la página
+  (que ahora traen el filtro aplicado). Pasa a ser un enlace a `principal_listado.php`.
+- El campo fecha ya no trae `value="2026-11-12"` fijo; si no, el formulario siempre filtraba por ese día.
+- Se usa `mb_stripos` en lugar de `stripos`, porque `stripos('Lucía', 'LUCÍA')` no encuentra la
+  coincidencia con tildes en mayúscula.
+- Primero se filtra y después se muestra: así el conteo se conoce antes de escribir el `<caption>`,
+  y el `<tbody>` solo pinta las filas.
+- Los nombres de días y meses se toman de dos arreglos en español, porque la extensión `intl` no
+  está activa en XAMPP.
+- "Marcar llegada" por ahora solo enlaza al detalle; registrar la llegada cambiará datos, así que
+  tendrá que hacerse con un formulario POST.
+- El resumen por estado cuenta sobre todas las citas (`$citas`), no sobre las filtradas.
+
+**Problemas:**
+- Al borrar las opciones de los selects también se borraron "Todas" y "Todos".
+- Al cambiar la celda de acciones se borró el `</tr>`; el navegador lo ocultaba al pintar la tabla.
+- Al cambiar el `value` de la fecha se borró el `>` que cerraba el `<input>`.
+- `selected` quedó después del `>` de `<option>` y aparecía como texto visible en el select.
+  Chrome recordaba la opción elegida y daba una impresión falsa; se probó escribiendo la URL directamente.
+- `$mostradas++` quedó fuera del `foreach` y antes de `$mostradas = 0` (aviso "Undefined variable").
+- Faltó `count()` en `$citas_filtradas`: se imprimía "Array" y el aviso de sin resultados nunca salía.
+- En `cmd`, la `\` antes de `$` en los mensajes de commit se guarda tal cual (`\$citas`).
+
+**Pendiente:**
+- Benjamin: fase 2 en `principal_detalle.php` (leer `?codigo=`, mostrar la cita y enviar a
+  `error.php?codigo=404` si no existe), `principal_formulario.php` e `index.php`.
+- Alvaro: clases CSS de pendiente y confirmada (en el listado salen sin color).
