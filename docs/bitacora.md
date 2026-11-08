@@ -595,3 +595,72 @@ Edwin Vergara
 - Quien tenga la página 8: migrar `secundaria-formulario.html` a `secundaria_formulario.php` con `git mv`.
 
 
+---------------------------------------------------------------------------------------------------------------------------------
+## 2026-11-08 (madrugada) · Fase 2 de `principal_formulario.php`: datos, horas libres y calendario
+**Participantes:**
+- Benjamin Concepción
+
+**Trabajo realizado:**
+- La página carga `config/datos_demo.php`. Los selects de especialidad y servicio se generan con
+  `foreach` y marcan con `selected` el valor del formulario (`dc9a60a`).
+- Tarjetas de médicos desde `$medicos`, con la especialidad debajo del nombre en lugar del
+  "Próximo: …" de la maqueta, que no coincidía con los horarios. "Cualquier médico" pasa al final (`181a50a`).
+- Horas libres generadas con un `while` desde el horario del médico (`desde`, `hasta` y `duracion`).
+  Las horas con una cita activa del mismo médico ese día salen desactivadas (R1) (`d62852e`).
+- Botón "Ver horas libres" (`formaction`, `formmethod="get"`, `formnovalidate`): recarga la misma
+  página por GET con lo elegido. Los valores se leen de `$_GET` con lista blanca y, si no llegan,
+  se usan los de la maqueta (Valdelomar, 12 de noviembre, 10:00) (también en `d62852e`).
+- Calendario del mes de la fecha elegida, con `mktime`, `date('t')`, `date('N')` y `array_chunk`.
+  Marca domingos, feriados, ausencias del médico, días sin cupo (R2, `MAX_CITAS_DIA`) y días en que
+  el médico no atiende. Si el día elegido está bloqueado, no se ofrecen horas y se explica el
+  motivo (`182eec7`).
+- Resumen con lo elegido; muestra "—" si falta algo o si la hora no está libre (`f08f2f8`).
+
+**Decisiones:**
+- Sin JavaScript, PHP solo calcula la página cuando se pide. Para que reaccione al médico y la
+  fecha se añadió un segundo botón que consulta por GET. "Confirmar cita" sigue por POST a
+  `procesar_principal.php`: GET para consultar, POST para cambiar datos.
+- `formnovalidate` en "Ver horas libres", para poder consultar antes de escribir el expediente.
+- GET envía todos los campos: si el usuario ya escribió el expediente o el motivo, aparecen en la URL.
+  Por eso conviene elegir primero médico, fecha y hora, y después rellenar el resto.
+- Se muestran todos los médicos, no solo los de la especialidad elegida: sin JavaScript la lista
+  no cambia al elegir otra especialidad, y el usuario no encontraría al médico.
+- Si la especialidad o el servicio llegan vacíos o inválidos, se queda "Seleccione…": no se
+  sustituye por un valor por defecto.
+- La fecha se valida con `preg_match` y con el rango 2026-11-01 a 2027-04-02, comparando como texto
+  (las fechas AAAA-MM-DD se ordenan bien así). Son los mismos límites que el `min` y `max` del campo.
+- Se mantiene el horario seguido de 08:00 a 18:00 de Valdelomar que cargó Edwin. La maqueta tenía un
+  hueco de almuerzo (sin 12:00, 12:30 ni 13:00); si el equipo lo quiere, se añade en `datos_demo.php`.
+- Los sábados salen cerrados porque ningún médico de `datos_demo.php` atiende ese día
+  (en la maqueta salían disponibles).
+- Prioridad de los días: domingo, feriado, ausencia, sin cupo y "no atiende"; el primero que se
+  cumple gana. Para el día elegido se guarda el motivo antes de marcarlo como "elegido".
+- La hora del resumen solo se muestra si está en la lista de horas libres: puede llegar por la URL
+  una hora ocupada o una que no existe con el médico elegido.
+
+**Problemas:**
+- Al cambiar las opciones del select de especialidad se volvió a borrar "Seleccione…"
+  (igual que en el listado).
+- Al principio, cambiar la fecha no cambiaba las horas: PHP calcula la página una sola vez con los
+  valores iniciales. Se resolvió con el botón por GET.
+- Al reemplazar la lista de horas quedó un `</div>` de más (16 abiertos y 17 cerrados).
+- Al escribir `<label class="eq05-tarjeta-radio">`, VS Code añadió solo el `</label>` en otra línea,
+  y la tarjeta "Cualquier médico" quedó vacía con el radio fuera.
+- El Paso 3 y el botón por GET quedaron en el mismo commit (`d62852e`), porque no se hizo commit
+  entre los dos.
+- El HTML del resumen se quedó un rato sin cambiar: las variables se calculaban pero no se imprimían.
+- La prueba del día 18 mostró las horas de la tarde libres aunque Valdelomar ya tenía 8 citas;
+  se corrigió con el cálculo de días sin cupo del calendario.
+
+**Pendiente:**
+- Benjamin: fase 2 de `index.php` (selects desde `$especialidades` y `$medicos`).
+- Benjamin, fase 3: si `procesar_principal.php` devuelve errores, rellenar el formulario con lo
+  enviado (los `$valor_…` ya están preparados para eso) y mostrar los mensajes.
+- Dana: `procesar_principal.php` lee `expediente`, pero el formulario envía `numero_expediente`;
+  hoy "Confirmar cita" siempre falla.
+- Dana: R1 en `procesar_principal.php` solo con citas activas (como hace ya el formulario) y
+  qué hacer con "Cualquier médico" (`value="cualquiera"`).
+- Equipo: `$dias`, `$meses` y `$claves_dia` están repetidos en `principal_listado.php`,
+  `principal_detalle.php` y `principal_formulario.php`; acordar con Alvaro una función en
+  `funciones.php`.
+- Equipo: el campo "Paciente (solo Recepción)" todavía no busca; depende de la sesión y del rol.
