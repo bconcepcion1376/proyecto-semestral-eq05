@@ -132,6 +132,25 @@ if ($motivo_bloqueo !== '') {
     $horas = [];
 }
 
+// Resumen: textos de lo elegido ('—' si falta)
+$resumen_especialidad = $valor_especialidad !== '' ? $especialidades[$valor_especialidad] : '—';
+$resumen_servicio = $valor_servicio !== ''
+    ? $servicios[$valor_servicio]['nombre'] . ' (' . $servicios[$valor_servicio]['minutos'] . ' min)'
+    : '—';
+$resumen_medico = $valor_medico !== 'cualquiera' ? $medicos[$valor_medico]['nombre'] : 'Cualquier médico';
+$resumen_fecha  = $texto_fecha . ' de ' . $anio;
+
+// La hora solo cuenta si está en la lista de horas y no está ocupada
+$hora_valida = in_array($valor_hora, $horas) && !in_array($valor_hora, $ocupadas);
+if ($hora_valida) {
+    $marca_hora = strtotime($valor_fecha . ' ' . $valor_hora);
+    $resumen_hora = date('g:i', $marca_hora) . (date('a', $marca_hora) === 'am' ? ' a. m.' : ' p. m.');
+} else {
+    $resumen_hora = '—';
+}
+
+$resumen_lugar = $horario_dia !== null ? 'Consultorio ' . $horario_dia['consultorio'] : '—';
+
 $titulo = 'Reservar cita';
 $descripcion = 'Reserve una cita médica eligiendo especialidad, servicio, médico, fecha y hora disponibles.';
 $pagina_activa = 'reservar';
@@ -267,12 +286,12 @@ require_once __DIR__ . '/includes/encabezado.php';
       <aside class="eq05-tarjeta eq05-resumen" aria-labelledby="eq05-titulo-resumen">
         <h2 id="eq05-titulo-resumen">Resumen</h2>
         <dl class="eq05-datos">
-          <dt>Especialidad</dt><dd>Pediatría</dd>
-          <dt>Servicio</dt><dd>Primera vez (30 min)</dd>
-          <dt>Médico</dt><dd>Dr. Ignacio Valdelomar</dd>
-          <dt>Fecha</dt><dd><time datetime="2026-11-12">Jue 12 Nov 2026</time></dd>
-          <dt>Hora</dt><dd><time datetime="10:00">10:00 a. m.</time></dd>
-          <dt>Lugar</dt><dd>Consultorio 204</dd>
+          <dt>Especialidad</dt><dd><?php echo limpiar($resumen_especialidad); ?></dd>
+          <dt>Servicio</dt><dd><?php echo limpiar($resumen_servicio); ?></dd>
+          <dt>Médico</dt><dd><?php echo limpiar($resumen_medico); ?></dd>
+          <dt>Fecha</dt><dd><time datetime="<?php echo limpiar($valor_fecha); ?>"><?php echo limpiar($resumen_fecha); ?></time></dd>
+          <dt>Hora</dt><dd><?php if ($hora_valida): ?><time datetime="<?php echo limpiar($valor_hora); ?>"><?php echo limpiar($resumen_hora); ?></time><?php else: ?>—<?php endif; ?></dd>
+          <dt>Lugar</dt><dd><?php echo limpiar($resumen_lugar); ?></dd>
         </dl>
         <button class="eq05-boton eq05-boton--primario eq05-boton--bloque" type="submit">Confirmar cita</button>
         <p><a href="principal_listado.php">Cancelar</a></p>
