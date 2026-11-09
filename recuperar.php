@@ -1,40 +1,14 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Recupere el acceso a su cuenta de MediAgenda: reciba un enlace en su correo y cree una contraseña nueva.">
-  <title>Recuperar contraseña · MediAgenda</title>
-  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap">
-  <link rel="stylesheet" href="css/estilos.css">
-</head>
-<body>
-  <header id="eq05-encabezado">
-    <div class="eq05-contenedor eq05-encabezado__barra">
-      <a class="eq05-logo" href="index.html">
-        <img src="img/logo.svg" alt="Logo de MediAgenda" width="36" height="36">
-        <span>MediAgenda</span>
-      </a>
-      <input class="eq05-menu-check" type="checkbox" id="eq05-menu-check">
-      <label class="eq05-menu-boton" for="eq05-menu-check"><span class="eq05-sr">Abrir o cerrar el menú</span><span aria-hidden="true">☰</span></label>
-      <nav class="eq05-nav" id="eq05-nav-principal" aria-label="Principal">
-        <ul class="eq05-nav__lista">
-          <li><a class="eq05-nav__enlace" href="index.html">Inicio</a></li>
-          <li><a class="eq05-nav__enlace" href="principal-formulario.html">Reservar cita</a></li>
-          <li><a class="eq05-nav__enlace" href="principal-listado.html">Citas</a></li>
-          <li><a class="eq05-nav__enlace" href="secundaria-formulario.html">Horarios</a></li>
-          <li><a class="eq05-nav__enlace" href="panel.html">Administración</a></li>
-        </ul>
-        <div class="eq05-cuenta">
-          <a class="eq05-boton eq05-boton--claro" href="login.html">Iniciar sesión</a>
-          <a class="eq05-boton eq05-boton--blanco" href="registro.html">Registrarse</a>
-        </div>
-      </nav>
-    </div>
-  </header>
+<?php
+//uso funciones y encabezados para todos los archivos incluyendo la pagina recuperar.php
+define('APP_ACCESO', true);
+
+require_once __DIR__ . '/includes/funciones.php';
+$titulo = 'Recuperar contraseña';
+$descripcion = 'Recupere el acceso a su cuenta de MediAgenda: reciba un enlace en su correo y cree una contraseña nueva.';
+$pagina_activa = '';
+require_once __DIR__ . '/includes/encabezado.php';
+?>
+
 
   <main id="eq05-principal" class="eq05-contenedor">
     <section aria-labelledby="eq05-titulo-recuperar">
@@ -48,9 +22,8 @@
       <div class="eq05-tres-columnas">
         <section class="eq05-tarjeta" id="eq05-paso-1" aria-labelledby="eq05-titulo-paso-1">
           <h2 id="eq05-titulo-paso-1">1 · Indique su correo</h2>
-          
-          <!-- CORRECCIÓN 1 y 2: method="post", action="#" y fieldset/legend -->
-          <form class="eq05-form" id="eq05-form-recuperar" action="#" method="post">
+                  
+          <form class="eq05-form" id="eq05-form-recuperar" action="recuperar.php" method="post">
             <fieldset class="eq05-conjunto-campos">
               <legend class="eq05-sr">Formulario para solicitar enlace de recuperación</legend>
               
@@ -71,9 +44,8 @@
 
         <section class="eq05-tarjeta" id="eq05-paso-3" aria-labelledby="eq05-titulo-paso-3">
           <h2 id="eq05-titulo-paso-3">3 · Nueva contraseña</h2>
-          
-          <!-- CORRECCIÓN 1 y 2: method="post", action="#" y fieldset/legend -->
-          <form class="eq05-form" id="eq05-form-nueva-clave" action="#" method="post">
+                  
+          <form class="eq05-form" id="eq05-form-nueva-clave" action="recuperar.php" method="post">
             <fieldset class="eq05-conjunto-campos">
               <legend class="eq05-sr">Formulario de creación de nueva contraseña</legend>
               
@@ -94,23 +66,10 @@
           </form>
         </section>
       </div>
-      <p><a href="login.html">← Volver a iniciar sesión</a></p>
+      <p><a href="login.php">← Volver a iniciar sesión</a></p>
     </section>
   </main>
 
-  <footer id="eq05-pie">
-    <div class="eq05-contenedor eq05-pie__barra">
-      <p><strong>MediAgenda</strong> · Clínicas Minimed, Ciudad de Panamá</p>
-      <nav aria-label="Enlaces del pie de página">
-        <ul class="eq05-pie__enlaces">
-          <li><a href="index.html#eq05-como-funciona">Ayuda</a></li>
-          <li><a href="legal.html#eq05-privacidad">Privacidad</a></li>
-          <li><a href="legal.html#eq05-terminos">Términos</a></li>
-          <li><a href="index.html#eq05-contacto">Contacto</a></li>
-        </ul>
-      </nav>
-      <p><small>© 2026 MediAgenda · Proyecto semestral, equipo 05</small></p>
-    </div>
-  </footer>
-</body>
-</html>
+  <?php // se anexa la parte de pie de pagina para que se muestre en la pagina de recuperar con pie.php 
+     require_once __DIR__ . '/includes/pie.php';
+      ?>
