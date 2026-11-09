@@ -59,6 +59,11 @@ $total_afectadas = count($citas_afectadas);
 // Texto con el número de citas: "1 cita" o "N citas"
 $texto_citas = $total_afectadas === 1 ? '1 cita' : $total_afectadas . ' citas';
 
+// Nombres cortos para las fechas de la vista previa ("Jue 12 nov · 8:30")
+$dias_cortos  = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+$meses_cortos = [1 => 'ene', 'feb', 'mar', 'abr', 'may', 'jun',
+                 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+
 $titulo = 'Horario de ' . $medico['nombre'];
 $descripcion = 'Configure el horario semanal de cada médico y registre ausencias con reagendado automático de citas.';
 $pagina_activa = 'horarios';
@@ -173,31 +178,29 @@ require_once __DIR__ . '/includes/encabezado.php';
           <p>Al guardar, el sistema propondrá el <strong>siguiente espacio libre</strong> en la agenda del médico para cada una. El paciente verá la nueva fecha al ingresar y podrá cambiarla.</p>
           <div class="eq05-tabla-envoltura">
             <table class="eq05-tabla">
-              <caption>Vista previa del reagendado (3 de 9 citas)</caption>
-              <thead>
+              <caption>Citas que se reagendarán (<?php echo $texto_citas; ?>)</caption>
+            <thead>
                 <tr>
                   <th scope="col">Paciente</th>
                   <th scope="col">Cita actual</th>
-                  <th scope="col">Nueva fecha propuesta</th>
+                  <th scope="col">Estado</th>
                 </tr>
               </thead>
               <tbody>
+              <?php foreach ($citas_afectadas as $codigo => $cita): ?>
+              <?php $marca = strtotime($cita['fecha'] . ' ' . $cita['hora']); ?>
               <tr>
-                <th scope="row">Jorge Batista</th>
-                <td><time datetime="2027-02-15T08:00">Lun 15 feb · 8:00</time></td>
-                <td><strong><time datetime="2027-02-17T13:00">Mié 17 feb · 13:00</time></strong></td>
+                <th scope="row"><?php echo limpiar($pacientes[$cita['expediente']]['nombre'] ?? 'Paciente sin registro'); ?></th>
+                <td><time datetime="<?php echo limpiar($cita['fecha'] . 'T' . $cita['hora']); ?>"><?php echo $dias_cortos[date('w', $marca)] . ' ' . date('j', $marca) . ' ' . $meses_cortos[date('n', $marca)] . ' · ' . date('G:i', $marca); ?></time></td>
+                <td><?php echo limpiar($estados[$cita['estado']]['texto']); ?></td>
               </tr>
+              <?php endforeach; ?>
+              <?php if ($total_afectadas === 0): ?>
               <tr>
-                <th scope="row">Rosa Méndez</th>
-                <td><time datetime="2027-02-15T08:30">Lun 15 feb · 8:30</time></td>
-                <td><strong><time datetime="2027-02-17T13:30">Mié 17 feb · 13:30</time></strong></td>
+                <td colspan="3">No hay citas activas de este médico en esas fechas.</td>
               </tr>
-              <tr>
-                <th scope="row">Iván Torres</th>
-                <td><time datetime="2027-02-16T09:00">Mar 16 feb · 9:00</time></td>
-                <td><strong><time datetime="2027-02-18T08:00">Jue 18 feb · 8:00</time></strong></td>
-              </tr>
-              </tbody>
+              <?php endif; ?>
+            </tbody>
             </table>
           </div>
         </div>
