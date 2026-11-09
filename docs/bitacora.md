@@ -730,18 +730,29 @@ Edwin Vergara
 - Benjamin Concepcion
 
 **Trabajo realizado:**
-- Validación (8c2bb1f): 10 capturas en docs/validacion/. Son nuevas login, registro, recuperar, legal (como html-privacidad-terminos.png), error 404 y 403 y las 3 páginas principal_*, y se reemplazó la de index.
-- Se reemplazó la captura de estilos.css.
-- Se renombró secundaria-formulario.html a secundaria_formulario.php con git mv (pendiente del 2026-11-07)
-- Se borraron 61 líneas (el <head>, el encabezado y el pie fijos) y se cambiaron por encabezado.php y pie.php con   $titulo, $descripcion y $pagina_activa = 'horarios'. Las migas y “Cancelar” ya enlazan a .php.
-- La extension errada .pho se cambio por .php
+- Validación W3C de las páginas PHP: 10 capturas en `docs/validacion/`. Son nuevas `login`, `registro`,
+  `recuperar`, `legal` (como `html-privacidad-terminos.png`), `error` 404 y 403 y las 3 páginas
+  `principal_*`, y se reemplazó la de `index` (`8c2bb1f`).
+- Se reemplazó la captura de `estilos.css` (`4567787`).
+- Se renombró `secundaria-formulario.html` a `secundaria_formulario.php` con `git mv`
+  (pendiente del 2026-11-07) (`da6a2aa`).
+- Se borraron 61 líneas (el `<head>`, el encabezado y el pie fijos) y se cambiaron por `encabezado.php`
+  y `pie.php` con `$titulo`, `$descripcion` y `$pagina_activa = 'horarios'`. Las migas y "Cancelar"
+  ya enlazan a `.php` (`e22b8f7`).
+- Se corrigió la extensión errada `.pho` en el enlace de las migas (`90dcba1`).
 
 **Decisiones:**
-- Se uso git mv y no borrar y crear el archivo: así se conserva el historial.
-- Con el encabezado común desaparecen el usuario fijo “Marta Díaz” y el comentario CORRECCIÓN del logo.
+- Se usó `git mv` en lugar de borrar y crear el archivo, para conservar el historial.
+- Con el encabezado común desaparecen el usuario fijo "Marta Díaz" y el comentario `CORRECCIÓN` del logo.
 
 **Problemas:**
-- La extenxion errada .pho despues del comits nos percatamos del error.
+- En `e22b8f7` el enlace "Horarios" de las migas quedó como `secundaria_formulario.pho`. Se detectó
+  después del commit y se corrigió en un commit aparte.
+- El commit `8516b63` de esta entrada se hizo antes de guardar las correcciones del texto; se
+  corrigió en un commit posterior.
 
 **Pendiente:**
-- Benjamin: fase 2 de secundaria_formulario.php (médico, horario, ausencia y citas afectadas desde datos_demo.php)
+- Benjamin: fase 2 de `secundaria_formulario.php` (médico, horario, ausencia y citas afectadas desde
+  `datos_demo.php`).
+- Benjamin: validar `secundaria_formulario.php` en W3C al terminar la fase 2 (se migró después de la validación).
+- Benjamin: `procesar_secundaria.php` (pendiente desde el 2026-11-06).
