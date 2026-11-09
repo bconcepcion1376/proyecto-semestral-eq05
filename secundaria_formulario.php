@@ -19,6 +19,31 @@ $dias_semana = ['lun' => 'Lunes', 'mar' => 'Martes', 'mie' => 'Miércoles',
                 'jue' => 'Jueves', 'vie' => 'Viernes', 'sab' => 'Sábado'];
 $consultorios = ['101', '204', '206'];
 
+// Ausencia: llega por GET al pulsar "Ver horario". Si no llega o no es válida, se usa la de ejemplo.
+$valor_aus_desde = $_GET['ausencia_desde'] ?? '2026-11-12';
+if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $valor_aus_desde)
+    || $valor_aus_desde < '2026-11-01' || $valor_aus_desde > '2027-04-02') {
+    $valor_aus_desde = '2026-11-12';
+}
+
+$valor_aus_hasta = $_GET['ausencia_hasta'] ?? '2026-11-16';
+if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $valor_aus_hasta)
+    || $valor_aus_hasta < '2026-11-01' || $valor_aus_hasta > '2027-04-02') {
+    $valor_aus_hasta = '2026-11-16';
+}
+
+// "Hasta" no puede ser anterior a "Desde"
+if ($valor_aus_hasta < $valor_aus_desde) {
+    $valor_aus_hasta = $valor_aus_desde;
+}
+
+$motivos_ausencia = ['congreso' => 'Congreso médico', 'vacaciones' => 'Vacaciones',
+                     'incapacidad' => 'Incapacidad', 'otro' => 'Otro'];
+$valor_aus_motivo = $_GET['ausencia_motivo'] ?? 'congreso';
+if (!isset($motivos_ausencia[$valor_aus_motivo])) {
+    $valor_aus_motivo = 'congreso';
+}
+
 $titulo = 'Horario de ' . $medico['nombre'];
 $descripcion = 'Configure el horario semanal de cada médico y registre ausencias con reagendado automático de citas.';
 $pagina_activa = 'horarios';
@@ -101,22 +126,21 @@ require_once __DIR__ . '/includes/encabezado.php';
           <fieldset id="eq05-ausencia">
             <legend>Registrar ausencia</legend>
             <div class="eq05-fila-campos">
-              <div class="eq05-campo">
-                <label for="eq05-aus-desde">Desde</label>
-                <input type="date" id="eq05-aus-desde" name="ausencia_desde" value="2027-02-15" min="2027-02-01">
+            <div class="eq05-campo">
+                <label for="eq05-aus-desde">Desde</label>              
+                <input type="date" id="eq05-aus-desde" name="ausencia_desde" value="<?php echo limpiar($valor_aus_desde); ?>" min="2026-11-01" max="2027-04-02">
               </div>
               <div class="eq05-campo">
-                <label for="eq05-aus-hasta">Hasta</label>
-                <input type="date" id="eq05-aus-hasta" name="ausencia_hasta" value="2027-02-16" min="2027-02-01">
+                <label for="eq05-aus-hasta">Hasta</label>              
+                <input type="date" id="eq05-aus-hasta" name="ausencia_hasta" value="<?php echo limpiar($valor_aus_hasta); ?>" min="2026-11-01" max="2027-04-02">
               </div>
             </div>
             <div class="eq05-campo">
               <label for="eq05-aus-motivo">Motivo</label>
               <select id="eq05-aus-motivo" name="ausencia_motivo">
-                <option value="congreso" selected>Congreso médico</option>
-                <option value="vacaciones">Vacaciones</option>
-                <option value="incapacidad">Incapacidad</option>
-                <option value="otro">Otro</option>
+                <?php foreach ($motivos_ausencia as $clave_motivo => $nombre_motivo): ?>
+                <option value="<?php echo $clave_motivo; ?>" <?php echo $clave_motivo === $valor_aus_motivo ? 'selected' : ''; ?>><?php echo $nombre_motivo; ?></option>
+                <?php endforeach; ?>
               </select>
             </div>
             <div class="eq05-campo">
