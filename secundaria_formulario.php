@@ -44,6 +44,21 @@ if (!isset($motivos_ausencia[$valor_aus_motivo])) {
     $valor_aus_motivo = 'congreso';
 }
 
+// Citas afectadas por la ausencia: mismo médico, activas y con fecha dentro del rango
+$citas_afectadas = [];
+foreach ($citas as $codigo => $cita) {
+    if ($cita['medico'] === $valor_medico
+        && $estados[$cita['estado']]['activa']
+        && $cita['fecha'] >= $valor_aus_desde
+        && $cita['fecha'] <= $valor_aus_hasta) {
+        $citas_afectadas[$codigo] = $cita;
+    }
+}
+$total_afectadas = count($citas_afectadas);
+
+// Texto con el número de citas: "1 cita" o "N citas"
+$texto_citas = $total_afectadas === 1 ? '1 cita' : $total_afectadas . ' citas';
+
 $titulo = 'Horario de ' . $medico['nombre'];
 $descripcion = 'Configure el horario semanal de cada médico y registre ausencias con reagendado automático de citas.';
 $pagina_activa = 'horarios';
@@ -154,8 +169,8 @@ require_once __DIR__ . '/includes/encabezado.php';
       <section class="eq05-aviso eq05-aviso--advertencia" aria-labelledby="eq05-titulo-impacto">
         <img src="img/iconos/advertencia.svg" alt="Icono de advertencia" width="22" height="22">
         <div>
-          <h2 id="eq05-titulo-impacto">Esta ausencia afecta 9 citas programadas</h2>
-          <p>Al guardar, el sistema propondrá el <strong>siguiente espacio libre</strong> de la Dra. Ríos para cada una. El paciente verá la nueva fecha al ingresar y podrá cambiarla.</p>
+          <h2 id="eq05-titulo-impacto">Esta ausencia afecta <?php echo $texto_citas; ?></h2>
+          <p>Al guardar, el sistema propondrá el <strong>siguiente espacio libre</strong> en la agenda del médico para cada una. El paciente verá la nueva fecha al ingresar y podrá cambiarla.</p>
           <div class="eq05-tabla-envoltura">
             <table class="eq05-tabla">
               <caption>Vista previa del reagendado (3 de 9 citas)</caption>
@@ -195,8 +210,8 @@ require_once __DIR__ . '/includes/encabezado.php';
       </fieldset>
 
       <div class="eq05-acciones">
-        <button class="eq05-boton eq05-boton--primario" type="submit">Guardar y reagendar 9 citas</button>
-        <a class="eq05-boton" href="panel.php">Cancelar</a>
+        <button class="eq05-boton eq05-boton--primario" type="submit"><?php echo $total_afectadas > 0 ? 'Guardar y reagendar ' . $texto_citas : 'Guardar'; ?></button>
+      <a class="eq05-boton" href="panel.php">Cancelar</a>
       </div>
     </form>
   </main>
