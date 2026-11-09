@@ -208,8 +208,8 @@ require_once __DIR__ . '/includes/encabezado.php';
 
       <fieldset>
         <legend>¿Cómo reagendar las citas afectadas?</legend>
-        <div class="eq05-opcion"><input type="radio" id="eq05-aus-misma" name="estrategia" value="mismo_medico" checked><label for="eq05-aus-misma">Con la misma médica, en su siguiente espacio libre</label></div>
-        <div class="eq05-opcion"><input type="radio" id="eq05-aus-otro" name="estrategia" value="otro_medico"><label for="eq05-aus-otro">Permitir otro médico de la misma especialidad</label></div>
+        <div class="eq05-opcion"><input type="radio" id="eq05-aus-misma" name="estrategia" value="mismo_medico" checked><label for="eq05-aus-misma">Con el mismo médico, en su siguiente espacio libre</label></div>
+        <div class="eq05-opcion"><input type="radio" id="eq05-aus-otro" name="estrategia" value="otro_medico"><label for="eq05-aus-otro">Permitir otro médico de <?php echo limpiar($especialidades[$medico['especialidad']]); ?></label></div>
       </fieldset>
 
       <div class="eq05-acciones">
