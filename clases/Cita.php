@@ -106,9 +106,9 @@ class Cita {
         return true;
     }
 
-    // El motivo es opcional, pero no puede pasar de 200 caracteres
+    // El motivo es opcional, pero no puede pasar de 300 caracteres
     public function setMotivo($motivo) {
-        if (mb_strlen($motivo) > 200) {
+        if (mb_strlen($motivo) > 300) {
             return false;
         }
         $this->motivo = $motivo;
