@@ -5,7 +5,7 @@ define('APP_ACCESO', true);
 require_once __DIR__ . '/includes/funciones.php';
 
 require_once __DIR__ . '/config/datos_demo.php';
-
+exigir_rol(['paciente', 'recepcion']);
 
 // Si procesar_principal.php encontró errores, dejó en la sesión los mensajes,
 // el expediente y el motivo. La selección (médico, fecha, hora…) vuelve por la URL.

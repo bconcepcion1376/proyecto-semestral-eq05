@@ -4,6 +4,30 @@ define('APP_ACCESO', true);
 
 require_once __DIR__ . '/includes/funciones.php';
 require_once __DIR__ . '/config/datos_demo.php';
+
+// Citas es solo para usuarios con sesión (tabla de roles de los wireframes)
+$rol_usuario = $_SESSION['rol'] ?? 'invitado';
+if ($rol_usuario === 'invitado') {
+    redirigir('login.php');
+}
+
+// Qué citas puede ver cada rol: el médico, su agenda; el paciente, sus citas; recepción y admin, todas
+$citas_visibles = [];
+foreach ($citas as $codigo => $cita) {
+    if ($rol_usuario === 'medico' && $cita['medico'] !== ($_SESSION['medico'] ?? '')) continue;
+    if ($rol_usuario === 'paciente' && $cita['expediente'] !== ($_SESSION['expediente'] ?? '')) continue;
+    $citas_visibles[$codigo] = $cita;
+}
+
+// Título de la página según el rol
+if ($rol_usuario === 'medico') {
+    $titulo_lista = 'Mi agenda';
+} elseif ($rol_usuario === 'paciente') {
+    $titulo_lista = 'Mis citas';
+} else {
+    $titulo_lista = 'Citas';
+}
+
 // Filtro de médico que llega por la URL (vacío = todos)
 $filtro_medico = $_GET['medico'] ?? '';
 // Si el médico no existe en la lista, se ignora el filtro
@@ -45,7 +69,7 @@ if ($filtro_fecha !== '') {
 
 // Primero se filtran las citas; la tabla solo pinta las que quedan
 $citas_filtradas = [];
-foreach ($citas as $codigo => $cita) {
+foreach ($citas_visibles as $codigo => $cita) {
     $paciente = $pacientes[$cita['expediente']];
 
     if ($filtro_medico !== '' && $cita['medico'] !== $filtro_medico) continue;
@@ -62,11 +86,11 @@ foreach ($citas as $codigo => $cita) {
 
 // Cuántas citas hay de cada estado (para el resumen de arriba)
 $conteo_estados = [];
-foreach ($citas as $cita) {
+foreach ($citas_visibles as $cita) {
     $conteo_estados[$cita['estado']] = ($conteo_estados[$cita['estado']] ?? 0) + 1;
 }
 
-$titulo = 'Listado de citas';
+$titulo = $titulo_lista;
 $descripcion = 'Agenda del día con búsqueda y filtros por fecha, médico, especialidad y estado de cada cita.';
 $pagina_activa = 'citas';
 require_once __DIR__ . '/includes/encabezado.php';
@@ -75,12 +99,16 @@ require_once __DIR__ . '/includes/encabezado.php';
   <main id="eq05-principal" class="eq05-contenedor">
     <div class="eq05-titulo-fila">
       <div>
-        <h1>Citas</h1>
+        <h1><?php echo limpiar($titulo_lista); ?></h1>
         <p class="eq05-texto-secundario">Agenda <?php echo limpiar($texto_fecha); ?></p>
       </div>
       <div class="eq05-acciones">
+        <?php if ($rol_usuario === 'recepcion' || $rol_usuario === 'admin'): ?>
         <a class="eq05-boton" href="secundaria_formulario.php#eq05-ausencia">Registrar ausencia de médico</a>
+        <?php endif; ?>
+        <?php if ($rol_usuario === 'recepcion' || $rol_usuario === 'paciente'): ?>
         <a class="eq05-boton eq05-boton--primario" href="principal_formulario.php">+ Nueva cita</a>
+        <?php endif; ?>
       </div>
     </div>
 
@@ -97,6 +125,8 @@ require_once __DIR__ . '/includes/encabezado.php';
           <label for="eq05-filtro-fecha">Fecha</label>
           <input type="date" id="eq05-filtro-fecha" name="fecha" value="<?php echo limpiar($filtro_fecha); ?>"> 
         </div>
+        <?php // El médico solo ve su agenda: no necesita el filtro de médico ?>
+        <?php if ($rol_usuario !== 'medico'): ?>
         <div class="eq05-campo">
           <label for="eq05-filtro-medico">Médico</label>
           <?php //cambio realizado para extraer los medicos del arreglo de datos_demo.php y
@@ -109,6 +139,7 @@ require_once __DIR__ . '/includes/encabezado.php';
           </select>
           
         </div>
+        <?php endif; ?>
         <div class="eq05-campo">
           <label for="eq05-filtro-especialidad">Especialidad</label>
           <?php //cambio realizado para extraer las especialidades del arreglo de datos_demo.php y
@@ -140,7 +171,7 @@ require_once __DIR__ . '/includes/encabezado.php';
     </form>
     
     <ul class="eq05-resumen-estados" aria-label="Resumen por estado">
-        <li><a href="principal_listado.php" <?php echo $filtro_estado === '' ? 'aria-current="true"' : ''; ?>>Todas <span class="eq05-numero"><?php echo count($citas); ?></span></a></li>
+        <li><a href="principal_listado.php" <?php echo $filtro_estado === '' ? 'aria-current="true"' : ''; ?>>Todas <span class="eq05-numero"><?php echo count($citas_visibles); ?></span></a></li>
         <?php foreach ($estados as $clave => $estado): ?>
         <li><a href="principal_listado.php?estado=<?php echo urlencode($clave); ?>" <?php echo $filtro_estado === $clave ? 'aria-current="true"' : ''; ?>><?php echo limpiar($estado['texto']); ?> <span class="eq05-numero"><?php echo $conteo_estados[$clave] ?? 0; ?></span></a></li>
         <?php endforeach; ?>
@@ -148,7 +179,7 @@ require_once __DIR__ . '/includes/encabezado.php';
 
     <div class="eq05-tabla-envoltura">
       <table class="eq05-tabla eq05-tabla--apilada">
-        <caption>Citas <?php echo limpiar($texto_fecha); ?> (<?php echo count($citas_filtradas); ?> de <?php echo count($citas); ?>)</caption>
+        <caption>Citas <?php echo limpiar($texto_fecha); ?> (<?php echo count($citas_filtradas); ?> de <?php echo count($citas_visibles); ?>)</caption>
         <thead>
           <tr>
             <th scope="col">Hora</th>
@@ -187,7 +218,7 @@ require_once __DIR__ . '/includes/encabezado.php';
         </tbody>
       </table>
     </div>
-    <p class="eq05-texto-secundario">Mostrando <?php echo count($citas_filtradas); ?> de <?php echo count($citas); ?> citas.</p>
+    <p class="eq05-texto-secundario">Mostrando <?php echo count($citas_filtradas); ?> de <?php echo count($citas_visibles); ?> citas.</p>
     <?php if (count($citas_filtradas) === 0): ?>
        <p>No hay citas que coincidan con los filtros. <a href="principal_listado.php">Ver todas</a></p>
     <?php endif; ?>

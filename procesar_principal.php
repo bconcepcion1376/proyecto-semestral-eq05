@@ -2,6 +2,7 @@
 define('APP_ACCESO', true);
 require_once 'includes/funciones.php';
 require_once 'config/datos_demo.php';
+exigir_rol(['paciente', 'recepcion']);
 require_once 'clases/Validador.php';
 require_once 'clases/Cita.php';
 

@@ -4,6 +4,7 @@ define('APP_ACCESO', true);
 
 require_once __DIR__ . '/includes/funciones.php';
 require_once __DIR__ . '/config/datos_demo.php';
+exigir_rol(['paciente', 'recepcion', 'medico', 'admin']);
 
 // Código de la cita que llega por la URL
 $codigo = $_GET['codigo'] ?? '';
@@ -18,6 +19,14 @@ $cita     = $citas[$codigo];
 $paciente = $pacientes[$cita['expediente']];
 $medico   = $medicos[$cita['medico']];
 $servicio = $servicios[$cita['servicio']];
+
+// El paciente solo ve sus citas y el médico solo las de su agenda
+if ($_SESSION['rol'] === 'paciente' && $cita['expediente'] !== ($_SESSION['expediente'] ?? '')) {
+    redirigir('error.php?codigo=403');
+}
+if ($_SESSION['rol'] === 'medico' && $cita['medico'] !== ($_SESSION['medico'] ?? '')) {
+    redirigir('error.php?codigo=403');
+}
 
 // Fecha y hora en español para el subtítulo
 $dias  = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
