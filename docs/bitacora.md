@@ -727,21 +727,161 @@ Edwin Vergara
 ---------------------------------------------------------------------------------------------------------------------------------
 ## 2026-11-08 · Validación W3C del Hito 2 y migración de `secundaria_formulario.php`
 **Participantes:**
-- Benjamin Concepcion
+- Benjamin Concepción
 
 **Trabajo realizado:**
-- Validación (8c2bb1f): 10 capturas en docs/validacion/. Son nuevas login, registro, recuperar, legal (como html-privacidad-terminos.png), error 404 y 403 y las 3 páginas principal_*, y se reemplazó la de index.
-- Se reemplazó la captura de estilos.css.
-- Se renombró secundaria-formulario.html a secundaria_formulario.php con git mv (pendiente del 2026-11-07)
-- Se borraron 61 líneas (el <head>, el encabezado y el pie fijos) y se cambiaron por encabezado.php y pie.php con   $titulo, $descripcion y $pagina_activa = 'horarios'. Las migas y “Cancelar” ya enlazan a .php.
-- La extension errada .pho se cambio por .php
+- Validación W3C de las páginas PHP: 10 capturas en `docs/validacion/`. Son nuevas `login`, `registro`,
+  `recuperar`, `legal` (como `html-privacidad-terminos.png`), `error` 404 y 403 y las 3 páginas
+  `principal_*`, y se reemplazó la de `index` (`8c2bb1f`).
+- Se reemplazó la captura de `estilos.css` (`4567787`).
+- Se renombró `secundaria-formulario.html` a `secundaria_formulario.php` con `git mv`
+  (pendiente del 2026-11-07) (`da6a2aa`).
+- Se borraron 61 líneas (el `<head>`, el encabezado y el pie fijos) y se cambiaron por `encabezado.php`
+  y `pie.php` con `$titulo`, `$descripcion` y `$pagina_activa = 'horarios'`. Las migas y "Cancelar"
+  ya enlazan a `.php` (`e22b8f7`).
+- Se corrigió la extensión errada `.pho` en el enlace de las migas (`90dcba1`).
 
 **Decisiones:**
-- Se uso git mv y no borrar y crear el archivo: así se conserva el historial.
-- Con el encabezado común desaparecen el usuario fijo “Marta Díaz” y el comentario CORRECCIÓN del logo.
+- Se usó `git mv` en lugar de borrar y crear el archivo, para conservar el historial.
+- Con el encabezado común desaparecen el usuario fijo "Marta Díaz" y el comentario `CORRECCIÓN` del logo.
 
 **Problemas:**
-- La extenxion errada .pho despues del comits nos percatamos del error.
+- En `e22b8f7` el enlace "Horarios" de las migas quedó como `secundaria_formulario.pho`. Se detectó
+  después del commit y se corrigió en un commit aparte.
+- El commit `8516b63` de esta entrada se hizo antes de guardar las correcciones del texto; se
+  corrigió en un commit posterior.
 
 **Pendiente:**
-- Benjamin: fase 2 de secundaria_formulario.php (médico, horario, ausencia y citas afectadas desde datos_demo.php)
+- Benjamin: fase 2 de `secundaria_formulario.php` (médico, horario, ausencia y citas afectadas desde
+  `datos_demo.php`).
+- Benjamin: validar `secundaria_formulario.php` en W3C al terminar la fase 2 (se migró después de la validación).
+- Benjamin: `procesar_secundaria.php` (pendiente desde el 2026-11-06).
+
+---------------------------------------------------------------------------------------------------------------------------------
+## 2026-11-08 / 2026-11-09 · Fase 2 de `secundaria_formulario.php`
+**Participantes:**
+- Benjamin Concepción
+
+**Trabajo realizado:**
+- La página carga `config/datos_demo.php` y lee `?medico=` con lista blanca; si llega vacío o no existe,
+  usa `rios` (`3e4e2d6`).
+- Migas, caption de la tabla y `<title>` con el nombre del médico. El formulario envía a
+  `procesar_secundaria.php` por POST y se quitó el comentario `CORRECCIÓN` (`b7f00a1`).
+- Select con los 5 médicos de `$medicos` (se agregan Valdelomar y Zamudio) y botón "Ver horario"
+  (`formaction`, `formmethod="get"`, `formnovalidate`) para recargar la página con lo elegido (`9ef1e1c`).
+- Tabla de días con un `foreach` sobre `$dias_semana`: `checked`, horas y consultorio salen de
+  `$horarios`. Las 6 filas fijas pasan a ser una fila modelo. Se agrega el consultorio 101 (`740da2e`).
+- Duración y "Vigente desde" según el horario del médico; rango de fechas 2026-11-01 a 2027-04-02 (`c3e26ba`).
+- Fechas de la ausencia por GET con `preg_match` y rango; si "Hasta" es anterior a "Desde", se iguala.
+  Motivo con lista blanca desde `$motivos_ausencia` (`30c8218`).
+- Citas afectadas: se recorren las `$citas` y se guardan las del mismo médico, activas y con fecha
+  dentro de la ausencia. El título y el botón muestran el número real ("1 cita" en singular; "Guardar"
+  si no hay ninguna) (`7b373d5`).
+- Vista previa con las citas reales: paciente desde `$pacientes`, fecha corta en español
+  ("Jue 12 nov · 8:30") y estado. Si no hay citas, se muestra un mensaje (`5581dc3`).
+- Opciones de reagendado con texto válido para cualquier médico y con su especialidad (`a507a94`).
+- Validación W3C sin errores ni advertencias (`7d13624`, `9198847`).
+
+**Decisiones:**
+- Si el médico de la URL no es válido se usa `rios` en lugar del 404 de `principal_detalle.php`: aquí
+  el médico es una opción del formulario, no el recurso que identifica la página.
+- Dentro de los `foreach` se usan `$datos_medico`, `$clave_dia` y `$dia`, para no sobrescribir
+  `$medico` y `$horario`, que se usan más abajo.
+- La tabla muestra lo que dice `datos_demo.php`: la Dra. Ríos atiende lun, mar, jue y vie en el 206
+  (la maqueta decía también miércoles y consultorio 204).
+- La nota interna de la ausencia no se lee por GET: con "Ver horario" quedaría en la URL y en el historial.
+- La ausencia de ejemplo es del 12 al 16 de noviembre para que la Dra. Ríos tenga 2 citas en la vista previa.
+- La columna "Nueva fecha propuesta" se cambió por "Estado": calcular el siguiente espacio libre es
+  parte de la fase 3, y no se inventan datos.
+- Textos neutros para cualquier médico: "Días y horas de atención · nombre", "en la agenda del médico"
+  y "Con el mismo médico" (antes "de la Dra." y "la misma médica").
+
+**Problemas:**
+- Al cambiar las migas se borraron también el `<li>` y el `<span>`, y el nombre quedó suelto dentro del `<ol>`.
+- En las fechas de la ausencia se reemplazaron los `<label>` en lugar de los `<input>`: quedaron dos
+  inputs con el mismo `id` y `name`, y PHP tomaba el último (con 2027), así que parecía que la página
+  no guardaba las fechas. Al devolver las etiquetas quedaron fuera de su `<div class="eq05-campo">`.
+- `php` no se reconocía en la terminal porque el PHP de XAMPP no está en el PATH; se usa
+  `C:\xampp\php\php.exe`.
+- En los mensajes de `740da2e` y `7b373d5` quedó `\$` en lugar de `$`.
+- La línea del README de la captura no se guardó antes de `7d13624`; entró en `9198847`.
+
+**Pendiente:**
+- Benjamin, fase 3: `procesar_secundaria.php` con los `name` actuales del formulario, errores y datos
+  enviados por `$_SESSION`, y token CSRF.
+- Benjamin, fase 3: calcular la nueva fecha propuesta (siguiente espacio libre) en `procesar_secundaria.php`
+  o en la clase `Horario`.
+- Equipo: la página de horarios se puede abrir sin sesión; debe exigir el rol admin, igual que `panel.php`.
+- Equipo: `$dias_cortos` y `$meses_cortos` se suman a los arreglos de fechas repetidos; acordar con
+  Alvaro una función en `funciones.php`.
+- Opcional: si la ausencia no afecta citas, ocultar el aviso amarillo y las opciones de reagendado.
+
+---------------------------------------------------------------------------------------------------------------------------------
+## 2026-11-09 · Las 4 clases y los 4 formularios POST con validación en el servidor
+**Participantes:**
+- Benjamin Concepción
+
+**Trabajo realizado:**
+- Revisión del enunciado del Hito 2 contra el repositorio. Faltaban las 4 clases (`clases/` estaba vacía en
+  todas las ramas), `procesar_secundaria.php`, la paginación, el regreso al formulario con errores y los
+  documentos de pruebas, trazabilidad e informe.
+- `clases/Validador.php`: clase de servicio con `requerido`, `longitud`, `correo`, `enLista`, `fecha`, `rango`
+  y `hora`; guarda un error por campo en una propiedad privada (`8489b16`). Después se agregó `regla()`
+  para comparaciones y reglas de negocio (`dbdb05f`).
+- `clases/Horario.php`: segunda entidad, con propiedades privadas, getters, setters con validación
+  (`setDuracion`, `setVigenteDesde`), `agregarDia()` y `atiende()` (`1ce00e5`).
+- `procesar_secundaria.php`: recibe el horario por POST, lo valida con `Validador`, arma un objeto `Horario`
+  y muestra una confirmación con encabezado y pie (`dbdb05f`). `secundaria_formulario.php` muestra los
+  errores y conserva lo enviado (`d7e4370`).
+- `clases/Cita.php`: entidad principal con setters validados, `estaActiva()` y `cancelar()` (`58048e2`).
+- `clases/Usuario.php`: guarda solo el hash de la contraseña; `setClave()` usa `password_hash`,
+  `verificarClave()` usa `password_verify` y no hay getter del hash (`396c2c4`).
+- Login con `Validador` y `Usuario`; `login.php` muestra los errores y conserva el correo (`f965b4f`).
+- `procesar_principal.php` con `Validador` y `Cita`: valida cada campo y las reglas de la agenda (`cc96169`).
+  `principal_formulario.php` muestra los errores y conserva el expediente y el motivo (`a6233af`).
+- `procesar_registro.php` con `Validador` y `Usuario`: valida los 13 campos y que correo, documento y
+  expediente no estén registrados (`38f8c1a`). `registro.php` muestra los errores y conserva lo escrito,
+  menos las contraseñas (`0973264`).
+- Cada clase y cada script se probaron con datos válidos, vacíos, con selects cambiados, sin `required`
+  y con `<script>alert(1)</script>`.
+
+**Decisiones:**
+- Los datos se leen con `trim()` y se escapan con `limpiar()` solo al mostrarlos. Si se escapan al leer,
+  "D'Alessio" sale como `D&amp;#039;Alessio`.
+- Los setters de las entidades devuelven `false` y no cambian nada si el dato no es válido. El constructor
+  pone valores por defecto y usa los setters, para que la validación esté en un solo lugar.
+- Los errores y lo escrito vuelven al formulario por `$_SESSION` y se borran con `unset()` al leerlos,
+  para que no reaparezcan al recargar.
+- En la reserva, la selección (médico, fecha, hora…) vuelve por la URL con `http_build_query`, porque
+  el formulario ya la lee de `$_GET`; el expediente y el motivo van por la sesión por ser datos personales.
+- Las reglas de la agenda (especialidad del médico, 24 h de anticipación, feriados, ausencias, horario,
+  R1 y R2) se revisan solo cuando cada campo ya es válido.
+- Las contraseñas no se leen con `trim()`, no se guardan en la sesión y nunca se muestran, ni ellas ni su hash.
+- El login responde "Correo o contraseña incorrectos" en los dos casos, para no revelar qué correos existen.
+- La contraseña del registro exige de 8 a 64 caracteres, una mayúscula y un número, como dice el
+  formulario (antes se aceptaban 6). El motivo de la cita admite 300 caracteres, como el `maxlength`.
+
+**Problemas:**
+- `procesar_login.php` leía `password`, `procesar_registro.php` también y `procesar_principal.php` leía
+  `expediente`, pero los formularios envían `clave` y `numero_expediente`: el login, el registro y la
+  reserva fallaban siempre. Se corrigió al reescribirlos con las clases.
+- El archivo de la primera clase se creó como `Validor.php` y se renombró a `Validador.php`.
+- Los métodos de `Validador` se pegaron después de la `}` que cierra la clase (error "unexpected token
+  public"); se movió la llave al final.
+- Dos veces el código no llegó al archivo porque no se guardó; se comprobó con `git status` antes de seguir.
+- Hubo confusión entre `procesar_principal.php` (el script que recibe) y `principal_formulario.php`
+  (la página que se ve).
+- Al pegar el aviso de errores en `principal_formulario.php` se borró el subtítulo; se repuso.
+
+**Pendiente:**
+- Benjamin: avisar a Dana que `procesar_login.php`, `procesar_principal.php` y `procesar_registro.php`
+  fueron reescritos, para que actualice su rama antes de tocarlos.
+- Benjamin: actualizar la declaración de IA del README con las clases, los `procesar_*` y las páginas de hoy.
+- Benjamin: validar en W3C las páginas de confirmación y los formularios con el aviso de errores.
+- Alvaro: paginación del listado (5 por página con `$_GET["pagina"]`).
+- Edwin: `docs/plan_pruebas.pdf`, `docs/trazabilidad.pdf` y `docs/informe_hito2.pdf`.
+- Equipo: `procesar_logout.php`; `panel.php` y `secundaria_formulario.php` deben exigir el rol admin
+  (`Usuario::esAdmin()` ya existe).
+- Equipo: desactivar `display_errors`, agregar `.htaccess` en `includes/` y `config/`, y revisar que el
+  cambio de requerimiento de la semana 11 esté implementado.
+- Equipo: equilibrar los commits (cada integrante debe tener al menos el 20 %).

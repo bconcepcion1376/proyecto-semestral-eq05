@@ -199,6 +199,7 @@ Validación HTML (Hito 2, HTML generado por PHP):
 ![Validación HTML de legal.php](docs/validacion/html-privacidad-terminos.png)
 ![Validación HTML de error.php (404)](docs/validacion/html-error.png)
 ![Validación HTML de error.php?codigo=403](docs/validacion/html-error-403.png)
+![Validación HTML de secundaria_formulario.php](docs/validacion/html-secundaria-formulario.png)
 
 Validación CSS:
 ![Validación CSS de estilos.css](docs/validacion/css-estilos.png)

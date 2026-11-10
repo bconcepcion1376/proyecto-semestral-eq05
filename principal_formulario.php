@@ -6,6 +6,13 @@ require_once __DIR__ . '/includes/funciones.php';
 
 require_once __DIR__ . '/config/datos_demo.php';
 
+
+// Si procesar_principal.php encontró errores, dejó en la sesión los mensajes,
+// el expediente y el motivo. La selección (médico, fecha, hora…) vuelve por la URL.
+$errores = $_SESSION['errores_cita'] ?? [];
+$datos_cita = $_SESSION['datos_cita'] ?? [];
+unset($_SESSION['errores_cita'], $_SESSION['datos_cita']);
+
 // Valores del formulario: llegan por GET al pulsar "Ver horas libres".
 // Si no llegan, se usan los de la maqueta; si no son válidos, se ignoran.
 $valor_especialidad = $_GET['especialidad'] ?? 'pediatria';
@@ -165,8 +172,16 @@ require_once __DIR__ . '/includes/encabezado.php';
       </ol>
     </nav>
     <h1>Reservar cita</h1>
-    <p class="eq05-subtitulo">Solo verá días y horas que la clínica y el médico tienen disponibles.</p>
-
+      <p class="eq05-subtitulo">Solo verá días y horas que la clínica y el médico tienen disponibles.</p>
+      <?php if (!empty($errores)): ?>
+      <div class="eq05-aviso eq05-aviso--error" role="alert">
+        <img src="img/iconos/advertencia.svg" alt="Icono de advertencia" width="22" height="22">
+      <div>
+        <h2>No se pudo reservar la cita</h2>
+        <?php mostrar_errores($errores); ?>
+      </div>
+    </div>
+    <?php endif; ?>
     <form class="eq05-form eq05-dos-columnas" id="eq05-form-cita" action="procesar_principal.php" method="post">
       <div>
         <fieldset>
@@ -181,7 +196,7 @@ require_once __DIR__ . '/includes/encabezado.php';
           <?php // Campo asignado: número de expediente de 6 dígitos ?>
           <div class="eq05-campo">
             <label for="eq05-cita-expediente">Número de expediente <span class="eq05-requerido">*</span></label>
-            <input type="text" id="eq05-cita-expediente" name="numero_expediente" placeholder="Ej. 123456" 
+            <input type="text" id="eq05-cita-expediente" name="numero_expediente" value="<?php echo limpiar($datos_cita['numero_expediente'] ?? ''); ?>" placeholder="Ej. 123456" 
                    pattern="\d{6}" minlength="6" maxlength="6" inputmode="numeric" 
                    autocomplete="off" required>
             <span class="eq05-ayuda">Debe contener exactamente 6 dígitos numéricos.</span>
@@ -279,7 +294,7 @@ require_once __DIR__ . '/includes/encabezado.php';
 
         <div class="eq05-campo">
           <label for="eq05-cita-motivo">Motivo de la consulta (opcional)</label>
-          <textarea id="eq05-cita-motivo" name="motivo" rows="3" maxlength="300" placeholder="Describa brevemente el motivo…"></textarea>
+          <textarea id="eq05-cita-motivo" name="motivo" rows="3" maxlength="300" placeholder="Describa brevemente el motivo…"><?php echo limpiar($datos_cita['motivo'] ?? ''); ?></textarea>
         </div>
       </div>
 

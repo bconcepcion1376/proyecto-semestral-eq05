@@ -3,6 +3,12 @@
 define('APP_ACCESO', true);
 
 require_once __DIR__ . '/includes/funciones.php';
+
+// Si procesar_login.php encontró errores, dejó en la sesión los mensajes y el correo escrito
+$errores = $_SESSION['errores_login'] ?? [];
+$correo_escrito = $_SESSION['correo_login'] ?? '';
+unset($_SESSION['errores_login'], $_SESSION['correo_login']);
+
 $titulo = 'Iniciar sesión';
 $descripcion = 'Inicie sesión en MediAgenda para reservar, reprogramar o cancelar sus citas médicas.';
 $pagina_activa = '';
@@ -14,7 +20,15 @@ require_once __DIR__ . '/includes/encabezado.php';
       <section class="eq05-tarjeta" aria-labelledby="eq05-titulo-login">
         <h1 id="eq05-titulo-login">Iniciar sesión</h1>
         <p class="eq05-subtitulo">Acceda para reservar y gestionar sus citas.</p>
-        
+
+        <?php if (!empty($errores)): ?>
+        <div class="eq05-aviso eq05-aviso--error" role="alert">
+          <img src="img/iconos/advertencia.svg" alt="Icono de advertencia" width="22" height="22">
+          <div>
+            <?php mostrar_errores($errores); ?>
+          </div>
+        </div>
+        <?php endif; ?>
 
         <form class="eq05-form" id="eq05-form-login" action="procesar_login.php" method="post">
 
@@ -23,7 +37,7 @@ require_once __DIR__ . '/includes/encabezado.php';
             
             <div class="eq05-campo">
               <label for="eq05-login-correo">Correo electrónico</label>
-              <input type="email" id="eq05-login-correo" name="correo" placeholder="nombre@correo.com" autocomplete="username" maxlength="120" required>
+              <input type="email" id="eq05-login-correo" name="correo" value="<?php echo limpiar($correo_escrito); ?>" placeholder="nombre@correo.com" autocomplete="username" maxlength="120" required>
             </div>
             <div class="eq05-campo">
               <label for="eq05-login-clave">Contraseña</label>
