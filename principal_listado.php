@@ -84,6 +84,25 @@ foreach ($citas_visibles as $codigo => $cita) {
     $citas_filtradas[$codigo] = $cita;
 }
 
+
+// ---------- Paginación: 5 citas por página ----------
+$por_pagina = 5;
+$total_filtradas = count($citas_filtradas);
+// Total de páginas redondeado hacia arriba (17 citas → 4 páginas); como mínimo 1
+$total_paginas = max(1, (int) ceil($total_filtradas / $por_pagina));
+
+// Número de página por la URL: se convierte a entero y se mantiene entre 1 y la última
+$pagina = (int) ($_GET['pagina'] ?? 1);
+$pagina = max(1, min($pagina, $total_paginas));
+
+// Solo las citas de esta página (la página 2 empieza en la posición 5)
+$inicio = ($pagina - 1) * $por_pagina;
+$citas_pagina = array_slice($citas_filtradas, $inicio, $por_pagina);
+
+// Filtros actuales (sin los vacíos) para que los enlaces de página no los pierdan
+$filtros_url = array_filter(['q' => $filtro_q, 'fecha' => $filtro_fecha, 'medico' => $filtro_medico,
+                             'especialidad' => $filtro_especialidad, 'estado' => $filtro_estado]);
+
 // Cuántas citas hay de cada estado (para el resumen de arriba)
 $conteo_estados = [];
 foreach ($citas_visibles as $cita) {
@@ -193,7 +212,7 @@ require_once __DIR__ . '/includes/encabezado.php';
           </tr>
         </thead>
         <tbody>
-          <?php foreach ($citas_filtradas as $codigo => $cita): ?>
+          <?php foreach ($citas_pagina as $codigo => $cita): ?>
           <?php
               $paciente = $pacientes[$cita['expediente']];
               $medico = $medicos[$cita['medico']];
@@ -218,7 +237,28 @@ require_once __DIR__ . '/includes/encabezado.php';
         </tbody>
       </table>
     </div>
-    <p class="eq05-texto-secundario">Mostrando <?php echo count($citas_filtradas); ?> de <?php echo count($citas_visibles); ?> citas.</p>
+     <nav class="eq05-paginacion" aria-label="Paginación">
+      <p class="eq05-texto-secundario">
+        <?php if ($total_filtradas > 0): ?>
+        Mostrando <?php echo $inicio + 1; ?>–<?php echo $inicio + count($citas_pagina); ?> de <?php echo $total_filtradas; ?> citas · Página <?php echo $pagina; ?> de <?php echo $total_paginas; ?>
+        <?php else: ?>
+        Mostrando 0 de <?php echo count($citas_visibles); ?> citas.
+        <?php endif; ?>
+      </p>
+      <?php if ($total_paginas > 1): ?>
+      <ul>
+        <?php if ($pagina > 1): ?>
+        <li><a href="principal_listado.php?<?php echo limpiar(http_build_query(array_merge($filtros_url, ['pagina' => $pagina - 1]))); ?>"><span aria-hidden="true">‹</span><span class="eq05-sr">Página anterior</span></a></li>
+        <?php endif; ?>
+        <?php for ($p = 1; $p <= $total_paginas; $p++): ?>
+        <li><a href="principal_listado.php?<?php echo limpiar(http_build_query(array_merge($filtros_url, ['pagina' => $p]))); ?>" <?php echo $p === $pagina ? 'aria-current="page"' : ''; ?>><?php echo $p; ?></a></li>
+        <?php endfor; ?>
+        <?php if ($pagina < $total_paginas): ?>
+        <li><a href="principal_listado.php?<?php echo limpiar(http_build_query(array_merge($filtros_url, ['pagina' => $pagina + 1]))); ?>"><span aria-hidden="true">›</span><span class="eq05-sr">Página siguiente</span></a></li>
+        <?php endif; ?>
+      </ul>
+      <?php endif; ?>
+    </nav>
     <?php if (count($citas_filtradas) === 0): ?>
        <p>No hay citas que coincidan con los filtros. <a href="principal_listado.php">Ver todas</a></p>
     <?php endif; ?>
