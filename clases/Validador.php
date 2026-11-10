@@ -107,4 +107,11 @@ class Validador {
             $this->agregarError($campo, "El campo $etiqueta no tiene una hora válida.");
         }
     }
+    
+    // 8. Regla propia: si $cumple es false, guarda el mensaje (comparaciones y reglas de negocio)
+    public function regla($campo, $cumple, $mensaje) {
+        if (!$cumple) {
+            $this->agregarError($campo, $mensaje);
+        }
+    }
 }
