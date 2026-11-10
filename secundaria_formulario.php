@@ -6,6 +6,12 @@ require_once __DIR__ . '/includes/funciones.php';
 
 require_once __DIR__ . '/config/datos_demo.php';
 
+// Si procesar_secundaria.php encontró errores, dejó en la sesión los mensajes y lo enviado.
+// Se leen y se borran enseguida, para que no vuelvan a salir al recargar la página.
+$errores = $_SESSION['errores_horario'] ?? [];
+$enviado = $_SESSION['datos_horario'] ?? [];
+unset($_SESSION['errores_horario'], $_SESSION['datos_horario']);
+
 $valor_medico = $_GET['medico'] ?? 'rios'; // Valor predeterminado si no se proporciona un médico
 if (!isset($medicos[$valor_medico])) {
     $valor_medico = 'rios'; // Valor predeterminado si el médico no existe
@@ -19,14 +25,32 @@ $dias_semana = ['lun' => 'Lunes', 'mar' => 'Martes', 'mie' => 'Miércoles',
                 'jue' => 'Jueves', 'vie' => 'Viernes', 'sab' => 'Sábado'];
 $consultorios = ['101', '204', '206'];
 
+// Si se vuelve con errores, la tabla, la duración y la vigencia muestran lo que se envió
+if (!empty($enviado)) {
+    $horario = [
+        'duracion'      => $enviado['duracion'] ?? '',
+        'vigente_desde' => $enviado['vigente_desde'] ?? '',
+        'dias'          => [],
+    ];
+    foreach ($dias_semana as $clave_dia => $nombre_dia) {
+        if (($enviado[$clave_dia . '_atiende'] ?? '') === 'si') {
+            $horario['dias'][$clave_dia] = [
+                'desde'       => $enviado[$clave_dia . '_desde'] ?? '',
+                'hasta'       => $enviado[$clave_dia . '_hasta'] ?? '',
+                'consultorio' => $enviado[$clave_dia . '_consultorio'] ?? '',
+            ];
+        }
+    }
+}
+
 // Ausencia: llega por GET al pulsar "Ver horario". Si no llega o no es válida, se usa la de ejemplo.
-$valor_aus_desde = $_GET['ausencia_desde'] ?? '2026-11-12';
+$valor_aus_desde = $enviado['ausencia_desde'] ?? $_GET['ausencia_desde'] ?? '2026-11-12';
 if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $valor_aus_desde)
     || $valor_aus_desde < '2026-11-01' || $valor_aus_desde > '2027-04-02') {
     $valor_aus_desde = '2026-11-12';
 }
 
-$valor_aus_hasta = $_GET['ausencia_hasta'] ?? '2026-11-16';
+$valor_aus_hasta = $enviado['ausencia_hasta'] ?? $_GET['ausencia_hasta'] ?? '2026-11-16';
 if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $valor_aus_hasta)
     || $valor_aus_hasta < '2026-11-01' || $valor_aus_hasta > '2027-04-02') {
     $valor_aus_hasta = '2026-11-16';
@@ -39,7 +63,7 @@ if ($valor_aus_hasta < $valor_aus_desde) {
 
 $motivos_ausencia = ['congreso' => 'Congreso médico', 'vacaciones' => 'Vacaciones',
                      'incapacidad' => 'Incapacidad', 'otro' => 'Otro'];
-$valor_aus_motivo = $_GET['ausencia_motivo'] ?? 'congreso';
+$valor_aus_motivo = $enviado['ausencia_motivo'] ?? $_GET['ausencia_motivo'] ?? 'congreso';
 if (!isset($motivos_ausencia[$valor_aus_motivo])) {
     $valor_aus_motivo = 'congreso';
 }
@@ -80,6 +104,16 @@ require_once __DIR__ . '/includes/encabezado.php';
     </nav>
     <h1>Horario del médico</h1>
     <p class="eq05-subtitulo">Defina cuándo atiende cada médico y registre sus ausencias. Los feriados y el carnaval se bloquean solos aunque el día tenga horario.</p>
+
+    <?php if (!empty($errores)): ?>
+    <div class="eq05-aviso eq05-aviso--error" role="alert">
+      <img src="img/iconos/advertencia.svg" alt="Icono de advertencia" width="22" height="22">
+      <div>
+        <h2>No se pudo guardar el horario</h2>
+        <?php mostrar_errores($errores); ?>
+      </div>
+    </div>
+    <?php endif; ?>
 
       <form class="eq05-form" id="eq05-form-horario" action="procesar_secundaria.php" method="post">
       <div class="eq05-campo">
@@ -165,7 +199,7 @@ require_once __DIR__ . '/includes/encabezado.php';
             </div>
             <div class="eq05-campo">
               <label for="eq05-aus-nota">Nota interna</label>
-              <textarea id="eq05-aus-nota" name="ausencia_nota" rows="2" maxlength="200" placeholder="Opcional"></textarea>
+              <textarea id="eq05-aus-nota" name="ausencia_nota" rows="2" maxlength="200" placeholder="Opcional"><?php echo limpiar($enviado['ausencia_nota'] ?? ''); ?></textarea>
             </div>
           </fieldset>
         </div>
@@ -208,9 +242,9 @@ require_once __DIR__ . '/includes/encabezado.php';
 
       <fieldset>
         <legend>¿Cómo reagendar las citas afectadas?</legend>
-        <div class="eq05-opcion"><input type="radio" id="eq05-aus-misma" name="estrategia" value="mismo_medico" checked><label for="eq05-aus-misma">Con el mismo médico, en su siguiente espacio libre</label></div>
-        <div class="eq05-opcion"><input type="radio" id="eq05-aus-otro" name="estrategia" value="otro_medico"><label for="eq05-aus-otro">Permitir otro médico de <?php echo limpiar($especialidades[$medico['especialidad']]); ?></label></div>
-      </fieldset>
+         <div class="eq05-opcion"><input type="radio" id="eq05-aus-misma" name="estrategia" value="mismo_medico" <?php echo ($enviado['estrategia'] ?? 'mismo_medico') !== 'otro_medico' ? 'checked' : ''; ?>><label for="eq05-aus-misma">Con el mismo médico, en su siguiente espacio libre</label></div>
+         <div class="eq05-opcion"><input type="radio" id="eq05-aus-otro" name="estrategia" value="otro_medico" <?php echo ($enviado['estrategia'] ?? '') === 'otro_medico' ? 'checked' : ''; ?>><label for="eq05-aus-otro">Permitir otro médico de <?php echo limpiar($especialidades[$medico['especialidad']]); ?></label></div>     
+        </fieldset>
 
       <div class="eq05-acciones">
         <button class="eq05-boton eq05-boton--primario" type="submit"><?php echo $total_afectadas > 0 ? 'Guardar y reagendar ' . $texto_citas : 'Guardar'; ?></button>
