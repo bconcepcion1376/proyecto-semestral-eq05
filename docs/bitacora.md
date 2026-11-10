@@ -885,3 +885,53 @@ Edwin Vergara
 - Equipo: desactivar `display_errors`, agregar `.htaccess` en `includes/` y `config/`, y revisar que el
   cambio de requerimiento de la semana 11 esté implementado.
 - Equipo: equilibrar los commits (cada integrante debe tener al menos el 20 %).
+
+---------------------------------------------------------------------------------------------------------------------------------
+## 2026-11-09 / 2026-11-10 · Logout, menú por rol, Mi agenda y control de acceso
+**Participantes:**
+- Benjamin Concepción
+
+**Trabajo realizado:**
+- `procesar_logout.php`: vacía `$_SESSION`, destruye la sesión y vuelve al login. Antes "Salir" daba 404
+  porque el archivo no existía (`e171189`).
+- `includes/menu.php` según la tabla "Visibilidad del menú por rol" de la página 3 de los wireframes:
+  Citas para todos los que tienen sesión, Reservar para público, paciente y recepción, y el nombre y el rol
+  del usuario en lugar de la palabra fija "Usuario" (`dd3671d`).
+- `procesar_login.php` guarda también `$_SESSION['medico']` y `$_SESSION['expediente']`.
+  `principal_listado.php` muestra "Mi agenda" al médico (solo sus citas), "Mis citas" al paciente y todas
+  a recepción y admin; exige sesión, y los botones y el filtro de médico dependen del rol (`c625962`).
+- `includes/funciones.php`: función `exigir_rol()` (sin sesión → login; rol no permitido → 403), usada en
+  `panel.php`, `secundaria_formulario.php`, `procesar_secundaria.php`, `principal_formulario.php`,
+  `procesar_principal.php` y `principal_detalle.php`, donde el paciente y el médico solo ven sus citas.
+  Además: `display_errors` desactivado, `.htaccess` en `includes/` y `config/`, y cada rol entra a su
+  página al iniciar sesión (`0640d6a`).
+- Merge de `entrega-hito2` en `benjamin/hito2` para resolver el conflicto de `panel.php` del Pull Request (`4a76166`).
+- Pruebas: 8 páginas con los 5 roles (sin sesión, paciente, recepción, médico y admin).
+
+**Decisiones:**
+- Lo que ve cada rol sale de la tabla de los wireframes: el orden del menú es fijo y los ítems que un rol
+  no puede usar no se muestran.
+- El médico puede ver los horarios (solo lectura), pero no guardarlos: `procesar_secundaria.php` solo
+  acepta recepción y admin.
+- En el listado, primero se separan las citas que el rol puede ver y después se aplican los filtros de la URL:
+  aunque el médico escriba `?medico=rios`, no ve la agenda de otro médico.
+- Al iniciar sesión: el admin va al panel, el paciente a su perfil, y recepción y médico a Citas.
+- `display_errors` se desactiva en `funciones.php` para que valga en todas las páginas. El `.htaccess` solo
+  funciona con Apache; la protección principal sigue siendo `APP_ACCESO`.
+- En el conflicto de `panel.php` se conservaron las dos cosas: la línea de Dana con su comentario y `exigir_rol`.
+
+**Problemas:**
+- "Salir" daba 404 porque `procesar_logout.php` no existía; se notó cuando el login empezó a funcionar.
+- El médico no veía "Citas" en el menú, así que no podía llegar a la nota de consulta. El menú también
+  mostraba "Recepcion" y "Medico" sin tilde.
+- Al proteger `panel.php`, recepción y médico caían en el 403 al iniciar sesión, porque el login los
+  mandaba al panel. Se cambió la redirección por rol.
+- `git` respondía "not a git repository" porque la terminal estaba en `C:\repos` y no en la carpeta del proyecto.
+- El Pull Request tenía un conflicto en `panel.php`: Dana y Benjamin cambiaron la misma línea.
+- Los Pull Requests #12 a #21 los unió Benjamin sin revisión de otro integrante.
+
+**Pendiente:**
+- Dana o Alvaro: revisar el Pull Request de `benjamin/hito2`, dejar un comentario y unirlo.
+- Benjamin: procesar la nota de consulta del médico en `principal_detalle.php`.
+- Benjamin: avisar a Dana (sus `procesar_*`) y a Alvaro (`menu.php` y `funciones.php`).
+- Alvaro: paginación del listado; revisar los cambios en `menu.php` y `funciones.php`.

@@ -27,6 +27,10 @@ if ($_SESSION['rol'] === 'paciente' && $cita['expediente'] !== ($_SESSION['exped
 if ($_SESSION['rol'] === 'medico' && $cita['medico'] !== ($_SESSION['medico'] ?? '')) {
     redirigir('error.php?codigo=403');
 }
+// Si procesar_nota.php encontró errores, dejó en la sesión los mensajes y lo escrito
+$errores_nota = $_SESSION['errores_nota'] ?? [];
+$datos_nota = $_SESSION['datos_nota'] ?? [];
+unset($_SESSION['errores_nota'], $_SESSION['datos_nota']);
 
 // Fecha y hora en español para el subtítulo
 $dias  = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
@@ -96,24 +100,36 @@ require_once __DIR__ . '/includes/encabezado.php';
           </section>
         </div>
 
+        <?php // La nota solo la ve y la escribe el médico de la cita: los demás roles no ven este bloque ?>
+        <?php if ($_SESSION['rol'] === 'medico'): ?>
         <section class="eq05-tarjeta" aria-labelledby="eq05-titulo-nota">
           <h2 id="eq05-titulo-nota">Nota de consulta</h2>
           <p class="eq05-texto-secundario"><small>Solo la ve y la edita el médico asignado. Se puede corregir durante 24 horas.</small></p>
-          
-          <form class="eq05-form" id="eq05-form-nota" action="principal_detalle.php?codigo=<?php echo urlencode($codigo); ?>" method="post">
+
+          <?php if (!empty($errores_nota)): ?>
+          <div class="eq05-aviso eq05-aviso--error" role="alert">
+            <img src="img/iconos/advertencia.svg" alt="Icono de advertencia" width="22" height="22">
+            <div>
+              <?php mostrar_errores($errores_nota); ?>
+            </div>
+          </div>
+          <?php endif; ?>
+
+          <form class="eq05-form" id="eq05-form-nota" action="procesar_nota.php" method="post">
+            <input type="hidden" name="codigo" value="<?php echo limpiar($codigo); ?>">
             <fieldset class="eq05-conjunto-campos">
               <legend class="eq05-sr">Formulario de nota de consulta</legend>
-              
+
               <div class="eq05-campo">
                 <label for="eq05-nota-observaciones">Observaciones y diagnóstico <span class="eq05-requerido">*</span></label>
-                <textarea id="eq05-nota-observaciones" name="observaciones" rows="4" minlength="10" maxlength="2000" placeholder="Escriba la nota de la consulta…" required></textarea>
+                <textarea id="eq05-nota-observaciones" name="observaciones" rows="4" minlength="10" maxlength="2000" placeholder="Escriba la nota de la consulta…" required><?php echo limpiar($datos_nota['observaciones'] ?? ''); ?></textarea>
               </div>
               <div class="eq05-campo">
                 <label for="eq05-nota-indicaciones">Indicaciones al paciente</label>
-                <textarea id="eq05-nota-indicaciones" name="indicaciones" rows="3" maxlength="1000" placeholder="Medicamentos, exámenes, próxima cita…"></textarea>
+                <textarea id="eq05-nota-indicaciones" name="indicaciones" rows="3" maxlength="1000" placeholder="Medicamentos, exámenes, próxima cita…"><?php echo limpiar($datos_nota['indicaciones'] ?? ''); ?></textarea>
               </div>
               <div class="eq05-opcion">
-                <input type="checkbox" id="eq05-nota-control" name="requiere_control" value="si">
+                <input type="checkbox" id="eq05-nota-control" name="requiere_control" value="si" <?php echo ($datos_nota['requiere_control'] ?? '') === 'si' ? 'checked' : ''; ?>>
                 <label for="eq05-nota-control">Requiere cita de control</label>
               </div>
               <div class="eq05-acciones">
@@ -123,6 +139,7 @@ require_once __DIR__ . '/includes/encabezado.php';
             </fieldset>
           </form>
         </section>
+        <?php endif; ?>
       </article>
 
       <aside>
