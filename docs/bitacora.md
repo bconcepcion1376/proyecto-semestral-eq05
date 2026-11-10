@@ -756,3 +756,62 @@ Edwin Vergara
   `datos_demo.php`).
 - Benjamin: validar `secundaria_formulario.php` en W3C al terminar la fase 2 (se migró después de la validación).
 - Benjamin: `procesar_secundaria.php` (pendiente desde el 2026-11-06).
+
+---------------------------------------------------------------------------------------------------------------------------------
+## 2026-11-08 / 2026-11-09 · Fase 2 de `secundaria_formulario.php`
+**Participantes:**
+- Benjamin Concepcion
+
+**Trabajo realizado:**
+- La página carga `config/datos_demo.php` y lee `?medico=` con lista blanca; si llega vacío o no existe,
+  usa `rios` (`3e4e2d6`).
+- Migas, caption de la tabla y `<title>` con el nombre del médico. El formulario envía a
+  `procesar_secundaria.php` por POST y se quitó el comentario `CORRECCIÓN` (`b7f00a1`).
+- Select con los 5 médicos de `$medicos` (se agregan Valdelomar y Zamudio) y botón "Ver horario"
+  (`formaction`, `formmethod="get"`, `formnovalidate`) para recargar la página con lo elegido (`9ef1e1c`).
+- Tabla de días con un `foreach` sobre `$dias_semana`: `checked`, horas y consultorio salen de
+  `$horarios`. Las 6 filas fijas pasan a ser una fila modelo. Se agrega el consultorio 101 (`740da2e`).
+- Duración y "Vigente desde" según el horario del médico; rango de fechas 2026-11-01 a 2027-04-02 (`c3e26ba`).
+- Fechas de la ausencia por GET con `preg_match` y rango; si "Hasta" es anterior a "Desde", se iguala.
+  Motivo con lista blanca desde `$motivos_ausencia` (`30c8218`).
+- Citas afectadas: se recorren las `$citas` y se guardan las del mismo médico, activas y con fecha
+  dentro de la ausencia. El título y el botón muestran el número real ("1 cita" en singular; "Guardar"
+  si no hay ninguna) (`7b373d5`).
+- Vista previa con las citas reales: paciente desde `$pacientes`, fecha corta en español
+  ("Jue 12 nov · 8:30") y estado. Si no hay citas, se muestra un mensaje (`5581dc3`).
+- Opciones de reagendado con texto válido para cualquier médico y con su especialidad (`a507a94`).
+- Validación W3C sin errores ni advertencias (`7d13624`, `9198847`).
+
+**Decisiones:**
+- Si el médico de la URL no es válido se usa `rios` en lugar del 404 de `principal_detalle.php`: aquí
+  el médico es una opción del formulario, no el recurso que identifica la página.
+- Dentro de los `foreach` se usan `$datos_medico`, `$clave_dia` y `$dia`, para no sobrescribir
+  `$medico` y `$horario`, que se usan más abajo.
+- La tabla muestra lo que dice `datos_demo.php`: la Dra. Ríos atiende lun, mar, jue y vie en el 206
+  (la maqueta decía también miércoles y consultorio 204).
+- La nota interna de la ausencia no se lee por GET: con "Ver horario" quedaría en la URL y en el historial.
+- La ausencia de ejemplo es del 12 al 16 de noviembre para que la Dra. Ríos tenga 2 citas en la vista previa.
+- La columna "Nueva fecha propuesta" se cambió por "Estado": calcular el siguiente espacio libre es
+  parte de la fase 3, y no se inventan datos.
+- Textos neutros para cualquier médico: "Días y horas de atención · nombre", "en la agenda del médico"
+  y "Con el mismo médico" (antes "de la Dra." y "la misma médica").
+
+**Problemas:**
+- Al cambiar las migas se borraron también el `<li>` y el `<span>`, y el nombre quedó suelto dentro del `<ol>`.
+- En las fechas de la ausencia se reemplazaron los `<label>` en lugar de los `<input>`: quedaron dos
+  inputs con el mismo `id` y `name`, y PHP tomaba el último (con 2027), así que parecía que la página
+  no guardaba las fechas. Al devolver las etiquetas quedaron fuera de su `<div class="eq05-campo">`.
+- `php` no se reconocía en la terminal porque el PHP de XAMPP no está en el PATH; se usa
+  `C:\xampp\php\php.exe`.
+- En los mensajes de `740da2e` y `7b373d5` quedó `\$` en lugar de `$`.
+- La línea del README de la captura no se guardó antes de `7d13624`; entró en `9198847`.
+
+**Pendiente:**
+- Benjamin, fase 3: `procesar_secundaria.php` con los `name` actuales del formulario, errores y datos
+  enviados por `$_SESSION`, y token CSRF.
+- Benjamin, fase 3: calcular la nueva fecha propuesta (siguiente espacio libre) en `procesar_secundaria.php`
+  o en la clase `Horario`.
+- Equipo: la página de horarios se puede abrir sin sesión; debe exigir el rol admin, igual que `panel.php`.
+- Equipo: `$dias_cortos` y `$meses_cortos` se suman a los arreglos de fechas repetidos; acordar con
+  Alvaro una función en `funciones.php`.
+- Opcional: si la ausencia no afecta citas, ocultar el aviso amarillo y las opciones de reagendado.
