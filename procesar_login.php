@@ -48,8 +48,12 @@ $_SESSION['correo'] = $usuario->getCorreo();
 $_SESSION['medico'] = $datos['medico'] ?? '';
 $_SESSION['expediente'] = $datos['expediente'] ?? '';
 
-// El paciente va a su perfil; el personal de la clínica, al panel
+// Cada rol va a su página de inicio: el admin al panel, el paciente a su perfil,
+// y recepción y médico a la agenda (Citas)
+if ($usuario->getRol() === 'admin') {
+    redirigir('panel.php');
+}
 if ($usuario->getRol() === 'paciente') {
     redirigir('perfil.php');
 }
-redirigir('panel.php');
+redirigir('principal_listado.php');

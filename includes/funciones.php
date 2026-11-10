@@ -1,4 +1,6 @@
 <?php
+// Los errores técnicos no se muestran al usuario final (rutas, nombres de archivos…)
+ini_set('display_errors', '0');
 session_start();
 defined('APP_ACCESO') or exit('Acceso denegado');
 
@@ -9,6 +11,17 @@ function limpiar($dato) {
 function redirigir($url) {
     header("Location: $url");
     exit;
+}
+
+// Exige que haya sesión y que el rol esté entre los permitidos.
+// Sin sesión → al login. Con un rol que no corresponde → error 403 (acceso denegado).
+function exigir_rol($roles_permitidos) {
+    if (!isset($_SESSION['rol'])) {
+        redirigir('login.php');
+    }
+    if (!in_array($_SESSION['rol'], $roles_permitidos, true)) {
+        redirigir('error.php?codigo=403');
+    }
 }
 
 function mostrar_errores($errores) {

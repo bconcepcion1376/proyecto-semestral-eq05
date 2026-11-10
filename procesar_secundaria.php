@@ -2,6 +2,7 @@
 define('APP_ACCESO', true);
 require_once 'includes/funciones.php';
 require_once 'config/datos_demo.php';
+exigir_rol(['recepcion', 'admin']);
 require_once 'clases/Validador.php';
 require_once 'clases/Horario.php';
 

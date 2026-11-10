@@ -1,6 +1,7 @@
 <?php
 define('APP_ACCESO', true);
 require_once 'includes/funciones.php';
+exigir_rol(['admin']);
 
 $titulo = 'Panel Administrativo';
 $descripcion = 'Panel de administración y gestión de MediAgenda';

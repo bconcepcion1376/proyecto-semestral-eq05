@@ -5,6 +5,7 @@ define('APP_ACCESO', true);
 require_once __DIR__ . '/includes/funciones.php';
 
 require_once __DIR__ . '/config/datos_demo.php';
+exigir_rol(['recepcion', 'medico', 'admin']);
 
 // Si procesar_secundaria.php encontró errores, dejó en la sesión los mensajes y lo enviado.
 // Se leen y se borran enseguida, para que no vuelvan a salir al recargar la página.
