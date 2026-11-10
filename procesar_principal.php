@@ -93,6 +93,18 @@ if (!$validador->hayErrores()) {
     }
     $validador->regla('hora', !$hora_ocupada, 'El médico ya tiene una cita a esa hora. Elija otra.');                  // R1
     $validador->regla('fecha', $activas_dia < MAX_CITAS_DIA, 'El médico no tiene más cupo ese día. Elija otra fecha.'); // R2
+
+    // R3: el paciente no puede tener dos citas activas de la misma especialidad
+    $misma_especialidad = false;
+    foreach ($citas as $datos) {
+        if ($datos['expediente'] === $expediente
+            && $datos['especialidad'] === $especialidad
+            && $estados[$datos['estado']]['activa']) {
+            $misma_especialidad = true;
+        }
+    }
+    $validador->regla('especialidad', !$misma_especialidad,
+                      'El paciente ya tiene una cita activa de esta especialidad. Reprograme o cancele esa cita antes de pedir otra.');
 }
 
 // ---------- Con errores: se vuelve al formulario ----------
