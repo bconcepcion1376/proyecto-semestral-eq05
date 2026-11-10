@@ -44,6 +44,10 @@ $_SESSION['rol'] = $usuario->getRol();
 $_SESSION['nombre'] = $usuario->getNombre();
 $_SESSION['correo'] = $usuario->getCorreo();
 
+// El médico ve "Mi agenda" y el paciente "Mis citas": se guarda quién es cada uno
+$_SESSION['medico'] = $datos['medico'] ?? '';
+$_SESSION['expediente'] = $datos['expediente'] ?? '';
+
 // El paciente va a su perfil; el personal de la clínica, al panel
 if ($usuario->getRol() === 'paciente') {
     redirigir('perfil.php');
