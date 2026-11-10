@@ -727,7 +727,7 @@ Edwin Vergara
 ---------------------------------------------------------------------------------------------------------------------------------
 ## 2026-11-08 · Validación W3C del Hito 2 y migración de `secundaria_formulario.php`
 **Participantes:**
-- Benjamin Concepcion
+- Benjamin Concepción
 
 **Trabajo realizado:**
 - Validación W3C de las páginas PHP: 10 capturas en `docs/validacion/`. Son nuevas `login`, `registro`,
@@ -760,7 +760,7 @@ Edwin Vergara
 ---------------------------------------------------------------------------------------------------------------------------------
 ## 2026-11-08 / 2026-11-09 · Fase 2 de `secundaria_formulario.php`
 **Participantes:**
-- Benjamin Concepcion
+- Benjamin Concepción
 
 **Trabajo realizado:**
 - La página carga `config/datos_demo.php` y lee `?medico=` con lista blanca; si llega vacío o no existe,
