@@ -815,3 +815,73 @@ Edwin Vergara
 - Equipo: `$dias_cortos` y `$meses_cortos` se suman a los arreglos de fechas repetidos; acordar con
   Alvaro una función en `funciones.php`.
 - Opcional: si la ausencia no afecta citas, ocultar el aviso amarillo y las opciones de reagendado.
+
+---------------------------------------------------------------------------------------------------------------------------------
+## 2026-11-09 · Las 4 clases y los 4 formularios POST con validación en el servidor
+**Participantes:**
+- Benjamin Concepción
+
+**Trabajo realizado:**
+- Revisión del enunciado del Hito 2 contra el repositorio. Faltaban las 4 clases (`clases/` estaba vacía en
+  todas las ramas), `procesar_secundaria.php`, la paginación, el regreso al formulario con errores y los
+  documentos de pruebas, trazabilidad e informe.
+- `clases/Validador.php`: clase de servicio con `requerido`, `longitud`, `correo`, `enLista`, `fecha`, `rango`
+  y `hora`; guarda un error por campo en una propiedad privada (`8489b16`). Después se agregó `regla()`
+  para comparaciones y reglas de negocio (`dbdb05f`).
+- `clases/Horario.php`: segunda entidad, con propiedades privadas, getters, setters con validación
+  (`setDuracion`, `setVigenteDesde`), `agregarDia()` y `atiende()` (`1ce00e5`).
+- `procesar_secundaria.php`: recibe el horario por POST, lo valida con `Validador`, arma un objeto `Horario`
+  y muestra una confirmación con encabezado y pie (`dbdb05f`). `secundaria_formulario.php` muestra los
+  errores y conserva lo enviado (`d7e4370`).
+- `clases/Cita.php`: entidad principal con setters validados, `estaActiva()` y `cancelar()` (`58048e2`).
+- `clases/Usuario.php`: guarda solo el hash de la contraseña; `setClave()` usa `password_hash`,
+  `verificarClave()` usa `password_verify` y no hay getter del hash (`396c2c4`).
+- Login con `Validador` y `Usuario`; `login.php` muestra los errores y conserva el correo (`f965b4f`).
+- `procesar_principal.php` con `Validador` y `Cita`: valida cada campo y las reglas de la agenda (`cc96169`).
+  `principal_formulario.php` muestra los errores y conserva el expediente y el motivo (`a6233af`).
+- `procesar_registro.php` con `Validador` y `Usuario`: valida los 13 campos y que correo, documento y
+  expediente no estén registrados (`38f8c1a`). `registro.php` muestra los errores y conserva lo escrito,
+  menos las contraseñas (`0973264`).
+- Cada clase y cada script se probaron con datos válidos, vacíos, con selects cambiados, sin `required`
+  y con `<script>alert(1)</script>`.
+
+**Decisiones:**
+- Los datos se leen con `trim()` y se escapan con `limpiar()` solo al mostrarlos. Si se escapan al leer,
+  "D'Alessio" sale como `D&amp;#039;Alessio`.
+- Los setters de las entidades devuelven `false` y no cambian nada si el dato no es válido. El constructor
+  pone valores por defecto y usa los setters, para que la validación esté en un solo lugar.
+- Los errores y lo escrito vuelven al formulario por `$_SESSION` y se borran con `unset()` al leerlos,
+  para que no reaparezcan al recargar.
+- En la reserva, la selección (médico, fecha, hora…) vuelve por la URL con `http_build_query`, porque
+  el formulario ya la lee de `$_GET`; el expediente y el motivo van por la sesión por ser datos personales.
+- Las reglas de la agenda (especialidad del médico, 24 h de anticipación, feriados, ausencias, horario,
+  R1 y R2) se revisan solo cuando cada campo ya es válido.
+- Las contraseñas no se leen con `trim()`, no se guardan en la sesión y nunca se muestran, ni ellas ni su hash.
+- El login responde "Correo o contraseña incorrectos" en los dos casos, para no revelar qué correos existen.
+- La contraseña del registro exige de 8 a 64 caracteres, una mayúscula y un número, como dice el
+  formulario (antes se aceptaban 6). El motivo de la cita admite 300 caracteres, como el `maxlength`.
+
+**Problemas:**
+- `procesar_login.php` leía `password`, `procesar_registro.php` también y `procesar_principal.php` leía
+  `expediente`, pero los formularios envían `clave` y `numero_expediente`: el login, el registro y la
+  reserva fallaban siempre. Se corrigió al reescribirlos con las clases.
+- El archivo de la primera clase se creó como `Validor.php` y se renombró a `Validador.php`.
+- Los métodos de `Validador` se pegaron después de la `}` que cierra la clase (error "unexpected token
+  public"); se movió la llave al final.
+- Dos veces el código no llegó al archivo porque no se guardó; se comprobó con `git status` antes de seguir.
+- Hubo confusión entre `procesar_principal.php` (el script que recibe) y `principal_formulario.php`
+  (la página que se ve).
+- Al pegar el aviso de errores en `principal_formulario.php` se borró el subtítulo; se repuso.
+
+**Pendiente:**
+- Benjamin: avisar a Dana que `procesar_login.php`, `procesar_principal.php` y `procesar_registro.php`
+  fueron reescritos, para que actualice su rama antes de tocarlos.
+- Benjamin: actualizar la declaración de IA del README con las clases, los `procesar_*` y las páginas de hoy.
+- Benjamin: validar en W3C las páginas de confirmación y los formularios con el aviso de errores.
+- Alvaro: paginación del listado (5 por página con `$_GET["pagina"]`).
+- Edwin: `docs/plan_pruebas.pdf`, `docs/trazabilidad.pdf` y `docs/informe_hito2.pdf`.
+- Equipo: `procesar_logout.php`; `panel.php` y `secundaria_formulario.php` deben exigir el rol admin
+  (`Usuario::esAdmin()` ya existe).
+- Equipo: desactivar `display_errors`, agregar `.htaccess` en `includes/` y `config/`, y revisar que el
+  cambio de requerimiento de la semana 11 esté implementado.
+- Equipo: equilibrar los commits (cada integrante debe tener al menos el 20 %).
